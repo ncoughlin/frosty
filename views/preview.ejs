@@ -1,1 +1,11 @@
+<%- include("partials/header.ejs") %>
+<%- include("partials/navbar.ejs") %>
+
+
 <h1>Preview of blog homepage goes here</h1>
+
+<% for(var i=0; i<posts.length; i++){ %>
+<h1><%= posts[i].title %></h1>
+<h3><%= posts[i].author %></h3>
+<img src="<%= posts[i].image %>">
+<% } %>

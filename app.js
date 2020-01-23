@@ -14,6 +14,9 @@ app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Listening on PORT: " + process.env.PORT + " at IP: " + process.env.IP);
 });
 
+// direct express to static files like CSS and Logos
+app.use(express.static("public"));
+
 // ***************************
 // ROUTES
 // ***************************
@@ -26,9 +29,9 @@ app.get("/preview", function(req, res){
 // temporarilly placing blog posts here until database is setup
 
     var posts = [
-            {title: "Blog Post 1", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "Blog Post 2", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "Blog Post 3", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"}
+            {title: "Blog Post 1", author: "Nick Coughlin", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "Blog Post 2", author: "Nick Coughlin", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "Blog Post 3", author: "Nick Coughlin", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"}
             
         ]
         
