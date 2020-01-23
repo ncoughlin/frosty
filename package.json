@@ -2,7 +2,7 @@
   "name": "frosty_cms",
   "version": "1.0.0",
   "description": "Frosty is a simple Javascript only blog CMS built with Node, Express and Mongo",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
