@@ -18,5 +18,21 @@ app.listen(process.env.PORT, process.env.IP, function(){
 // ROUTES
 // ***************************
 app.get("/", function(req, res){
-    res.send("Welcome to the Home Page");
+    res.render("landing.ejs");
+});
+
+app.get("/preview", function(req, res){
+
+// temporarilly placing blog posts here until database is setup
+
+    var posts = [
+            {title: "Blog Post 1", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "Blog Post 2", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "Blog Post 3", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"}
+            
+        ]
+        
+// the preview page for the blog, shows the sample blog posts    
+    res.render("preview.ejs", {posts:posts});
+
 });
