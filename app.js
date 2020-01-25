@@ -29,9 +29,11 @@ app.get("/preview", function(req, res){
 // temporarilly placing blog posts here until database is setup
 
     var posts = [
-            {title: "Blog Post 1", author: "Nick Coughlin", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "Blog Post 2", author: "Nick Coughlin", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "Blog Post 3", author: "Nick Coughlin", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"}
+            {title: "Widgets and You", author: "Davie Crocket", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "How to Train Your Cat", author: "Janet Myrtleton", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "Don't Put That There", author: "Barack Obama", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "Amateur Chainsaw Juggling", author: "Indiana Jones", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "The Legend of the BeeGees", author: "Miles Davis", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"}
             
         ]
         
