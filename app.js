@@ -20,11 +20,14 @@ app.use(express.static("public"));
 // ***************************
 // ROUTES
 // ***************************
+
+// render the landing page
 app.get("/", function(req, res){
     res.render("landing.ejs");
 });
 
-app.get("/preview", function(req, res){
+// render the preview page
+app.get("/posts", function(req, res){
 
 // temporarilly placing blog posts here until database is setup
 
@@ -34,10 +37,11 @@ app.get("/preview", function(req, res){
             {title: "Don't Put That There", author: "Barack Obama", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
             {title: "Amateur Chainsaw Juggling", author: "Indiana Jones", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
             {title: "The Legend of the BeeGees", author: "Miles Davis", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"}
-            
         ]
         
 // the preview page for the blog, shows the sample blog posts    
-    res.render("preview.ejs", {posts:posts});
+    res.render("posts.ejs", {posts:posts});
 
 });
+
+app.post
