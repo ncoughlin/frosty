@@ -8,6 +8,8 @@ console.log("app.js is connected");
 var express = require("express");
 // set express to variable
 var app = express();
+// import body-parser
+var bodyParser = require("body-parser");
 
 // set listen port
 //app.listen(process.env.PORT, process.env.IP, function(){
@@ -19,6 +21,8 @@ app.listen(8080, function(){
 
 // direct express to static files like CSS and Logos
 app.use(express.static("public"));
+// use body-parser
+app.use(bodyParser.urlencoded({extended:true}));
 
 // ***************************
 // ROUTES
@@ -63,7 +67,9 @@ app.get("/newpost", function(req, res){
 //----------------------------
 
 app.post("/newpost", function(req, res){
-    
+    // get data from form and add to posts array
+    // redirect back to posts page
     res.send("New Post Data Received");
+    
 
 });
