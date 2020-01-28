@@ -25,11 +25,22 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 
 // ***************************
+// Temporary Array
+// ***************************
+var posts = [
+            {title: "Widgets and You", author: "Davie Crocket", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "How to Train Your Cat", author: "Janet Myrtleton", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "Don't Put That There", author: "Barack Obama", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "Amateur Chainsaw Juggling", author: "Indiana Jones", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
+            {title: "The Legend of the BeeGees", author: "Miles Davis", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"}
+        ];
+        
+// ***************************
 // ROUTES
 // ***************************
 
 //----------------------------
-// .GET
+// .GET routes
 //----------------------------
 
 
@@ -40,36 +51,31 @@ app.get("/", function(req, res){
 
 // render the preview page
 app.get("/posts", function(req, res){
-
-// temporarilly placing blog posts here until database is setup
-
-    var posts = [
-            {title: "Widgets and You", author: "Davie Crocket", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "How to Train Your Cat", author: "Janet Myrtleton", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "Don't Put That There", author: "Barack Obama", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "Amateur Chainsaw Juggling", author: "Indiana Jones", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "The Legend of the BeeGees", author: "Miles Davis", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"}
-        ]
-        
 // the preview page for the blog, shows the sample blog posts    
     res.render("posts.ejs", {posts:posts});
-
 });
 
 // new post page
-app.get("/newpost", function(req, res){
+app.get("/posts/new", function(req, res){
     res.render("newPost.ejs");
 });
 
 
 //----------------------------
-// .POST
+// .POST routes
 //----------------------------
 
-app.post("/newpost", function(req, res){
+app.post("/posts", function(req, res){
     // get data from form and add to posts array
+    var title = req.body.title;
+    var author = req.body.author;
+    var content = req.body.content;
+    var image = req.body.image;
+    
+    var newPost = {title: title, author: author, content: content, image: image};
+    posts.push(newPost);
     // redirect back to posts page
-    res.send("New Post Data Received");
+    res.redirect("/posts");
     
 
 });
