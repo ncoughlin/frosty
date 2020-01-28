@@ -21,6 +21,11 @@ app.use(express.static("public"));
 // ROUTES
 // ***************************
 
+//----------------------------
+// .GET
+//----------------------------
+
+
 // render the landing page
 app.get("/", function(req, res){
     res.render("landing.ejs");
@@ -44,4 +49,18 @@ app.get("/posts", function(req, res){
 
 });
 
-app.post
+// new post page
+app.get("/newpost", function(req, res){
+    res.render("newPost.ejs");
+});
+
+
+//----------------------------
+// .POST
+//----------------------------
+
+app.post("/newpost", function(req, res){
+    
+    res.send("New Post Data Received");
+
+});
