@@ -10,8 +10,11 @@ var express = require("express");
 var app = express();
 
 // set listen port
-app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Listening on PORT: " + process.env.PORT + " at IP: " + process.env.IP);
+//app.listen(process.env.PORT, process.env.IP, function(){
+//    console.log("Listening on PORT: " + process.env.PORT + " at IP: " + process.env.IP);
+//});
+app.listen(8080, function(){
+    console.log("Server Running");
 });
 
 // direct express to static files like CSS and Logos
