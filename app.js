@@ -77,6 +77,4 @@ app.post("/posts", function(req, res){
     posts.push(newPost);
     // redirect back to posts page
     res.redirect("/posts");
-    
-
 });
