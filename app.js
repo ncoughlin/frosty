@@ -15,6 +15,7 @@ var bodyParser = require("body-parser");
 //app.listen(process.env.PORT, process.env.IP, function(){
 //    console.log("Listening on PORT: " + process.env.PORT + " at IP: " + process.env.IP);
 //});
+// must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
 app.listen(8080, function(){
     console.log("Server Running");
 });
@@ -51,7 +52,7 @@ app.get("/", function(req, res){
 
 // render the preview page
 app.get("/posts", function(req, res){
-// the preview page for the blog, shows the sample blog posts    
+// the posts page for the blog, shows the sample blog posts    
     res.render("posts.ejs", {posts:posts});
 });
 
