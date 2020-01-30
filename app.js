@@ -12,13 +12,13 @@ var app = express();
 var bodyParser = require("body-parser");
 
 // set listen port
-//app.listen(process.env.PORT, process.env.IP, function(){
-//    console.log("Listening on PORT: " + process.env.PORT + " at IP: " + process.env.IP);
-//});
-// must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
-app.listen(8080, function(){
-    console.log("Server Running");
+app.listen(process.env.PORT, process.env.IP, function(){
+    console.log("Listening on PORT: " + process.env.PORT + " at IP: " + process.env.IP);
 });
+// must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
+//app.listen(8080, function(){
+//    console.log("Server Running");
+//});
 
 // direct express to static files like CSS and Logos
 app.use(express.static("public"));
