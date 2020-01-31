@@ -54,32 +54,7 @@ var postSchema = new mongoose.Schema({
 // Compiling the model is what allows us to run these Mongoose methods
 var Post = mongoose.model("Post", postSchema);
 
-// adding a post to the DB in one go with the .create() method
-Post.create({
-    image: "https://ncoughlin.com/wp-content/uploads/2020/01/F4BB34AF-6E6F-4203-A1F0-321F9319A962_1_105_c.jpeg",
-    title: "Grocery Shopping in Brazil",
-    author: "Nick Coughlin",
-    content: "Remember that you have to carry the bags by hand."
-}, function(err, post){
-    if(err){
-        console.log("Failed to write post to database.");
-    } else {
-        console.log("Post successfully saved to database.");
-        console.log(post);
-    }
-});
 
-// ***************************
-// Temporary Array
-// ***************************
-var posts = [
-            {title: "Widgets and You", author: "Davie Crocket", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "How to Train Your Cat", author: "Janet Myrtleton", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "Don't Put That There", author: "Barack Obama", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "Amateur Chainsaw Juggling", author: "Indiana Jones", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"},
-            {title: "The Legend of the BeeGees", author: "Miles Davis", image: "https://ncoughlin.com/wp-content/uploads/2020/01/sample-image.jpg"}
-        ];
-        
 // ***************************
 // ROUTES
 // ***************************
@@ -96,8 +71,16 @@ app.get("/", function(req, res){
 
 // render the preview page
 app.get("/posts", function(req, res){
-// the posts page for the blog, shows the sample blog posts    
-    res.render("posts.ejs", {posts:posts});
+// original .render that pulled data from static array   
+//    res.render("posts.ejs", {posts:posts});
+// get campgrounds from database 
+    Post.find({}, function(err, posts){
+        if(err){
+            console.log("Error: Unable to retreive post data.");
+        } else {
+            res.render("posts.ejs", {posts:posts});
+        }
+    });
 });
 
 // new post page
