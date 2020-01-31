@@ -25,15 +25,48 @@ app.use(express.static("public"));
 // use body-parser
 app.use(bodyParser.urlencoded({extended:true}));
 
+// ***************************
+// DATABASE SETUP
+// ***************************
+
 // connecting application to mongoDB
 mongoose.connect('mongodb://localhost/frosty_posts', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connect('mongodb://localhost/frosty_settings', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.connect('mongodb://localhost/frosty_users', {useNewUrlParser: true, useUnifiedTopology: true});
 
+// console logging if connection is successful
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("MongoDB Connected");
+});
+
+// Mongoose Schema for Posts
+var postSchema = new mongoose.Schema({
+    image: String,
+    title: String,
+    author: String,
+    content: String
+});
+
+// creating schema Model named Post to be called later
+// IE Post.find() or Post.create()
+// Compiling the model is what allows us to run these Mongoose methods
+var Post = mongoose.model("Post", postSchema);
+
+// adding a post to the DB in one go with the .create() method
+Post.create({
+    image: "https://ncoughlin.com/wp-content/uploads/2020/01/F4BB34AF-6E6F-4203-A1F0-321F9319A962_1_105_c.jpeg",
+    title: "Grocery Shopping in Brazil",
+    author: "Nick Coughlin",
+    content: "Remember that you have to carry the bags by hand."
+}, function(err, post){
+    if(err){
+        console.log("Failed to write post to database.");
+    } else {
+        console.log("Post successfully saved to database.");
+        console.log(post);
+    }
 });
 
 // ***************************
