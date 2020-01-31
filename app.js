@@ -10,20 +10,31 @@ var express = require("express");
 var app = express();
 // import body-parser
 var bodyParser = require("body-parser");
+// import mongoose
+var mongoose = require("mongoose");
 
 // set listen port
+// must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Listening on PORT: " + process.env.PORT + " at IP: " + process.env.IP);
 });
-// must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
-//app.listen(8080, function(){
-//    console.log("Server Running");
-//});
+
 
 // direct express to static files like CSS and Logos
 app.use(express.static("public"));
 // use body-parser
 app.use(bodyParser.urlencoded({extended:true}));
+
+// connecting application to mongoDB
+mongoose.connect('mongodb://localhost/frosty_posts', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost/frosty_settings', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost/frosty_users', {useNewUrlParser: true, useUnifiedTopology: true});
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("MongoDB Connected");
+});
 
 // ***************************
 // Temporary Array
