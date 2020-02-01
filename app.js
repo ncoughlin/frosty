@@ -100,8 +100,17 @@ app.post("/posts", function(req, res){
     var content = req.body.content;
     var image = req.body.image;
     
-    var newPost = {title: title, author: author, content: content, image: image};
-    posts.push(newPost);
+    var newPostFormData = {title: title, author: author, content: content, image: image};
+    
+    Post.create(newPostFormData, function(err, newDatabaseRecord){
+        if(err){
+            console.log("Failed to write post to database.");
+        } else {
+            console.log("Post successfully saved to database.");
+            console.log(newDatabaseRecord);
+        }
+    });
+    
     // redirect back to posts page
     res.redirect("/posts");
 });

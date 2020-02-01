@@ -12,7 +12,7 @@ db.once('open', function() {
   console.log("MongoDB Connected");
 });
 
-// MongoDB Schema for Posts
+// Mongoose Schema for Posts
 var postSchema = new mongoose.Schema({
     image: String,
     title: String,
@@ -55,12 +55,12 @@ Post.create({
     title: "Training Capybaras",
     author: "Steve Buscemi",
     content: "Always remember to bring a bag of lettuce."
-}, function(err, post){
+}, function(err, newDatabaseRecord){
     if(err){
         console.log("Failed to write post to database.");
     } else {
         console.log("Post successfully saved to database.");
-        console.log(post);
+        console.log(newDatabaseRecord);
     }
 });
 
