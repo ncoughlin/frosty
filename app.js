@@ -1,4 +1,13 @@
 // ***************************
+// Command Reference
+// ***************************
+
+// Start MongoDB: sudo service mongod start
+// Check MongoDB Status: service mongod status (in unix shell)
+
+
+
+// ***************************
 // SETUP
 // ***************************
 
@@ -69,7 +78,7 @@ app.get("/", function(req, res){
     res.render("landing.ejs");
 });
 
-// render the preview page
+// render the posts page
 app.get("/posts", function(req, res){
 // original .render that pulled data from static array   
 //    res.render("posts.ejs", {posts:posts});
@@ -82,6 +91,12 @@ app.get("/posts", function(req, res){
         }
     });
 });
+
+// render individual post
+app.get("/posts/:id", function(req, res){
+    res.send("Future home of single post template");
+});
+
 
 // new post page
 app.get("/posts/new", function(req, res){
