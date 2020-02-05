@@ -1,11 +1,3 @@
-// ***************************
-// Command Reference
-// ***************************
-
-// Start MongoDB: sudo service mongod start
-// Check MongoDB Status: service mongod status (in unix shell)
-
-
 
 // ***************************
 // SETUP
@@ -53,6 +45,7 @@ var postSchema = new mongoose.Schema({
     image: String,
     title: String,
     author: String,
+    date: {type: Date, default: Date.now},
     short: String,
     content: String
 });
@@ -118,11 +111,12 @@ app.post("/posts", function(req, res){
     // get data from form and add to posts array
     var title = req.body.title;
     var author = req.body.author;
+    var date = req.body.date;
     var content = req.body.content;
     var short = req.body.short;
     var image = req.body.image;
     
-    var newPostFormData = {title: title, author: author, content: content, image: image, short: short};
+    var newPostFormData = {title: title, author: author, date: date, content: content, image: image, short: short};
     
     Post.create(newPostFormData, function(err, newDatabaseRecord){
         if(err){
@@ -136,3 +130,11 @@ app.post("/posts", function(req, res){
     // redirect back to posts page
     res.redirect("/posts");
 });
+
+
+// ***************************
+// Command Reference
+// ***************************
+
+// Start MongoDB: sudo service mongod start
+// Check MongoDB Status: service mongod status (in unix shell)
