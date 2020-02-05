@@ -2,9 +2,8 @@
 var mongoose = require("mongoose");
 
 // connecting application to mongoDB
-mongoose.connect('mongodb://localhost/frosty_posts', {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect('mongodb://localhost/frosty_settings', {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect('mongodb://localhost/frosty_users', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost/frosty_data', {useNewUrlParser: true, useUnifiedTopology: true});
+
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -17,7 +16,8 @@ var postSchema = new mongoose.Schema({
     image: String,
     title: String,
     author: String,
-    content: String
+    content: String,
+    short: String
 });
 
 // creating schema Model named Post to be called later

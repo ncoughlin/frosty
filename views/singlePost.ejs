@@ -2,7 +2,21 @@
 <%- include("partials/navbar.ejs") %>
 
 
-<h1>Single Post Page</h1>
+<!-- begin content -->
+<!-- fixed width container for content -->
+    <div class="container-lg mt-5">
+
+        <!--Header Image -->
+        <img src="<%= post.image %>" class="img-fluid" >
+        <!--Title & Author -->
+        <h1><%= post.title %></h1>
+        <h6><%= post.author %></h6>
+
+        <!--Content -->
+        <p class="font-weight-normal mt-5"><%= post.content %></p>
+
+        
+    </div>
 
 
 <%- include("partials/footer.ejs") %>

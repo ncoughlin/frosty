@@ -39,9 +39,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 // ***************************
 
 // connecting application to mongoDB
-mongoose.connect('mongodb://localhost/frosty_posts', {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect('mongodb://localhost/frosty_settings', {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect('mongodb://localhost/frosty_users', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost/frosty_data', {useNewUrlParser: true, useUnifiedTopology: true});
 
 // console logging if connection is successful
 var db = mongoose.connection;
@@ -55,6 +53,7 @@ var postSchema = new mongoose.Schema({
     image: String,
     title: String,
     author: String,
+    short: String,
     content: String
 });
 
@@ -80,27 +79,34 @@ app.get("/", function(req, res){
 
 // render the posts page
 app.get("/posts", function(req, res){
-// original .render that pulled data from static array   
-//    res.render("posts.ejs", {posts:posts});
-// get campgrounds from database 
+// get posts from database 
     Post.find({}, function(err, posts){
         if(err){
             console.log("Error: Unable to retreive post data.");
         } else {
-            res.render("posts.ejs", {posts:posts});
+            res.render("index.ejs", {posts:posts});
         }
     });
-});
-
-// render individual post
-app.get("/posts/:id", function(req, res){
-    res.send("Future home of single post template");
 });
 
 
 // new post page
 app.get("/posts/new", function(req, res){
     res.render("newPost.ejs");
+});
+
+// render individual post. This is a wildcard link and must therefore be
+// placed after static links in the application!
+app.get("/posts/:id", function(req, res){
+    // find post with provided ID
+    Post.findById(req.params.id, function(err, dbData){
+        if(err){
+            console.log("error finding post data by ID");
+        } else {
+            // render single post template with that post data
+            res.render("singlePost.ejs", {post: dbData});
+        }
+    });
 });
 
 
@@ -113,9 +119,10 @@ app.post("/posts", function(req, res){
     var title = req.body.title;
     var author = req.body.author;
     var content = req.body.content;
+    var short = req.body.short;
     var image = req.body.image;
     
-    var newPostFormData = {title: title, author: author, content: content, image: image};
+    var newPostFormData = {title: title, author: author, content: content, image: image, short: short};
     
     Post.create(newPostFormData, function(err, newDatabaseRecord){
         if(err){
