@@ -41,7 +41,7 @@ db.once('open', function() {
 });
 
 // Mongoose Schema for Posts
-var postSchema = new mongoose.Schema({
+var blogSchema = new mongoose.Schema({
     image: String,
     title: String,
     author: String,
@@ -50,10 +50,10 @@ var postSchema = new mongoose.Schema({
     content: String
 });
 
-// creating schema Model named Post to be called later
-// IE Post.find() or Post.create()
+// creating schema Model named Blog to be called later
+// IE Blog.find() or Blog.create()
 // Compiling the model is what allows us to run these Mongoose methods
-var Post = mongoose.model("Post", postSchema);
+var Blog = mongoose.model("Blog", blogSchema);
 
 
 // ***************************
@@ -72,12 +72,12 @@ app.get("/", function(req, res){
 
 // render the posts page
 app.get("/posts", function(req, res){
-// get posts from database 
-    Post.find({}, function(err, posts){
+// get blogs from database 
+    Blog.find({}, function(err, blogs){
         if(err){
             console.log("Error: Unable to retreive post data.");
         } else {
-            res.render("index.ejs", {posts:posts});
+            res.render("index.ejs", {blogs:blogs});
         }
     });
 });
@@ -85,19 +85,19 @@ app.get("/posts", function(req, res){
 
 // new post page
 app.get("/posts/new", function(req, res){
-    res.render("newPost.ejs");
+    res.render("newBlog.ejs");
 });
 
 // render individual post. This is a wildcard link and must therefore be
 // placed after static links in the application!
 app.get("/posts/:id", function(req, res){
     // find post with provided ID
-    Post.findById(req.params.id, function(err, dbData){
+    Blog.findById(req.params.id, function(err, dbData){
         if(err){
-            console.log("error finding post data by ID");
+            console.log("error finding blog data by ID");
         } else {
             // render single post template with that post data
-            res.render("singlePost.ejs", {post: dbData});
+            res.render("singleBlog.ejs", {blog: dbData});
         }
     });
 });
@@ -108,26 +108,18 @@ app.get("/posts/:id", function(req, res){
 //----------------------------
 
 app.post("/posts", function(req, res){
-    // get data from form and add to posts array
-    var title = req.body.title;
-    var author = req.body.author;
-    var date = req.body.date;
-    var content = req.body.content;
-    var short = req.body.short;
-    var image = req.body.image;
+    // get data from form and add to blogs array
     
-    var newPostFormData = {title: title, author: author, date: date, content: content, image: image, short: short};
-    
-    Post.create(newPostFormData, function(err, newDatabaseRecord){
+    Blog.create(req.body.blog, function(err, newDatabaseRecord){
         if(err){
             console.log("Failed to write post to database.");
         } else {
-            console.log("Post successfully saved to database.");
+            console.log("Blog successfully saved to database.");
             console.log(newDatabaseRecord);
         }
     });
     
-    // redirect back to posts page
+    // redirect back to blogs page
     res.redirect("/posts");
 });
 

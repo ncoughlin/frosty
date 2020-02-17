@@ -7,20 +7,20 @@
          
          
         <!-- The Loop Starts Here -->  
-        <% for(var i=0; i<posts.length; i++){ %>  
+        <% for(var i=0; i<blogs.length; i++){ %>  
         
         <div class="col-sm-12 col-md-6 col-lg-4">
           <div class="card mt-4" style="width: 18rem;">
             <img
-              src="<%= posts[i].image %>"
+              src="<%= blogs[i].image %>"
               class="card-img-top"
               alt="..."
             />
             <div class="card-body">
-              <h3 class="card-title"><%= posts[i].title %></h3>
-              <h6 class="card-title"><%= posts[i].author %></h5>
-              <p class="card-text"><%= posts[i].short %></p>
-              <a href="/posts/<%=posts[i]._id%>" class="btn btn-primary">Read More</a>
+              <h3 class="card-title"><%= blogs[i].title %></h3>
+              <h6 class="card-title"><%= blogs[i].author %></h5>
+              <p class="card-text"><%= blogs[i].short %></p>
+              <a href="/posts/<%=blogs[i]._id%>" class="btn btn-primary">Read More</a>
             </div>
           </div>
         </div>
