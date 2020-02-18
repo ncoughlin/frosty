@@ -1,0 +1,49 @@
+/* body must be set to 100% height so that settings column can fill the height of the parent */
+html,body {
+  height: 100%;
+}
+
+/* Primary Navbar*/
+#primary-nav{
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
+    z-index: 2;
+}
+
+/* Settings Navbar*/
+#settings-nav {
+    padding-right: 0px;
+    background-color: #3d4349;
+    position: absolute;
+}
+
+.settings-content{
+    margin-left: 5rem;
+}
+
+
+/* Icons*/
+i{
+  vertical-align:middle;
+} 
+
+.settings-menu-icons {
+    font-size: 1rem;
+}
+
+.navbar-settings-icon {
+    padding-left: 10px;
+}
+
+
+
+
+
+
+/* TESTING */
+/*
+
+* { 
+    border: 1px solid red !important; 
+}
+
+*/

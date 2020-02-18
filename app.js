@@ -57,6 +57,11 @@ var Blog = mongoose.model("Blog", blogSchema);
 
 
 // ***************************
+// DOM Interactivity
+// ***************************
+
+
+// ***************************
 // ROUTES
 // ***************************
 
@@ -102,6 +107,15 @@ app.get("/posts/:id", function(req, res){
     });
 });
 
+// render the settings/blogs page
+app.get("/settings/blogs", function(req, res){
+    res.render("settings-blogs.ejs");
+});
+
+// render the settings/general page
+app.get("/settings/general", function(req, res){
+    res.render("settings-general.ejs");
+});
 
 //----------------------------
 // .POST routes
