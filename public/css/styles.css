@@ -9,6 +9,28 @@ html,body {
     z-index: 2;
 }
 
+/* Settings Grid*/
+.settings-grid-container{
+    display:grid;
+    grid-template-columns: minmax(100px, 20%) auto;
+    grid-template-rows: 100vh;
+}
+
+.settings-grid-container.grid-padding{
+    padding: 0;
+}
+
+/* grid-area: grid-row-start, grid-column-start, grid-row-end, grid-column-end*/
+.settings-grid-one{
+    grid-area: 1/1/2/2;
+    background-color: brown;
+}
+
+.settings-grid-two{
+    grid-area: 1/2/2/3;
+    background-color: cornflowerblue;
+}
+
 /* Settings Navbar*/
 #settings-nav {
     padding-right: 0px;
