@@ -7,12 +7,36 @@
 
 
 <!-- begin content -->
-    <!-- bootstrap fixed width container for content -->
+<!-- bootstrap fixed width container for content -->
 <div class="container-lg mt-5">     
-    <div class="col-6 settings-content">
+    <h1 class="settings-title">Blog Posts</h1>
+    <table class="table">
+        <thead>
+            <tr>
+              <th scope="col">Image</th>
+              <th scope="col">Title</th>
+              <th scope="col">ID</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+        <tbody>
+          <!-- The Loop Starts Here -->  
+          <% for(var i=0; i<blogs.length; i++){ %>
+          <tr>
+            <td><img 
+                src="<%= blogs[i].image %>" 
+                alt="..."  
+                class="settings-table-image">
+            </th>
+            <td><%= blogs[i].title %></td>
+            <td><span class="settings-table-id"><%=blogs[i]._id%></span></td>
+            <td><button type="button" class="btn btn-outline-primary">Edit</button></td>
+          </tr>
+          <% } %>
+          <!-- The Loop Ends Here -->
+        </tbody>
+      </table>
 
-        <h1>Blog Settings will go here</h1>
-    </div>
 </div>
 
 <!-- css grid container for settings content end -->

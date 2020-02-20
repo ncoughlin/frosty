@@ -28,11 +28,9 @@ html,body {
 
 .settings-grid-two{
     grid-area: 1/2/2/3;
-    background-color: cornflowerblue;
 }
 
 /* Settings Navbar*/
-
 #settings-nav {
     width:inherit;
     height:inherit;
@@ -42,10 +40,19 @@ html,body {
     position: relative;
 }
 
-.settings-content{
-    
+/* Settings Content*/
+.settings-title{
+    padding-bottom: 30px;
 }
 
+/* Settings Tables*/
+.settings-table-image{
+    height: 40px;
+}
+
+.settings-table-id{
+    color: gray;
+}
 
 /* Icons*/
 i{

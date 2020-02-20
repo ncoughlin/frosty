@@ -80,9 +80,21 @@ app.get("/posts", function(req, res){
 // get blogs from database 
     Blog.find({}, function(err, blogs){
         if(err){
-            console.log("Error: Unable to retreive post data.");
+            console.log("Error: Unable to retreive blog data.");
         } else {
             res.render("index.ejs", {blogs:blogs});
+        }
+    });
+});
+
+// render the settings>blogs page
+app.get("/settings/blogs", function(req, res){
+// get blogs from database 
+    Blog.find({}, function(err, blogs){
+        if(err){
+            console.log("Error: Unable to retreive blog data.");
+        } else {
+            res.render("settings-blogs.ejs", {blogs:blogs});
         }
     });
 });
