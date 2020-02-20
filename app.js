@@ -13,6 +13,8 @@ var app = express();
 var bodyParser = require("body-parser");
 // import mongoose
 var mongoose = require("mongoose");
+// import method-override
+var methodOverride = require("method-override");
 
 // set listen port
 // must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
@@ -25,6 +27,8 @@ app.listen(process.env.PORT, process.env.IP, function(){
 app.use(express.static("public"));
 // use body-parser
 app.use(bodyParser.urlencoded({extended:true}));
+// use method-override
+app.use(methodOverride("_method"));
 
 // ***************************
 // DATABASE SETUP
@@ -165,7 +169,13 @@ app.post("/posts", function(req, res){
 //----------------------------
 // edit post
 app.put("/settings/blogs/:id", function(req, res){
-    res.send("PUT REQUEST RECEIVED");
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, newDatabaseRecord){
+        if(err){
+            console.log("Failed to update database");
+        } else {
+            res.redirect("/posts/" + req.params.id);
+        }
+    });
 }); 
 
 // ***************************
