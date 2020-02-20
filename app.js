@@ -70,12 +70,12 @@ var Blog = mongoose.model("Blog", blogSchema);
 //----------------------------
 
 
-// render the landing page
+// landing page
 app.get("/", function(req, res){
     res.render("landing.ejs");
 });
 
-// render the posts page
+// posts index
 app.get("/posts", function(req, res){
 // get blogs from database 
     Blog.find({}, function(err, blogs){
@@ -87,7 +87,18 @@ app.get("/posts", function(req, res){
     });
 });
 
-// render the settings>blogs page
+
+// new post form
+app.get("/posts/new", function(req, res){
+    res.render("newBlog.ejs");
+});
+
+// settings/general
+app.get("/settings/general", function(req, res){
+    res.render("settings-general.ejs");
+});
+
+// settings>blogs
 app.get("/settings/blogs", function(req, res){
 // get blogs from database 
     Blog.find({}, function(err, blogs){
@@ -99,10 +110,17 @@ app.get("/settings/blogs", function(req, res){
     });
 });
 
-
-// new post page
-app.get("/posts/new", function(req, res){
-    res.render("newBlog.ejs");
+// settings>blogs>:id>edit
+app.get("/settings/blogs/:id/edit", function(req, res){
+     // find post with provided ID
+    Blog.findById(req.params.id, function(err, dbData){
+        if(err){
+            console.log("error finding blog data by ID");
+        } else {
+            // render single post template with that post data
+            res.render("editBlog.ejs", {blog: dbData});
+        }
+    });
 });
 
 // render individual post. This is a wildcard link and must therefore be
@@ -119,20 +137,12 @@ app.get("/posts/:id", function(req, res){
     });
 });
 
-// render the settings/blogs page
-app.get("/settings/blogs", function(req, res){
-    res.render("settings-blogs.ejs");
-});
-
-// render the settings/general page
-app.get("/settings/general", function(req, res){
-    res.render("settings-general.ejs");
-});
 
 //----------------------------
 // .POST routes
 //----------------------------
 
+// new post
 app.post("/posts", function(req, res){
     // get data from form and add to blogs array
     
@@ -149,6 +159,14 @@ app.post("/posts", function(req, res){
     res.redirect("/posts");
 });
 
+
+//----------------------------
+// .PUT routes
+//----------------------------
+// edit post
+app.put("/settings/blogs/:id", function(req, res){
+    res.send("PUT REQUEST RECEIVED");
+}); 
 
 // ***************************
 // Command Reference

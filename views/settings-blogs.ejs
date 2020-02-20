@@ -30,7 +30,7 @@
             </th>
             <td><%= blogs[i].title %></td>
             <td><span class="settings-table-id"><%=blogs[i]._id%></span></td>
-            <td><button type="button" class="btn btn-outline-primary">Edit</button></td>
+            <td><a href="/settings/blogs/<%=blogs[i]._id%>/edit" class="btn btn-outline-primary">Edit</a></td>
           </tr>
           <% } %>
           <!-- The Loop Ends Here -->

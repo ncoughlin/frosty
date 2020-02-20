@@ -1,18 +1,23 @@
 <%- include("partials/header.ejs") %>
 <%- include("partials/navbar.ejs") %>
+<!-- contains css grid container start -->
+<%- include("partials/settings-bar.ejs") %>
+<!-- css grid container for settings content start -->
+<%- include("partials/settings-content-grid-start.ejs") %>
+
 
 <!-- begin content -->
     <!-- fixed width container for content -->
     <div class="container-lg mt-5">
-    <h1 class="settings-title">New Blog</h1>
+    <h1 class="settings-title">Edit Blog</h1>
         <!--input for title, author, image, content -->
-        <form action="/posts" method="POST">
+        <form action="/settings/blogs/<%= blog._id %>" method="PUT">
 
             <div class="form-group">
                 <label for="featuredImageURL">
                     <h4>Featured Image URL</h4>
                 </label>
-                <input type="text" class="form-control" id="featuredImageURL" name="blog[image]">
+                <input type="text" class="form-control" id="featuredImageURL" name="blog[image]" value="<%= blog.image %>">
                 <small id="imageHelp" class="form-text text-muted">Paste URL of a hosted image. Will create media database in future update.</small>
             </div>
 
@@ -20,21 +25,21 @@
                 <label for="titleInput">
                     <h4>Title</h4>
                 </label>
-                <input type="text" class="form-control" id="titleInput" placeholder="Enter Post Title" name="blog[title]">
+                <input type="text" class="form-control" id="titleInput" name="blog[title]" value="<%= blog.title %>">
             </div>
 
             <div class="form-group">
                 <label for="authorInput">
                     <h4>Author</h4>
                 </label>
-                <input type="text" class="form-control" id="authorInput" placeholder="Enter Author Name" name="blog[author]">
+                <input type="text" class="form-control" id="authorInput" name="blog[author]" value="<%= blog.author %>">
             </div>
             
             <div class="form-group">
                 <label for="dateInput">
                     <h4>Date</h4>
                 </label>
-                <input type="date" class="form-control" id="dateInput" name="blog[date]">
+                <input type="date" class="form-control" id="dateInput" name="blog[date]" value="<%= blog.date %>">
                 <small id="dateInputHelp" class="form-text text-muted">If left blank will default to current date.</small>
             </div>
             
@@ -43,7 +48,7 @@
                     <h4>Short Description</h4>
                     </h4>
                 </label>
-                <textarea class="form-control" id="shortDescriptionInput" rows="3" placeholder="A short description of your content..." name="blog[short]"></textarea>
+                <textarea class="form-control" id="shortDescriptionInput" rows="3" name="blog[short]"><%= blog.short %></textarea>
                 <small id="shortDescriptionHelp" class="form-text text-muted">This short description will be visible on the homepage.</small>
             </div>
 
@@ -52,7 +57,7 @@
                     <h4>Content</h4>
                     </h4>
                 </label>
-                <textarea class="form-control" id="contentInput" rows="3" placeholder="Content goes here..." name="blog[content]"></textarea>
+                <textarea class="form-control" id="contentInput" rows="3" name="blog[content]"><%= blog.content %></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -61,4 +66,8 @@
     </div>
 
 
+<!-- css grid container for settings content end -->
+<%- include("partials/settings-content-grid-end.ejs") %>
+<!-- settings grid container end must go at end of settings content templates! -->  
+<%- include("partials/settings-grid-container-end.ejs") %>
 <%- include("partials/footer.ejs") %>
