@@ -12,8 +12,7 @@ html,body {
 /* Settings Grid*/
 .settings-grid-container{
     display:grid;
-   /* grid-template-columns: minmax(100px, 20vw) auto; */
-    grid-template-columns: 20vw auto;
+    grid-template-columns: minmax(100px, 20vw) auto;
     grid-template-rows: 100vh;
 }
 
@@ -23,9 +22,8 @@ html,body {
 
 /* grid-area: grid-row-start, grid-column-start, grid-row-end, grid-column-end*/
 .settings-grid-one{
-    width: inherit;
     grid-area: 1/1/2/2;
-    background-color: brown;
+    background-color: #3d4349;
 }
 
 .settings-grid-two{
@@ -37,9 +35,11 @@ html,body {
 
 #settings-nav {
     width:inherit;
+    height:inherit;
+    flex-direction: column;
+    align-items: stretch;
     padding-right: 0px;
-    background-color: #3d4349;
-    position: absolute;
+    position: relative;
 }
 
 .settings-content{
@@ -59,7 +59,6 @@ i{
 .navbar-settings-icon {
     padding-left: 10px;
 }
-
 
 
 
