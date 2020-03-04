@@ -1,20 +1,22 @@
 
 // ***************************
-// SETUP
+// EXPRESS SETUP
 // ***************************
 
 console.log("app.js is connected");
 
 // import express module
-var express = require("express");
+const express = require("express");
 // set express to variable
-var app = express();
+const app = express();
 // import body-parser
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 // import mongoose
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 // import method-override
-var methodOverride = require("method-override");
+const methodOverride = require("method-override");
+// import express-sanitizer
+const expressSanitizer = require('express-sanitizer');
 
 // set listen port
 // must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
@@ -29,9 +31,11 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 // use method-override
 app.use(methodOverride("_method"));
+// use express-sanitizer
+app.use(expressSanitizer());
 
 // ***************************
-// DATABASE SETUP
+// MONGO DATABASE SETUP
 // ***************************
 
 // connecting application to mongoDB
@@ -148,8 +152,11 @@ app.get("/blogs/:id", function(req, res){
 
 // new post
 app.post("/blogs", function(req, res){
+    // sanitize inputs
+    req.body.blog.title = req.sanitize(req.body.blog.title);
+    req.body.blog.short = req.sanitize(req.body.blog.short);
+    req.body.blog.content = req.sanitize(req.body.blog.content);
     // get data from form and add to blogs array
-    
     Blog.create(req.body.blog, function(err, newDatabaseRecord){
         if(err){
             console.log("Failed to write post to database.");
@@ -168,6 +175,11 @@ app.post("/blogs", function(req, res){
 //----------------------------
 // edit post
 app.put("/blogs/:id", function(req, res){
+    // sanitize inputs
+    req.body.blog.title = req.sanitize(req.body.blog.title);
+    req.body.blog.short = req.sanitize(req.body.blog.short);
+    req.body.blog.content = req.sanitize(req.body.blog.content);
+    // find and update post
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, oldDatabaseRecord){
         if(err){
             console.log("Failed to update database");
