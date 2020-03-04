@@ -187,6 +187,21 @@ app.put("/blogs/:id", function(req, res){
     });
 }); 
 
+//----------------------------
+// .DELETE routes
+//----------------------------
+// delete post
+app.delete("/blogs/:id", function(req, res){
+    Blog.findByIdAndRemove(req.params.id, function (err){
+        if(err){
+          console.log("failed to delete Mongo document");  
+        } else {
+            console.log("Blog with ID:" + req.params.id + " has been deleted");
+            res.redirect("/settings/blogs");
+        }
+    });
+})
+
 // ***************************
 // Command Reference
 // ***************************
