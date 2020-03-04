@@ -156,11 +156,10 @@ app.post("/posts", function(req, res){
         } else {
             console.log("Blog successfully saved to database.");
             console.log(newDatabaseRecord);
+            // redirect back to blogs page
+             res.redirect("/posts");
         }
     });
-    
-    // redirect back to blogs page
-    res.redirect("/posts");
 });
 
 
@@ -173,6 +172,9 @@ app.put("/settings/blogs/:id", function(req, res){
         if(err){
             console.log("Failed to update database");
         } else {
+            console.log("Blog successfully saved to database.");
+            console.log(req.body.blog);
+            // redirect to updated single post page
             res.redirect("/posts/" + req.params.id);
         }
     });
@@ -183,4 +185,4 @@ app.put("/settings/blogs/:id", function(req, res){
 // ***************************
 
 // Start MongoDB: sudo service mongod start
-// Check MongoDB Status: service mongod status (in unix shell)
+// Check MongoDB Status: service mongod status (in linux shell)
