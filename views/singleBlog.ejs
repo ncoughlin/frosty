@@ -13,8 +13,8 @@
         <h6><%= blog.author %></h6>
         <h6><%= blog.date.toDateString() %></h6>
 
-        <!--Content -->
-        <p class="font-weight-normal mt-5"><%= blog.content %></p>
+        <!--Content - EJS set to run as code to render HTML -->
+        <p class="font-weight-normal mt-5"><%- blog.content %></p>
 
         
     </div>

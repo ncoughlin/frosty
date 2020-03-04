@@ -57,7 +57,9 @@
                     <h4>Content</h4>
                     </h4>
                 </label>
-                <textarea class="form-control" id="contentInput" rows="3" name="blog[content]"><%= blog.content %></textarea>
+                <div contenteditable="true">
+                    <textarea class="form-control" id="contentInput" rows="3" name="blog[content]"><%= blog.content %></textarea>
+                </div>    
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
