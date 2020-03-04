@@ -80,7 +80,7 @@ app.get("/", function(req, res){
 });
 
 // posts index
-app.get("/posts", function(req, res){
+app.get("/blogs", function(req, res){
 // get blogs from database 
     Blog.find({}, function(err, blogs){
         if(err){
@@ -93,7 +93,7 @@ app.get("/posts", function(req, res){
 
 
 // new post form
-app.get("/posts/new", function(req, res){
+app.get("/blogs/new", function(req, res){
     res.render("newBlog.ejs");
 });
 
@@ -129,7 +129,7 @@ app.get("/settings/blogs/:id/edit", function(req, res){
 
 // render individual post. This is a wildcard link and must therefore be
 // placed after static links in the application!
-app.get("/posts/:id", function(req, res){
+app.get("/blogs/:id", function(req, res){
     // find post with provided ID
     Blog.findById(req.params.id, function(err, dbData){
         if(err){
@@ -147,7 +147,7 @@ app.get("/posts/:id", function(req, res){
 //----------------------------
 
 // new post
-app.post("/posts", function(req, res){
+app.post("/blogs", function(req, res){
     // get data from form and add to blogs array
     
     Blog.create(req.body.blog, function(err, newDatabaseRecord){
@@ -157,7 +157,7 @@ app.post("/posts", function(req, res){
             console.log("Blog successfully saved to database.");
             console.log(newDatabaseRecord);
             // redirect back to blogs page
-             res.redirect("/posts");
+             res.redirect("/blogs");
         }
     });
 });
@@ -167,15 +167,22 @@ app.post("/posts", function(req, res){
 // .PUT routes
 //----------------------------
 // edit post
-app.put("/settings/blogs/:id", function(req, res){
-    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, newDatabaseRecord){
+app.put("/blogs/:id", function(req, res){
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, oldDatabaseRecord){
         if(err){
             console.log("Failed to update database");
         } else {
-            console.log("Blog successfully saved to database.");
-            console.log(req.body.blog);
+            console.log("Blog successfully updated in database.");
+            // we want to log the UPDATED data, not the old
+            Blog.findById(req.params.id, '_id image title author date short content' , { lean: true }, function (err, newDatabaseRecord){
+                if(err){
+                    console.log("Failed To Retreive Updated Record For Display");
+                } else {
+                    console.log(newDatabaseRecord);
+                }
+            });
             // redirect to updated single post page
-            res.redirect("/posts/" + req.params.id);
+            res.redirect("/blogs/" + req.params.id);
         }
     });
 }); 
