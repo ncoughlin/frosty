@@ -5,18 +5,14 @@
 
 console.log("app.js is connected");
 
-// import express module
-const express = require("express");
-// set express to variable
-const app = express();
-// import body-parser
-const bodyParser = require("body-parser");
-// import mongoose
-const mongoose = require("mongoose");
-// import method-override
-const methodOverride = require("method-override");
-// import express-sanitizer
-const expressSanitizer = require('express-sanitizer');
+// import modules
+const express          = require("express"),
+      app              = express(),
+      bodyParser       = require("body-parser"),
+      mongoose         = require("mongoose"),
+      methodOverride   = require("method-override"),
+      expressSanitizer = require('express-sanitizer'),
+      Blog            = require("./models/blogs");
 
 // set listen port
 // must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
@@ -47,26 +43,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("MongoDB Connected");
 });
-
-// Mongoose Schema for Posts
-var blogSchema = new mongoose.Schema({
-    image: String,
-    title: String,
-    author: String,
-    date: {type: Date, default: Date.now},
-    short: String,
-    content: String
-});
-
-// creating schema Model named Blog to be called later
-// IE Blog.find() or Blog.create()
-// Compiling the model is what allows us to run these Mongoose methods
-var Blog = mongoose.model("Blog", blogSchema);
-
-
-// ***************************
-// DOM Interactivity
-// ***************************
 
 
 // ***************************
