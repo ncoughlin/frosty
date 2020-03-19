@@ -12,7 +12,11 @@ const express          = require("express"),
       mongoose         = require("mongoose"),
       methodOverride   = require("method-override"),
       expressSanitizer = require('express-sanitizer'),
-      Blog            = require("./models/blogs");
+      Blog             = require("./models/blogs"),
+      seedDB           = require("./seeds");
+      
+// run seed database function
+seedDB();
 
 // set listen port
 // must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
