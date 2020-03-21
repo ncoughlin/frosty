@@ -8,7 +8,13 @@ var blogSchema = new mongoose.Schema({
     author: String,
     date: {type: Date, default: Date.now},
     short: String,
-    content: String
+    content: String,
+       comments: [
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Comment"
+      }
+   ]
 });
 
 // creating schema Model named Blog to be called later

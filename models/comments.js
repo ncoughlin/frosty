@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 // import method-override
 
-// Mongoose Schema for Posts
+// Mongoose Schema for comments
 var commentSchema = new mongoose.Schema({
     author: String,
     date: {type: Date, default: Date.now},
