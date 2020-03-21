@@ -3,7 +3,7 @@ const mongoose         = require("mongoose"),
       Comment          = require("./models/comments");
       
 // static data array to seed database
-const data = [
+const blogSeeds = [
     {
     image: 'https://ncoughlin.com/wp-content/uploads/2020/01/F4BB34AF-6E6F-4203-A1F0-321F9319A962_1_105_c.jpeg',
     title: 'Strange Brazilian Dogs',
@@ -45,8 +45,19 @@ const data = [
     content:
    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
     }
-    
-]
+];
+
+const commentSeeds = [
+    {
+    author: "Robert Downey Jr.",
+    date: 2020-03-18,
+    content: "This seed comment will be repeated on all blog posts for the time being."
+    },{
+    author: "Julia Roberts",
+    date: 2020-03-18,
+    content: "This is another seed comment that is automatically generated."
+    }
+];
 
 // remove current blog data
 function seedDB(){
@@ -56,7 +67,7 @@ function seedDB(){
         } else {
             console.log("ALL BLOG DATA DELETED");
              // add seed data
-             data.forEach(function(seed){
+             blogSeeds.forEach(function(seed){
                 Blog.create(seed, function(err, blog){
                     if(err){
                         console.log(err);

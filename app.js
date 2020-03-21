@@ -13,6 +13,7 @@ const express          = require("express"),
       methodOverride   = require("method-override"),
       expressSanitizer = require('express-sanitizer'),
       Blog             = require("./models/blogs"),
+      Comment          = require("./models/comments"),
       seedDB           = require("./seeds");
       
 // run seed database function
