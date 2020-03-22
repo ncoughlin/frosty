@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-// import method-override
 
 // Mongoose Schema for comments
 var commentSchema = new mongoose.Schema({

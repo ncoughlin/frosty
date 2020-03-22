@@ -56,28 +56,22 @@ const blogSeeds = [
 async function seedDB(){
     try {
         await Comment.deleteMany({});
-        console.log("Comments Removed from DB");
         await Blog.deleteMany({});
-        console.log("Blogs Removed from DB");
-    
         for (const blogSeed of  blogSeeds) {
             let blog = await Blog.create(blogSeed);
-            console.log("Blog Created");
             let comment = await Comment.create(
                                 {
                                     author: "Duke Ellington",
                                     text: "This comment will be the same for every blog. But it's just seed data so who cares."
                                 }
                             );
-        console.log("Comment Created");                    
         blog.comments.push(comment);  
-        console.log("Comment saved to Blog");
         blog.save();
-        console.log("Blog Saved");
         }
         } catch (err) {
             console.log(err);
         }
+console.log("Blog Data Removed and Re-Seeded");        
 }
 
 

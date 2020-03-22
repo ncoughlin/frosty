@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-// import method-override
 
-// Mongoose Schema for Posts
+// Mongoose Schema for Blogs
 var blogSchema = new mongoose.Schema({
     image: String,
     title: String,
@@ -9,12 +8,12 @@ var blogSchema = new mongoose.Schema({
     date: {type: Date, default: Date.now},
     short: String,
     content: String,
-       comments: [
+    comments: [
       {
          type: mongoose.Schema.Types.ObjectId,
          ref: "Comment"
       }
-   ]
+    ]
 });
 
 // creating schema Model named Blog to be called later
