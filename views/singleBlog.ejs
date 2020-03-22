@@ -2,32 +2,40 @@
 <%- include("partials/navbar.ejs") %>
 
 
-<!-- begin content -->
+
 <!-- fixed width container for content -->
 <div class="container-lg mt-5">
+<!-- Content Section -->
 
     <!--Header Image -->
     <img src="<%= blog.image %>" class="img-fluid" >
     <!--Title & Author -->
-    <h1><%= blog.title %></h1>
-    <h6><%= blog.author %></h6>
-    <h6><%= blog.date.toDateString() %></h6>
+    <h1 class="mt-4"><%= blog.title %></h1>
+    <h6><strong><%= blog.author %></strong></h6>
+    <h6><em class="text-muted"><%= blog.date.toDateString() %></em></h6>
 
     <!--Content - EJS set to run as code to render HTML -->
     <p class="font-weight-normal mt-5"><%- blog.content %></p>
 
-        
+<!--Comments Section -->
+    <!--comments wrapper -->
+    <div class="mt-5 mb-5">
+        <hr>
+        <p>
+          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <strong>View Comments</strong>
+          </button>
+        </p>
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+            <!--Comments Loop -->
+            <% blog.comments.forEach((comment) => { %>
+                <p><strong><%= comment.author %></strong><em class="text-muted"> - <%= comment.date.toDateString() %></em></p>
+                <p><%= comment.content %></p>
+            <% }); %>   
+          </div>
+        </div>        
+    </div>
 </div>
-    
-<div class="container-lg mt-5">
-
-    <!--Comments Loop -->
-    <% blog.comments.forEach((comment) => { %>
-        <p><strong><%= comment.author %></strong></p>
-        <p><%= comment.content %></p>
-    <% }); %>   
-        
-</div>
-
 
 <%- include("partials/footer.ejs") %>
