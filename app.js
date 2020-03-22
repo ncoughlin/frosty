@@ -116,10 +116,14 @@ app.get("/settings/blogs/:id/edit", function(req, res){
 // placed after static links in the application!
 app.get("/blogs/:id", function(req, res){
     // find post with provided ID
-    Blog.findById(req.params.id, function(err, dbData){
+    Blog.findById(req.params.id).
+    // populate comments
+    populate("comments").
+    exec(function(err, dbData){
         if(err){
             console.log("error finding blog data by ID");
         } else {
+            console.log(dbData);
             // render single post template with that post data
             res.render("singleBlog.ejs", {blog: dbData});
         }

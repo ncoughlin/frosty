@@ -4,20 +4,30 @@
 
 <!-- begin content -->
 <!-- fixed width container for content -->
-    <div class="container-lg mt-5">
+<div class="container-lg mt-5">
 
-        <!--Header Image -->
-        <img src="<%= blog.image %>" class="img-fluid" >
-        <!--Title & Author -->
-        <h1><%= blog.title %></h1>
-        <h6><%= blog.author %></h6>
-        <h6><%= blog.date.toDateString() %></h6>
+    <!--Header Image -->
+    <img src="<%= blog.image %>" class="img-fluid" >
+    <!--Title & Author -->
+    <h1><%= blog.title %></h1>
+    <h6><%= blog.author %></h6>
+    <h6><%= blog.date.toDateString() %></h6>
 
-        <!--Content - EJS set to run as code to render HTML -->
-        <p class="font-weight-normal mt-5"><%- blog.content %></p>
+    <!--Content - EJS set to run as code to render HTML -->
+    <p class="font-weight-normal mt-5"><%- blog.content %></p>
 
         
-    </div>
+</div>
+    
+<div class="container-lg mt-5">
+
+    <!--Comments Loop -->
+    <% blog.comments.forEach((comment) => { %>
+        <p><strong><%= comment.author %></strong></p>
+        <p><%= comment.content %></p>
+    <% }); %>   
+        
+</div>
 
 
 <%- include("partials/footer.ejs") %>

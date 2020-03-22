@@ -62,7 +62,7 @@ async function seedDB(){
             let comment = await Comment.create(
                                 {
                                     author: "Duke Ellington",
-                                    text: "This comment will be the same for every blog. But it's just seed data so who cares."
+                                    content: "This comment will be the same for every blog. But it's just seed data so who cares."
                                 }
                             );
         blog.comments.push(comment);  
