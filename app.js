@@ -82,10 +82,10 @@ app.get("/blogs/new",(req, res) => {
     res.render("newBlog.ejs");
 });
 
-// new comment form
-app.get("/blogs/:id/comments/new",(req,res) => {
+// new comment form **I'm not making this on a separate page, this is embeded in the single post page**
+/*app.get("/blogs/:id/comments/new",(req,res) => {
     res.send("NEW COMMENTS FORM GOES HERE");
-});
+});*/
 
 // settings/general
 app.get("/settings/general",(req, res) => {
@@ -140,7 +140,7 @@ app.get("/blogs/:id",(req, res) => {
 // .POST routes
 //----------------------------
 
-// new post
+// new blog: receive and save
 app.post("/blogs",(req, res) => {
     // sanitize inputs
     req.body.blog.title = req.sanitize(req.body.blog.title);
@@ -159,7 +159,32 @@ app.post("/blogs",(req, res) => {
     });
 });
 
+// new comment: receive and save to blog
+app.post("/blogs/:id/comments",(req,res) => {
+    // sanitize inputs
+    req.body.comment.author = req.sanitize(req.body.comment.author);
+    req.body.comment.content = req.sanitize(req.body.comment.content);
+        
+    async function saveComment() {
+        try {
+            // lookup blog using ID
+            let blog = await Blog.findById(req.params.id);
+            // create new comment
+            let comment = await Comment.create(req.body.comment);
+            // connect new comment to blog
+            blog.comments.push(comment);
+            blog.save();
+            console.log("New Comment Saved");
+            // redirect    
+            res.redirect("/blogs/" + blog._id);
+        } catch(err) {
+            console.log(err);
+        }
+    }
+    saveComment();
+});    
 
+ 
 //----------------------------
 // .PUT routes
 //----------------------------

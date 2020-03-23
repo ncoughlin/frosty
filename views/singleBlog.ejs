@@ -17,25 +17,7 @@
     <!--Content - EJS set to run as code to render HTML -->
     <p class="font-weight-normal mt-5"><%- blog.content %></p>
 
-<!--Comments Section -->
-    <!--comments wrapper -->
-    <div class="mt-5 mb-5">
-        <hr>
-        <p>
-          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            <strong>View Comments</strong>
-          </button>
-        </p>
-        <div class="collapse" id="collapseExample">
-          <div class="card card-body">
-            <!--Comments Loop -->
-            <% blog.comments.forEach((comment) => { %>
-                <p><strong><%= comment.author %></strong><em class="text-muted"> - <%= comment.date.toDateString() %></em></p>
-                <p><%= comment.content %></p>
-            <% }); %>   
-          </div>
-        </div>        
-    </div>
+<%- include("partials/comments.ejs") %>
 </div>
 
 <%- include("partials/footer.ejs") %>

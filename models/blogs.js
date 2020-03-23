@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // Mongoose Schema for Blogs
-var blogSchema = new mongoose.Schema({
+const blogSchema = new mongoose.Schema({
     image: String,
     title: String,
     author: String,
