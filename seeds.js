@@ -47,9 +47,18 @@ const blogSeeds = [
     }
 ];
 
-
-
-// Promises
+const commentSeeds = [
+    {
+        author: "Duke Ellington",
+        content: "This comment will be the same for every blog. But it's just seed data so who cares."
+    },{
+        author: "Marv Ellis",
+        content: "Would you be interested in hosting a guest post about article xyz?"
+    },{
+        author: "Ella Fitzgerald",
+        content: "Just don't give up trying to do what you really want to do. Where there is love and inspiration, I don't think you can go wrong."
+    }
+];
 
 
 // Async version: remove current blog data
@@ -57,21 +66,19 @@ async function seedDB(){
     try {
         await Comment.deleteMany({});
         await Blog.deleteMany({});
+        console.log("All Blogs and Comments Deleted");
         for (const blogSeed of  blogSeeds) {
             let blog = await Blog.create(blogSeed);
-            let comment = await Comment.create(
-                                {
-                                    author: "Duke Ellington",
-                                    content: "This comment will be the same for every blog. But it's just seed data so who cares."
-                                }
-                            );
-        blog.comments.push(comment);  
-        blog.save();
+            for (const commentSeed of commentSeeds) {
+                let comment = await Comment.create(commentSeed);
+                blog.comments.push(comment);  
+                }
+        blog.save();        
+        console.log("Blog Saved"); 
         }
         } catch (err) {
             console.log(err);
         }
-console.log("Blog Data Removed and Re-Seeded");        
 }
 
 
