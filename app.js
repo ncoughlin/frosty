@@ -60,14 +60,14 @@ db.once('open', function() {
 
 
 // landing page
-app.get("/", function(req, res){
+app.get("/",(req, res) => {
     res.render("landing.ejs");
 });
 
 // posts index
-app.get("/blogs", function(req, res){
+app.get("/blogs",(req, res) => {
 // get blogs from database 
-    Blog.find({}, function(err, blogs){
+    Blog.find({},(err, blogs) => {
         if(err){
             console.log("Error: Unable to retreive blog data.");
         } else {
@@ -78,19 +78,22 @@ app.get("/blogs", function(req, res){
 
 
 // new post form
-app.get("/blogs/new", function(req, res){
+app.get("/blogs/new",(req, res) => {
     res.render("newBlog.ejs");
 });
 
+// new comment form
+
+
 // settings/general
-app.get("/settings/general", function(req, res){
+app.get("/settings/general",(req, res) => {
     res.render("settings-general.ejs");
 });
 
 // settings>blogs
-app.get("/settings/blogs", function(req, res){
+app.get("/settings/blogs",(req, res) => {
 // get blogs from database 
-    Blog.find({}, function(err, blogs){
+    Blog.find({},(err, blogs) => {
         if(err){
             console.log("Error: Unable to retreive blog data.");
         } else {
@@ -100,9 +103,9 @@ app.get("/settings/blogs", function(req, res){
 });
 
 // settings>blogs>:id>edit
-app.get("/settings/blogs/:id/edit", function(req, res){
+app.get("/settings/blogs/:id/edit",(req, res) => {
      // find post with provided ID
-    Blog.findById(req.params.id, function(err, dbData){
+    Blog.findById(req.params.id,(err, dbData) => {
         if(err){
             console.log("error finding blog data by ID");
         } else {
@@ -114,12 +117,12 @@ app.get("/settings/blogs/:id/edit", function(req, res){
 
 // render individual post. This is a wildcard link and must therefore be
 // placed after static links in the application!
-app.get("/blogs/:id", function(req, res){
+app.get("/blogs/:id",(req, res) => {
     // find post with provided ID
     Blog.findById(req.params.id).
     // populate comments
     populate("comments").
-    exec(function(err, dbData){
+    exec((err, dbData) => {
         if(err){
             console.log("error finding blog data by ID");
         } else {
@@ -136,13 +139,13 @@ app.get("/blogs/:id", function(req, res){
 //----------------------------
 
 // new post
-app.post("/blogs", function(req, res){
+app.post("/blogs",(req, res) => {
     // sanitize inputs
     req.body.blog.title = req.sanitize(req.body.blog.title);
     req.body.blog.short = req.sanitize(req.body.blog.short);
     req.body.blog.content = req.sanitize(req.body.blog.content);
     // get data from form and add to blogs array
-    Blog.create(req.body.blog, function(err, newDatabaseRecord){
+    Blog.create(req.body.blog,(err, newDatabaseRecord) => {
         if(err){
             console.log("Failed to write post to database.");
         } else {
@@ -159,19 +162,19 @@ app.post("/blogs", function(req, res){
 // .PUT routes
 //----------------------------
 // edit post
-app.put("/blogs/:id", function(req, res){
+app.put("/blogs/:id",(req, res) => {
     // sanitize inputs
     req.body.blog.title = req.sanitize(req.body.blog.title);
     req.body.blog.short = req.sanitize(req.body.blog.short);
     req.body.blog.content = req.sanitize(req.body.blog.content);
     // find and update post
-    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, oldDatabaseRecord){
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog,(err, oldDatabaseRecord) => {
         if(err){
             console.log("Failed to update database");
         } else {
             console.log("Blog successfully updated in database.");
             // we want to log the UPDATED data, not the old
-            Blog.findById(req.params.id, '_id image title author date short content' , { lean: true }, function (err, newDatabaseRecord){
+            Blog.findById(req.params.id, '_id image title author date short content' , { lean: true },(err, newDatabaseRecord) => {
                 if(err){
                     console.log("Failed To Retreive Updated Record For Display");
                 } else {
@@ -188,8 +191,8 @@ app.put("/blogs/:id", function(req, res){
 // .DELETE routes
 //----------------------------
 // delete post
-app.delete("/blogs/:id", function(req, res){
-    Blog.findByIdAndRemove(req.params.id, function (err){
+app.delete("/blogs/:id",(req, res) => {
+    Blog.findByIdAndRemove(req.params.id,(err) => {
         if(err){
           console.log("failed to delete Mongo document");  
         } else {
