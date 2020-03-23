@@ -80,6 +80,8 @@ async function seedDB(){
             console.log(err);
         }
 }
+// run function
+seedDB();
 
 
 /*// remove current blog data - callback hell version

@@ -16,8 +16,6 @@ const express          = require("express"),
       Comment          = require("./models/comments"),
       seedDB           = require("./seeds");
       
-// run seed database function
-seedDB();
 
 // set listen port
 // must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
@@ -120,7 +118,7 @@ app.get("/settings/blogs/:id/edit",(req, res) => {
 // render individual post. This is a wildcard link and must therefore be
 // placed after static links in the application!
 app.get("/blogs/:id",(req, res) => {
-    // find post with provided ID
+    // Find Blog by ID and populate comments
     Blog.findById(req.params.id).
     // populate comments
     populate("comments").
