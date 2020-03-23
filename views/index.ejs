@@ -6,26 +6,26 @@
       <div class="row justify-content-start">
          
          
-        <!-- The Loop Starts Here -->  
-        <% for(var i=0; i<blogs.length; i++){ %>  
+        <!-- The Loop Starts Here -->
+        <% blogs.forEach((blog) => { %>
         
         <div class="col-sm-12 col-md-6 col-lg-4">
           <div class="card mt-4" style="width: 18rem;">
             <img
-              src="<%= blogs[i].image %>"
+              src="<%= blog.image %>"
               class="card-img-top"
               alt="..."
             />
             <div class="card-body">
-              <h3 class="card-title"><%= blogs[i].title %></h3>
-              <h6 class="card-title"><%= blogs[i].author %></h5>
-              <p class="card-text"><%= blogs[i].short %></p>
-              <a href="/blogs/<%=blogs[i]._id%>" class="btn btn-primary">Read More</a>
+              <h3 class="card-title"><%= blog.title %></h3>
+              <h6 class="card-title"><%= blog.author %></h5>
+              <p class="card-text"><%= blog.short %></p>
+              <a href="/blogs/<%=blog._id%>" class="btn btn-primary">Read More</a>
             </div>
           </div>
         </div>
         
-        <% } %>
+        <% }); %>
         <!-- The Loop Ends Here -->
         
       </div>

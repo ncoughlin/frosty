@@ -83,7 +83,9 @@ app.get("/blogs/new",(req, res) => {
 });
 
 // new comment form
-
+app.get("/blogs/:id/comments/new",(req,res) => {
+    res.send("NEW COMMENTS FORM GOES HERE");
+});
 
 // settings/general
 app.get("/settings/general",(req, res) => {

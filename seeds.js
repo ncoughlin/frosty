@@ -2,7 +2,7 @@ const mongoose         = require("mongoose"),
       Blog             = require("./models/blogs"),
       Comment          = require("./models/comments");
       
-// static data array to seed database
+// static data arrays to seed database
 const blogSeeds = [
     {
     image: 'https://ncoughlin.com/wp-content/uploads/2020/01/F4BB34AF-6E6F-4203-A1F0-321F9319A962_1_105_c.jpeg',
