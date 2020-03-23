@@ -123,9 +123,9 @@ app.get("/blogs/:id", function(req, res){
         if(err){
             console.log("error finding blog data by ID");
         } else {
-            console.log(dbData);
             // render single post template with that post data
             res.render("singleBlog.ejs", {blog: dbData});
+            console.log("Article: " + dbData.title + " has loaded.");
         }
     });
 });
