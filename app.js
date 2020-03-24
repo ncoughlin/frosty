@@ -59,7 +59,24 @@ db.once('open', function() {
 
 // landing page
 app.get("/",(req, res) => {
-    res.render("landing.ejs");
+    // get blogs from database 
+    Blog.find({},(err, blogs) => {
+        if(err){
+            console.log("Error: Unable to retreive blog data.");
+        } else {
+            res.render("index.ejs", {blogs:blogs});
+        }
+    });
+});
+
+// login page
+app.get("/login",(req, res) => {
+    res.render("login.ejs");
+});
+
+// register page
+app.get("/register",(req, res) => {
+    res.render("register.ejs");
 });
 
 // posts index
@@ -74,16 +91,10 @@ app.get("/blogs",(req, res) => {
     });
 });
 
-
 // new post form
 app.get("/blogs/new",(req, res) => {
     res.render("newBlog.ejs");
 });
-
-// new comment form **I'm not making this on a separate page, this is embeded in the single post page**
-/*app.get("/blogs/:id/comments/new",(req,res) => {
-    res.send("NEW COMMENTS FORM GOES HERE");
-});*/
 
 // settings/general
 app.get("/settings/general",(req, res) => {
@@ -152,7 +163,7 @@ app.post("/blogs",(req, res) => {
             console.log("Blog successfully saved to database.");
             console.log(newDatabaseRecord);
             // redirect back to blogs page
-             res.redirect("/blogs");
+             res.redirect("/");
         }
     });
 });
@@ -212,6 +223,7 @@ app.put("/blogs/:id",(req, res) => {
     });
 }); 
 
+
 //----------------------------
 // .DELETE routes
 //----------------------------
@@ -226,6 +238,7 @@ app.delete("/blogs/:id",(req, res) => {
         }
     });
 })
+
 
 // ***************************
 // Command Reference

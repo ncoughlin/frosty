@@ -10,7 +10,7 @@
         <% blogs.forEach((blog) => { %>
         
         <div class="col-sm-12 col-md-6 col-lg-4">
-          <div class="card mt-4" style="width: 18rem;">
+          <div class="card shadow mt-4" >
             <img
               src="<%= blog.image %>"
               class="card-img-top"
@@ -18,7 +18,7 @@
             />
             <div class="card-body">
               <h3 class="card-title"><%= blog.title %></h3>
-              <h6 class="card-title"><%= blog.author %></h5>
+              <h6 class="card-title"><em><%= blog.author %></em></h5>
               <p class="card-text"><%= blog.short %></p>
               <a href="/blogs/<%=blog._id%>" class="btn btn-primary">Read More</a>
             </div>

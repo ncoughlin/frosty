@@ -1,0 +1,31 @@
+<%- include("partials/header.ejs") %>
+
+<div class="container-sm h-100">
+   <div class="row h-100 justify-content-center align-items-center"> 
+        <div class="card shadow" style="width: 25rem;">
+            <div class="card-body">
+                <a href="/">
+                <img
+                  src="/images/logo1.svg"
+                  class="card-img-top mt-4 mb-4"
+                  width="80"
+                  height="80"
+                  alt="Frosty CMS Logo"
+                /></a>
+                <h2 class="card-title text-center">Login</h2>
+                <form class="mt-4">
+                  <div class="form-group">
+                    <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="email">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="password">
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-lg btn-block mt-4 mb-3">Submit</button>
+                </form>
+                <a href="/register"><p class="text-center">Register</p></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include("partials/footer.ejs") %>
