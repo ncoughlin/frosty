@@ -38,7 +38,7 @@ app.use(methodOverride("_method"));
 app.use(expressSanitizer());
 
 // ***************************
-// MONGO DATABASE SETUP
+// MONGO CONFIGURATION
 // ***************************
 
 // connecting application to mongoDB
@@ -51,6 +51,22 @@ db.once('open', function() {
   console.log("MongoDB Connected");
 });
 
+// ***************************
+// PASSPORT CONFIGURATION
+// ***************************
+
+app.use(require("express-session")({
+    secret: "Never play anything the same way twice.",
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize());
+app.use(passport.session());
+// the following User.methods are provided by
+// plugin(passportLocalMongoose) in the users.js model module
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // ***************************
 // ROUTES
@@ -59,7 +75,6 @@ db.once('open', function() {
 //----------------------------
 // .GET routes
 //----------------------------
-
 
 // landing page
 app.get("/",(req, res) => {
@@ -100,12 +115,12 @@ app.get("/blogs/new",(req, res) => {
     res.render("newBlog.ejs");
 });
 
-// settings/general
-app.get("/settings/general",(req, res) => {
-    res.render("settings-general.ejs");
+// settings/dashboard
+app.get("/settings/dashboard",(req, res) => {
+    res.render("settings-dashboard.ejs");
 });
 
-// settings>blogs
+// settings/blogs
 app.get("/settings/blogs",(req, res) => {
 // get blogs from database 
     Blog.find({},(err, blogs) => {
@@ -115,6 +130,16 @@ app.get("/settings/blogs",(req, res) => {
             res.render("settings-blogs.ejs", {blogs:blogs});
         }
     });
+});
+
+// settings/users
+app.get("/settings/users",(req, res) => {
+    res.render("settings-users.ejs");
+});
+
+// settings/general
+app.get("/settings/general",(req, res) => {
+    res.render("settings-general.ejs");
 });
 
 // settings>blogs>:id>edit
@@ -197,10 +222,42 @@ app.post("/blogs/:id/comments",(req,res) => {
     saveComment();
 });    
 
+// new user registration: save user to database and authenticate them
+app.post("/register", (req, res) => {
+  var newUser = new User({
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    email: req.body.email,
+    username: req.body.username
+  });
+  User.register(newUser, req.body.password, (err, user) => {
+    console.log("attempting user registration");
+    if (err) {
+      console.log(err);
+      return res.render("register.ejs");
+    }
+    passport.authenticate("local")(req, res, () => {
+      res.redirect("/");
+    });
+    console.log("user registration successful: " + newUser.username);
+  });
+});
+
+// login user: authenticate user
+// app.post("/login", middleware, callback)
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/settings/dashboard",
+    failureRedirect: "/login"
+  }),
+  (req, res) => {}
+);
  
 //----------------------------
 // .PUT routes
 //----------------------------
+
 // edit post
 app.put("/blogs/:id",(req, res) => {
     // sanitize inputs

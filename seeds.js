@@ -1,6 +1,7 @@
 const mongoose         = require("mongoose"),
       Blog             = require("./models/blogs"),
-      Comment          = require("./models/comments");
+      Comment          = require("./models/comments"),
+      User             = require("./models/users");
       
 // static data arrays to seed database
 const blogSeeds = [
@@ -64,6 +65,8 @@ const commentSeeds = [
 // Async version: remove current blog data
 async function seedDB(){
     try {
+//        await User.deleteMany({});
+//        console.log("All Users Deleted");
         await Comment.deleteMany({});
         await Blog.deleteMany({});
         console.log("All Blogs and Comments Deleted");

@@ -13,21 +13,21 @@
                   alt="Frosty CMS Logo"
                 /></a>
                 <h2 class="card-title text-center">Register</h2>
-                <form class="mt-4">
+                <form class="mt-4" action="/register" method="POST">
                   <div class="form-group">    
-                    <input type="text" class="form-control form-control-lg" placeholder="first name">
+                    <input type="text" class="form-control form-control-lg" placeholder="first name" name="firstname">
                   </div>    
                   <div class="form-group">
-                    <input type="text" class="form-control form-control-lg" placeholder="last name">
+                    <input type="text" class="form-control form-control-lg" placeholder="last name" name="lastname">
                   </div>
                   <div class="form-group">
-                    <input type="text" class="form-control form-control-lg" placeholder="username">
+                    <input type="text" class="form-control form-control-lg" placeholder="username" name="username">
                   </div>
                   <div class="form-group">
-                    <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="email">
+                    <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="email" name="email">
                   </div>
                   <div class="form-group">
-                    <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="password">
+                    <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="password" name="password">
                   </div>
                   <button type="submit" class="btn btn-primary btn-lg btn-block mt-4 mb-3">Submit</button>
                 </form>
