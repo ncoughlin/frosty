@@ -6,15 +6,19 @@
 console.log("app.js is connected");
 
 // import modules
-const express          = require("express"),
+const express          = require('express'),
       app              = express(),
-      bodyParser       = require("body-parser"),
-      mongoose         = require("mongoose"),
-      methodOverride   = require("method-override"),
+      bodyParser       = require('body-parser'),
+      mongoose         = require('mongoose'),
+      methodOverride   = require('method-override'),
       expressSanitizer = require('express-sanitizer'),
-      Blog             = require("./models/blogs"),
-      Comment          = require("./models/comments"),
-      seedDB           = require("./seeds");
+      passport         = require('passport'),
+      LocalStrategy    = require('passport-local'),
+      Blog             = require('./models/blogs'),
+      Comment          = require('./models/comments'),
+      User             = require('./models/users'),
+      // disable to prevent seeding of database
+      seedDB           = require('./seeds');
       
 
 // set listen port
