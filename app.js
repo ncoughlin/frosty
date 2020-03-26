@@ -69,6 +69,18 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // ***************************
+// MIDDLEWARE FUNCTIONS
+// ***************************
+
+// check if user is logged in
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
+
+// ***************************
 // ROUTES
 // ***************************
 
@@ -83,7 +95,7 @@ app.get("/",(req, res) => {
         if(err){
             console.log("Error: Unable to retreive blog data.");
         } else {
-            res.render("index.ejs", {blogs:blogs});
+            res.render("index.ejs", {blogs:blogs, currentUser: req.user});
         }
     });
 });
@@ -96,6 +108,12 @@ app.get("/login",(req, res) => {
 // register page
 app.get("/register",(req, res) => {
     res.render("register.ejs");
+});
+
+// logout user
+app.get("/logout",(req, res) => {
+    req.logout();
+    res.redirect("/");
 });
 
 // posts index
@@ -111,17 +129,17 @@ app.get("/blogs",(req, res) => {
 });
 
 // new post form
-app.get("/blogs/new",(req, res) => {
+app.get("/blogs/new", isLoggedIn, (req, res) => {
     res.render("newBlog.ejs");
 });
 
 // settings/dashboard
-app.get("/settings/dashboard",(req, res) => {
+app.get("/settings/dashboard", isLoggedIn, (req, res) => {
     res.render("settings-dashboard.ejs");
 });
 
 // settings/blogs
-app.get("/settings/blogs",(req, res) => {
+app.get("/settings/blogs", isLoggedIn, (req, res) => {
 // get blogs from database 
     Blog.find({},(err, blogs) => {
         if(err){
@@ -133,17 +151,17 @@ app.get("/settings/blogs",(req, res) => {
 });
 
 // settings/users
-app.get("/settings/users",(req, res) => {
+app.get("/settings/users", isLoggedIn, (req, res) => {
     res.render("settings-users.ejs");
 });
 
 // settings/general
-app.get("/settings/general",(req, res) => {
+app.get("/settings/general", isLoggedIn, (req, res) => {
     res.render("settings-general.ejs");
 });
 
 // settings>blogs>:id>edit
-app.get("/settings/blogs/:id/edit",(req, res) => {
+app.get("/settings/blogs/:id/edit", isLoggedIn, (req, res) => {
      // find post with provided ID
     Blog.findById(req.params.id,(err, dbData) => {
         if(err){
@@ -179,7 +197,7 @@ app.get("/blogs/:id",(req, res) => {
 //----------------------------
 
 // new blog: receive and save
-app.post("/blogs",(req, res) => {
+app.post("/blogs", isLoggedIn, (req, res) => {
     // sanitize inputs
     req.body.blog.title = req.sanitize(req.body.blog.title);
     req.body.blog.short = req.sanitize(req.body.blog.short);
@@ -198,7 +216,7 @@ app.post("/blogs",(req, res) => {
 });
 
 // new comment: receive and save to blog
-app.post("/blogs/:id/comments",(req,res) => {
+app.post("/blogs/:id/comments", isLoggedIn, (req,res) => {
     // sanitize inputs
     req.body.comment.author = req.sanitize(req.body.comment.author);
     req.body.comment.content = req.sanitize(req.body.comment.content);
