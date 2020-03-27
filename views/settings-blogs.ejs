@@ -31,7 +31,7 @@
             </th>
             <td><%= blogs[i].title %></td>
             <td><span class="settings-table-id"><%=blogs[i]._id%></span></td>
-            <td><a href="/settings/blogs/<%=blogs[i]._id%>/edit" class="btn btn-outline-primary">Edit</a></td>
+            <td><a href="/blogs/<%=blogs[i]._id%>/edit" class="btn btn-outline-primary">Edit</a></td>
             <td>
               <form action="/blogs/<%= blogs[i]._id %>?_method=DELETE" method="POST">
                 <button type="submit" class="btn btn-outline-danger">Delete</button>
