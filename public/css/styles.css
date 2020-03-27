@@ -9,6 +9,11 @@ html,body {
     z-index: 2;
 }
 
+/* Mobile Navbar*/
+.navbar-collapse {
+    margin: 1em;
+}
+
 /* Settings Grid*/
 .settings-grid-container{
     display:grid;
@@ -66,6 +71,16 @@ i{
 .navbar-settings-icon {
     padding-left: 10px;
 }
+
+/* Material Design Icons */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { 
+    font-size: 36px;
+    top: 4px;
+    position: relative;
+    }
+.material-icons.md-48 { font-size: 48px; }
 
 /* TESTING */
 /*

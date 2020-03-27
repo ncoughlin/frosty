@@ -34,14 +34,23 @@
       </li>              
       <% } else { %>
       <!-- new post button -->
-      <a class="btn btn-outline-success nav-item mr-auto" href="/blogs/new" role="button"> +New Post</a>
       <li class="nav-item">
-          <a class="nav-link" href="/logout">
+        <a class="btn btn-outline-success nav-item mr-2" href="/blogs/new" role="button"> +New Post</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link mr-2" href="/">
+              <u><%= currentUser.username %></u>
+              <span class="sr-only"><%= currentUser.username %></span></a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link mr-2" href="/logout">
               Logout
               <span class="sr-only">Logout</span></a>
       </li>
       <!-- settings icon -->
-      <a href="/settings/dashboard" class="navbar-settings-icon"><i class="material-icons">settings</i></a>      
+      <li class="nav-item">
+        <a href="/settings/dashboard"><i class="material-icons md-36">settings</i></a>   
+      </li>  
       <% } %>
     </ul>
   </div>

@@ -12,13 +12,17 @@
           <div class="card card-body">
             <!--New Comment Button -->
             <p>
-              <button class="btn btn-success" role="button" data-toggle="collapse" data-target="#collapseNewComment" aria-expanded="false" aria-controls="collapseNewComment"> 
+              <button class="btn btn-outline-success" role="button" data-toggle="collapse" data-target="#collapseNewComment" aria-expanded="false" aria-controls="collapseNewComment"> 
               +New Comment
               </button>
             </p>
             <!--New Comment Input -->
             <div class="collapse" id="collapseNewComment">
               <div class="card card-body mb-4">
+                <% if(!currentUser){ %>
+                <p>You must be logged in to comment.<p>
+                <a class="btn btn-outline-primary" role="button" href="/login">Login</a>
+                <% } else { %>
                 <!--New Comment Form -->
                 <form action="/blogs/<%= blog._id %>/comments" method="POST">
                   <div class="form-group">
@@ -42,6 +46,7 @@
                     </button>
                   </span>
                 </form>
+                <% } %>
               </div>
             </div>
             <!--Comments Loop -->

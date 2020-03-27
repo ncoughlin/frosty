@@ -80,6 +80,12 @@ function isLoggedIn(req, res, next){
     res.redirect("/login");
 }
 
+// pass through user data on every route
+app.use((req,res,next) => {
+    res.locals.currentUser = req.user;
+    next();
+});
+
 // ***************************
 // ROUTES
 // ***************************
@@ -95,7 +101,7 @@ app.get("/",(req, res) => {
         if(err){
             console.log("Error: Unable to retreive blog data.");
         } else {
-            res.render("index.ejs", {blogs:blogs, currentUser: req.user});
+            res.render("index.ejs", {blogs:blogs});
         }
     });
 });
