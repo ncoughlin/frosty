@@ -1,5 +1,8 @@
+// ***************************
+// EXPRESS SETUP
+// ***************************
 var express          = require("express"),
-    router           = express.Router(),
+    router           = express.Router({mergeParams: true}),
     Blog             = require('../models/blogs');
     
 // ***************************
@@ -31,7 +34,7 @@ router.use((req,res,next) => {
 // landing page is in index.js
 
 // blogs index
-router.get("/blogs",(req, res) => {
+router.get("/",(req, res) => {
 // get blogs from database 
     Blog.find({},(err, blogs) => {
         if(err){
@@ -43,13 +46,13 @@ router.get("/blogs",(req, res) => {
 });
 
 // new post form
-router.get("/blogs/new", isLoggedIn, (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
     res.render("newBlog.ejs");
 });
 
 // render individual post. This is a wildcard link and must therefore be
 // placed after static links in the application!
-router.get("/blogs/:id",(req, res) => {
+router.get("/:id",(req, res) => {
     // Find Blog by ID and populate comments
     Blog.findById(req.params.id).
     // populate comments
@@ -70,7 +73,7 @@ router.get("/blogs/:id",(req, res) => {
 //----------------------------
 
 // new blog: receive and save
-router.post("/blogs", isLoggedIn, (req, res) => {
+router.post("/", isLoggedIn, (req, res) => {
     // sanitize inputs
     req.body.blog.title = req.sanitize(req.body.blog.title);
     req.body.blog.short = req.sanitize(req.body.blog.short);
@@ -93,7 +96,7 @@ router.post("/blogs", isLoggedIn, (req, res) => {
 //----------------------------
 
 // edit post
-router.put("/blogs/:id",(req, res) => {
+router.put("/:id",(req, res) => {
     // sanitize inputs
     req.body.blog.title = req.sanitize(req.body.blog.title);
     req.body.blog.short = req.sanitize(req.body.blog.short);
@@ -124,7 +127,7 @@ router.put("/blogs/:id",(req, res) => {
 //----------------------------
 
 // delete post
-router.delete("/blogs/:id",(req, res) => {
+router.delete("/:id",(req, res) => {
     Blog.findByIdAndRemove(req.params.id,(err) => {
         if(err){
           console.log("failed to delete Mongo document");  

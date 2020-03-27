@@ -1,5 +1,8 @@
+// ***************************
+// EXPRESS SETUP
+// ***************************
 var express          = require("express"),
-    router           = express.Router(),
+    router           = express.Router({mergeParams: true}),
     Comment          = require('../models/comments'),
     Blog             = require('../models/blogs');
     
@@ -36,7 +39,7 @@ router.use((req,res,next) => {
 //----------------------------
 
 // new comment: receive and save to blog
-router.post("/blogs/:id/comments", isLoggedIn, (req,res) => {
+router.post("/", isLoggedIn, (req,res) => {
     // sanitize inputs
     req.body.comment.author = req.sanitize(req.body.comment.author);
     req.body.comment.content = req.sanitize(req.body.comment.content);

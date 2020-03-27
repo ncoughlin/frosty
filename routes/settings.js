@@ -1,5 +1,8 @@
+// ***************************
+// EXPRESS SETUP
+// ***************************
 var express          = require("express"),
-    router           = express.Router(),
+    router           = express.Router({mergeParams: true}),
     Blog             = require('../models/blogs');
     
 // ***************************
@@ -29,12 +32,22 @@ router.use((req,res,next) => {
 //----------------------------
 
 // settings/dashboard
-router.get("/settings/dashboard", isLoggedIn, (req, res) => {
+router.get("/dashboard", isLoggedIn, (req, res) => {
     res.render("settings-dashboard.ejs");
 });
 
+// settings/users
+router.get("/users", isLoggedIn, (req, res) => {
+    res.render("settings-users.ejs");
+});
+
+// settings/general
+router.get("/general", isLoggedIn, (req, res) => {
+    res.render("settings-general.ejs");
+});
+
 // settings/blogs
-router.get("/settings/blogs", isLoggedIn, (req, res) => {
+router.get("/blogs", isLoggedIn, (req, res) => {
 // get blogs from database 
     Blog.find({},(err, blogs) => {
         if(err){
@@ -45,18 +58,8 @@ router.get("/settings/blogs", isLoggedIn, (req, res) => {
     });
 });
 
-// settings/users
-router.get("/settings/users", isLoggedIn, (req, res) => {
-    res.render("settings-users.ejs");
-});
-
-// settings/general
-router.get("/settings/general", isLoggedIn, (req, res) => {
-    res.render("settings-general.ejs");
-});
-
 // settings>blogs>:id>edit
-router.get("/settings/blogs/:id/edit", isLoggedIn, (req, res) => {
+router.get("/blogs/:id/edit", isLoggedIn, (req, res) => {
      // find post with provided ID
     Blog.findById(req.params.id,(err, dbData) => {
         if(err){

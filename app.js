@@ -77,9 +77,9 @@ passport.deserializeUser(User.deserializeUser());
 // ROUTE CONFIGURATION
 // ***************************
 
-app.use(blogRoutes);
-app.use(commentRoutes);
-app.use(settingRoutes);
+app.use("/blogs", blogRoutes);
+app.use("/blogs/:id/comments", commentRoutes);
+app.use("/settings", settingRoutes);
 app.use(indexRoutes);
 
 // ***************************
