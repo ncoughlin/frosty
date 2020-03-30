@@ -58,18 +58,6 @@ router.get("/blogs", isLoggedIn, (req, res) => {
     });
 });
 
-// settings>blogs>:id>edit
-router.get("/blogs/:id/edit", isLoggedIn, (req, res) => {
-     // find post with provided ID
-    Blog.findById(req.params.id,(err, dbData) => {
-        if(err){
-            console.log("error finding blog data by ID");
-        } else {
-            // render single post template with that post data
-            res.render("editBlog.ejs", {blog: dbData});
-        }
-    });
-});
 
 //----------------------------
 // .POST routes
