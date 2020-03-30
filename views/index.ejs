@@ -17,7 +17,7 @@
             />
             <div class="card-body">
               <h3 class="card-title"><%= blog.title %></h3>
-              <h6 class="card-title"><em><%= blog.author %></em></h5>
+              <h6 class="card-title"><em><%= blog.author.firstname + " " + blog.author.lastname %></em></h5>
               <p class="card-text"><%= blog.short %></p>
               <a href="/blogs/<%=blog._id%>" class="btn btn-primary">Read More</a>
             </div>

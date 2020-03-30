@@ -41,7 +41,6 @@ router.use((req,res,next) => {
 // /blogs/:id/comments - new comment: receive and save to blog
 router.post("/", isLoggedIn, (req,res) => {
     // sanitize inputs
-    req.body.comment.author = req.sanitize(req.body.comment.author);
     req.body.comment.content = req.sanitize(req.body.comment.content);
         
     async function saveComment() {

@@ -4,7 +4,15 @@ const mongoose = require("mongoose");
 const blogSchema = new mongoose.Schema({
     image: String,
     title: String,
-    author: String,
+    author: {
+        id: {
+            type: mongoose.Schema.Types.ObjectID,
+            ref: "User"
+        },
+        username: String,
+        firstname: String,
+        lastname: String
+    },
     date: {type: Date, default: Date.now},
     short: String,
     content: String,

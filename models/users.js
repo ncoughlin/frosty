@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 
-// Mongoose Schema for comments
+// Mongoose Schema for users
 const userSchema = new mongoose.Schema({
     firstname: String,
     lastname: String,
