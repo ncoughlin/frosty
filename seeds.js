@@ -50,13 +50,19 @@ const blogSeeds = [
 
 const commentSeeds = [
     {
-        author: "Duke Ellington",
+        author: {
+            username: "Duke Ellington"
+        },
         content: "This comment will be the same for every blog. But it's just seed data so who cares."
     },{
-        author: "Marv Ellis",
+        author: {
+            username: "Marv Ellis"
+        },
         content: "Would you be interested in hosting a guest post about article xyz?"
     },{
-        author: "Ella Fitzgerald",
+        author: {
+            username: "Ella Fitzgerald"
+        },
         content: "Just don't give up trying to do what you really want to do. Where there is love and inspiration, I don't think you can go wrong."
     }
 ];
@@ -83,8 +89,7 @@ async function seedDB(){
             console.log(err);
         }
 }
-// run function
-seedDB();
+
 
 
 /*// remove current blog data - callback hell version

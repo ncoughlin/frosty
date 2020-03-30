@@ -38,7 +38,7 @@ router.use((req,res,next) => {
 // .POST routes
 //----------------------------
 
-// new comment: receive and save to blog
+// /blogs/:id/comments - new comment: receive and save to blog
 router.post("/", isLoggedIn, (req,res) => {
     // sanitize inputs
     req.body.comment.author = req.sanitize(req.body.comment.author);
@@ -50,10 +50,15 @@ router.post("/", isLoggedIn, (req,res) => {
             let blog = await Blog.findById(req.params.id);
             // create new comment
             let comment = await Comment.create(req.body.comment);
+            // add username and id to comment
+            comment.author.id = req.user._id;
+            comment.author.username = req.user.username
+            // save comment
+            comment.save();
             // connect new comment to blog
             blog.comments.push(comment);
             blog.save();
-            console.log("New Comment Saved");
+            console.log("New Comment: " + comment);
             // redirect    
             res.redirect("/blogs/" + blog._id);
         } catch(err) {

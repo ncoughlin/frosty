@@ -83,6 +83,13 @@ app.use("/settings", settingRoutes);
 app.use(indexRoutes);
 
 // ***************************
+// DATABASE SEEDING
+// ***************************
+
+seedDB();
+
+
+// ***************************
 // MIDDLEWARE FUNCTIONS
 // ***************************
 
