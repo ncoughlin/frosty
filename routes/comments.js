@@ -1,10 +1,10 @@
 // ***************************
 // EXPRESS SETUP
 // ***************************
-var express          = require("express"),
-    router           = express.Router({mergeParams: true}),
-    Comment          = require('../models/comments'),
-    Blog             = require('../models/blogs');
+const express          = require("express"),
+      router           = express.Router({mergeParams: true}),
+      Comment          = require('../models/comments'),
+      Blog             = require('../models/blogs');
     
 // ***************************
 // MIDDLEWARE FUNCTIONS

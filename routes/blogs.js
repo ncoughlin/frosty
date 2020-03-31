@@ -1,9 +1,9 @@
 // ***************************
 // EXPRESS SETUP
 // ***************************
-var express          = require("express"),
-    router           = express.Router({mergeParams: true}),
-    Blog             = require('../models/blogs');
+const express          = require("express"),
+      router           = express.Router({mergeParams: true}),
+      Blog             = require('../models/blogs');
     
 // ***************************
 // MIDDLEWARE FUNCTIONS
@@ -88,16 +88,16 @@ router.get("/:id",(req, res) => {
 // new blog: receive and save
 router.post("/", isLoggedIn, (req, res) => {
     // sanitize inputs
-    req.body.blog.title = req.sanitize(req.body.blog.title);
-    req.body.blog.short = req.sanitize(req.body.blog.short);
+    req.body.blog.title   = req.sanitize(req.body.blog.title);
+    req.body.blog.short   = req.sanitize(req.body.blog.short);
     req.body.blog.content = req.sanitize(req.body.blog.content);
     
     // assign variables to incoming data
-    let title = req.body.blog.title;
-    let image = req.body.blog.image;
-    let short = req.body.blog.short;
-    let content = req.body.blog.short;
-    let date = req.body.blog.date;
+    let title   = req.body.blog.title,
+        image   = req.body.blog.image,
+        short   = req.body.blog.short,
+        content = req.body.blog.content,
+        date    = req.body.blog.date;
     
     // retriever user data
     let author = {
