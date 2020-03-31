@@ -10,7 +10,8 @@
     <!-- fixed width container for content -->
     <div class="container-lg mt-5">
     <h1 class="settings-title">Edit Blog</h1>
-        <!--input for title, author, image, content -->
+    <h4> Author: <strong><%= blog.author.username %></strong></h4>
+        <!--input for title, image, content -->
         <form action="/blogs/<%= blog._id %>?_method=PUT" method="POST">
 
             <div class="form-group">
@@ -26,13 +27,6 @@
                     <h4>Title</h4>
                 </label>
                 <input type="text" class="form-control" id="titleInput" name="blog[title]" value="<%= blog.title %>">
-            </div>
-
-            <div class="form-group">
-                <label for="authorInput">
-                    <h4>Author</h4>
-                </label>
-                <input type="text" class="form-control" id="authorInput" name="blog[author]" value="<%= blog.author %>">
             </div>
             
             <div class="form-group">
