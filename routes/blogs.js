@@ -91,8 +91,27 @@ router.post("/", isLoggedIn, (req, res) => {
     req.body.blog.title = req.sanitize(req.body.blog.title);
     req.body.blog.short = req.sanitize(req.body.blog.short);
     req.body.blog.content = req.sanitize(req.body.blog.content);
-    // get data from form and add to blogs array
-    Blog.create(req.body.blog,(err, newDatabaseRecord) => {
+    
+    // assign variables to incoming data
+    let title = req.body.blog.title;
+    let image = req.body.blog.image;
+    let short = req.body.blog.short;
+    let content = req.body.blog.short;
+    let date = req.body.blog.date;
+    
+    // retriever user data
+    let author = {
+        id: req.user._id,
+        username: req.user.username,
+        firstname: req.user.firstname,
+        lastname: req.user.lastname
+    };
+    
+    // combine all data into new variable
+    let newBlog = {title: title, image: image, short: short, content: content, date: date, author: author};
+    
+    // save combined data to new blog
+    Blog.create(newBlog,(err, newDatabaseRecord) => {
         if(err){
             console.log("Failed to write post to database.");
         } else {
