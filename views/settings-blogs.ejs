@@ -34,16 +34,16 @@
             <td><%= blog.author.username %></td>
               <td><span class="settings-table-id"><%=blog._id%></span></td>
               <td>
-                <% if(currentUser && blog.author.id.equals(currentUser._id)){ %>
+              <% if(currentUser && blog.author.id.equals(currentUser._id)){ %>
                 <a href="/blogs/<%=blog._id%>/edit" class="btn btn-outline-primary">Edit</a></td>
               <td>
-                  <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
-                    <button type="submit" class="btn btn-outline-danger">Delete</button>
-                  </form>
-                <% } else { %>
+              <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+              </form>
+              <% } else { %>
                 <td></td>
                 <td></td>
-                <% } %>
+              <% } %>
               </td>
           </tr>
           <% }); %>
