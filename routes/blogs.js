@@ -161,7 +161,7 @@ router.delete("/:id",(req, res) => {
             res.redirect("/settings/blogs");
         }
     });
-})
+});
 
 
 // export module
