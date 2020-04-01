@@ -95,7 +95,7 @@ async function seedDB(){
 //        console.log("All Users Deleted");
         await Comment.deleteMany({});
         await Blog.deleteMany({});
-        console.log("All Blogs and Comments Deleted");
+/*        console.log("All Blogs and Comments Deleted");
         for (const blogSeed of  blogSeeds) {
             let blog = await Blog.create(blogSeed);
             for (const commentSeed of commentSeeds) {
@@ -104,7 +104,7 @@ async function seedDB(){
                 }
         blog.save();        
         console.log("Blog Saved"); 
-        }
+        }*/
         } catch (err) {
             console.log(err);
         }

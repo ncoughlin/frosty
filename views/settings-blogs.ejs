@@ -15,6 +15,7 @@
             <tr>
               <th scope="col">Image</th>
               <th scope="col">Title</th>
+              <th scope="col">Author</th>
               <th scope="col">ID</th>
               <th scope="col"></th>
               <th scope="col"></th>
@@ -22,27 +23,33 @@
           </thead>
         <tbody>
           <!-- The Loop Starts Here -->  
-          <% for(var i=0; i<blogs.length; i++){ %>
+          <% blogs.forEach((blog) => { %>
           <tr>
             <td><img 
-                src="<%= blogs[i].image %>" 
+                src="<%= blog.image %>" 
                 alt="..."  
                 class="settings-table-image">
             </th>
-            <td><%= blogs[i].title %></td>
-            <td><span class="settings-table-id"><%=blogs[i]._id%></span></td>
-            <td><a href="/blogs/<%=blogs[i]._id%>/edit" class="btn btn-outline-primary">Edit</a></td>
-            <td>
-              <form action="/blogs/<%= blogs[i]._id %>?_method=DELETE" method="POST">
-                <button type="submit" class="btn btn-outline-danger">Delete</button>
-              </form>  
-            </td>
+            <td><%= blog.title %></td>
+            <td><%= blog.author.username %></td>
+              <td><span class="settings-table-id"><%=blog._id%></span></td>
+              <td>
+                <% if(currentUser && blog.author.id.equals(currentUser._id)){ %>
+                <a href="/blogs/<%=blog._id%>/edit" class="btn btn-outline-primary">Edit</a></td>
+              <td>
+                  <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-outline-danger">Delete</button>
+                  </form>
+                <% } else { %>
+                <td></td>
+                <td></td>
+                <% } %>
+              </td>
           </tr>
-          <% } %>
+          <% }); %>
           <!-- The Loop Ends Here -->
         </tbody>
       </table>
-
 </div>
 
 <!-- css grid container for settings content end -->
