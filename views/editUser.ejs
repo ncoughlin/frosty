@@ -10,14 +10,16 @@
     <!-- fixed width container for content -->
     <div class="container-lg mt-5">
     <h1 class="settings-title">Edit User</h1>
-    <h4> Username: <strong><%= user.username %></strong></h4>
-    <h4> ID:<%= user._id %></h4>
+    <p>
+        <h4> Username: <strong><%= user.username %></strong></h4>
+        <h4> ID:<%= user._id %></h4>
+    </p>
         <!--input for title, image, content -->
         <form action="/users/<%= user._id %>?_method=PUT" method="POST">
             
             <div class="form-group">
                 <label for="username">
-                    <h4>First Name</h4>
+                    <h4>Username</h4>
                 </label>
                 <input type="text" class="form-control" id="username" name="user[username]" value="<%= user.username %>">
             </div>

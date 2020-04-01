@@ -67,6 +67,11 @@ router.get("/logout",(req, res) => {
 
 // new user registration: save user to database and authenticate them
 router.post("/register", (req, res) => {
+    
+    req.body.firstname = req.sanitize(req.body.firstname);
+    req.body.lastname = req.sanitize(req.body.lastname);
+    req.body.username = req.sanitize(req.body.username);
+    
   let newUser = new User({
     firstname: req.body.firstname,
     lastname: req.body.lastname,

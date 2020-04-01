@@ -31,7 +31,16 @@ router.use((req,res,next) => {
 // .GET routes
 //----------------------------
 
-
+// edit user form
+router.get("/:id/edit",isLoggedIn, (req, res) => {
+    User.findById(req.params.id, (err, foundUser) => {
+        if(err){
+            console.log(err);
+        } else {
+            res.render("editUser.ejs", {user: foundUser});     
+        }
+    });
+});
 
 //----------------------------
 // .POST routes
@@ -43,7 +52,25 @@ router.use((req,res,next) => {
 // .PUT routes
 //----------------------------
 
-
+// edit user
+router.put("/:id",isLoggedIn,(req, res) => {
+    // sanitize inputs
+    req.body.user.firstname = req.sanitize(req.body.user.firstname);
+    req.body.user.lastname = req.sanitize(req.body.user.lastname);
+    req.body.user.username = req.sanitize(req.body.user.username);
+    
+    // find and update blog
+    User.findByIdAndUpdate(req.params.id, req.body.user,(err, foundUser) => {
+        if(err){
+            console.log("Error: Failed to update user");
+        } else {
+            console.log("Success: User updated");
+            // redirect to updated single post page
+            res.redirect("/settings/users/");
+        }
+    });
+    
+}); 
 
 //----------------------------
 // .DELETE routes
