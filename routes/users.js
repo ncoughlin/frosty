@@ -1,9 +1,8 @@
 // ***************************
 // EXPRESS SETUP
 // ***************************
-const express          = require('express'),
+const express          = require("express"),
       router           = express.Router({mergeParams: true}),
-      Blog             = require('../models/blogs'),
       User             = require('../models/users');
     
 // ***************************
@@ -32,52 +31,35 @@ router.use((req,res,next) => {
 // .GET routes
 //----------------------------
 
-// settings/dashboard
-router.get("/dashboard", isLoggedIn, (req, res) => {
-    res.render("settings-dashboard.ejs");
-});
-
-// settings/users
-router.get("/users", isLoggedIn, (req, res) => {
-    // get users from database
-    User.find({},(err, users) => {
-        if(err){
-            console.log("Error: Unable to retrieve user data");
-        } else {
-            res.render("settings-users.ejs", {users:users});
-        }
-    })
-});
-
-// settings/general
-router.get("/general", isLoggedIn, (req, res) => {
-    res.render("settings-general.ejs");
-});
-
-// settings/blogs
-router.get("/blogs", isLoggedIn, (req, res) => {
-    // get blogs from database 
-    Blog.find({},(err, blogs) => {
-        if(err){
-            console.log("Error: Unable to retrieve blog data.");
-        } else {
-            res.render("settings-blogs.ejs", {blogs:blogs});
-        }
-    });
-});
 
 
 //----------------------------
 // .POST routes
 //----------------------------
 
+
+
 //----------------------------
 // .PUT routes
 //----------------------------
 
+
+
 //----------------------------
 // .DELETE routes
 //----------------------------
+
+// delete post
+router.delete("/:id",isLoggedIn,(req, res) => {
+    User.findByIdAndRemove(req.params.id,(err) => {
+        if(err){
+          console.log("Error: failed to delete user");  
+        } else {
+            console.log("User with username:" + req.params.username + " has been deleted");
+            res.redirect("/settings/users");
+        }
+    });
+});
 
 
 // export module

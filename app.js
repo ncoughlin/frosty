@@ -23,6 +23,7 @@ const express          = require('express'),
 const commentRoutes    = require("./routes/comments"),
       blogRoutes       = require("./routes/blogs"),
       settingRoutes    = require("./routes/settings"),
+      userRoutes       = require("./routes/users"),
       indexRoutes      = require("./routes/index");
 
 // set listen port
@@ -78,6 +79,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use("/blogs", blogRoutes);
 app.use("/blogs/:id/comments", commentRoutes);
+app.use("/users", userRoutes);
 app.use("/settings", settingRoutes);
 app.use(indexRoutes);
 
