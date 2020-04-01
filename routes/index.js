@@ -67,7 +67,7 @@ router.get("/logout",(req, res) => {
 
 // new user registration: save user to database and authenticate them
 router.post("/register", (req, res) => {
-  var newUser = new User({
+  let newUser = new User({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     email: req.body.email,
@@ -88,13 +88,10 @@ router.post("/register", (req, res) => {
 
 // login user: authenticate user
 // app.post("/login", middleware, callback)
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/settings/dashboard",
-    failureRedirect: "/login"
-  }),
-  (req, res) => {}
+router.post("/login",passport.authenticate("local", {
+                                                    successRedirect: "..",
+                                                    failureRedirect: "/login"
+                                                }), (req, res) => {}
 );
 
 //----------------------------

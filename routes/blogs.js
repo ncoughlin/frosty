@@ -17,6 +17,27 @@ function isLoggedIn(req, res, next){
     res.redirect("/login");
 }
 
+
+// check if blog author id matches user id
+function checkBlogOwnership(req,res,next){
+    // check if user is logged in
+    if(req.isAuthenticated()){
+        // find blog
+        Blog.findById(req.params.id, function(err, foundBlog){
+            if(err){
+                res.send("Could Not Find Blog by ID");
+            } else {
+                // check for matching id
+                if(foundBlog.author.id.equals(req.user._id)) {
+                    next();
+                } else {
+                    res.send("You do not have permission to do that.");
+                }
+            }
+        });
+    }
+}
+
 // pass through user data on every route
 router.use((req,res,next) => {
     res.locals.currentUser = req.user;
@@ -50,18 +71,18 @@ router.get("/new", isLoggedIn, (req, res) => {
     res.render("newBlog.ejs");
 });
 
+
 // edit blog form
-router.get("/:id/edit", isLoggedIn, (req, res) => {
-     // find blog with provided ID
-    Blog.findById(req.params.id,(err, foundBlog) => {
+router.get("/:id/edit",checkBlogOwnership, (req, res) => {
+    Blog.findById(req.params.id, (err, foundBlog) => {
         if(err){
-            console.log("error finding blog data by ID");
+            console.log(err);
         } else {
-            // render single blog template with that post data
-            res.render("editBlog.ejs", {blog: foundBlog});
+            res.render("editBlog.ejs", {blog: foundBlog});     
         }
     });
 });
+           
 
 // render individual blog. This is a wildcard link and must therefore be
 // placed after static links in the application!
@@ -128,7 +149,7 @@ router.post("/", isLoggedIn, (req, res) => {
 //----------------------------
 
 // edit blog
-router.put("/:id",(req, res) => {
+router.put("/:id",checkBlogOwnership,(req, res) => {
     // sanitize inputs
     req.body.blog.title = req.sanitize(req.body.blog.title);
     req.body.blog.short = req.sanitize(req.body.blog.short);
@@ -152,7 +173,7 @@ router.put("/:id",(req, res) => {
 //----------------------------
 
 // delete post
-router.delete("/:id",(req, res) => {
+router.delete("/:id",checkBlogOwnership,(req, res) => {
     Blog.findByIdAndRemove(req.params.id,(err) => {
         if(err){
           console.log("failed to delete Mongo document");  

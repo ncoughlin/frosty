@@ -17,7 +17,6 @@ const express          = require('express'),
       Blog             = require('./models/blogs'),
       Comment          = require('./models/comments'),
       User             = require('./models/users'),
-      // disable to prevent seeding of database
       seedDB           = require('./seeds');
 
 //import comment routes
@@ -85,8 +84,8 @@ app.use(indexRoutes);
 // ***************************
 // DATABASE SEEDING
 // ***************************
-
-seedDB();
+// disable to prevent seeding of database
+// seedDB();
 
 
 // ***************************
