@@ -31,13 +31,13 @@ router.use((req,res,next) => {
 // .GET routes
 //----------------------------
 
-// edit user form
-router.get("/:id/edit",isLoggedIn, (req, res) => {
+// user profile page
+router.get("/:id/profile",isLoggedIn, (req, res) => {
     User.findById(req.params.id, (err, foundUser) => {
         if(err){
             console.log(err);
         } else {
-            res.render("editUser.ejs", {user: foundUser});     
+            res.render("userProfile.ejs", {user: foundUser});     
         }
     });
 });
@@ -59,14 +59,14 @@ router.put("/:id",isLoggedIn,(req, res) => {
     req.body.user.lastname = req.sanitize(req.body.user.lastname);
     req.body.user.username = req.sanitize(req.body.user.username);
     
-    // find and update blog
+    // find and update user
     User.findByIdAndUpdate(req.params.id, req.body.user,(err, foundUser) => {
         if(err){
             console.log("Error: Failed to update user");
         } else {
             console.log("Success: User updated");
-            // redirect to updated single post page
-            res.redirect("/settings/users/");
+            // redirect to updated user profile
+            res.redirect("/users/" + req.params.id + "/profile");
         }
     });
     
@@ -76,7 +76,7 @@ router.put("/:id",isLoggedIn,(req, res) => {
 // .DELETE routes
 //----------------------------
 
-// delete post
+// delete user
 router.delete("/:id",isLoggedIn,(req, res) => {
     User.findByIdAndRemove(req.params.id,(err) => {
         if(err){

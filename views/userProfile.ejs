@@ -9,11 +9,9 @@
 <!-- begin content -->
     <!-- fixed width container for content -->
     <div class="container-lg mt-5">
-    <h1 class="settings-title">Edit User</h1>
-    <p>
-        <h4> Username: <strong><%= user.username %></strong></h4>
-        <h4> ID:<%= user._id %></h4>
-    </p>
+    <h1 class="settings-title">User Profile: <%= user.username %></h1>
+    <h4> Role: <strong><%= user.role %></strong></h4>
+    <p class="text-muted"> ID: <%= user._id %></p>
         <!--input for title, image, content -->
         <form action="/users/<%= user._id %>?_method=PUT" method="POST">
             
@@ -22,6 +20,19 @@
                     <h4>Username</h4>
                 </label>
                 <input type="text" class="form-control" id="username" name="user[username]" value="<%= user.username %>">
+            </div>
+            
+            <div class="form-group">
+                <label for="role-select">
+                    <h4>Role</h4>
+                </label>
+                <select class="form-control" name="user[role]" id="role-select" value="<%= user.role %>">
+                    <option value="<%= user.role %>"><%= user.role %></options>
+                    <option value="Reader">Reader</option>
+                    <option value="Writer">Writer</option>
+                    <option value="Editor">Editor</option>
+                    <option value="Administrator">Administrator</option>
+                </select>
             </div>
             
             <div class="form-group">
@@ -42,7 +53,7 @@
                 <label for="email">
                     <h4>Email</h4>
                 </label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="user[email]" placeholder="<%= user.email %>" >
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="user[email]" value="<%= user.email %>" >
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>

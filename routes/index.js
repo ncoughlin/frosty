@@ -75,6 +75,8 @@ router.post("/register", (req, res) => {
   let newUser = new User({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
+    // default role for all users is Reader
+    role: "Reader",
     email: req.body.email,
     username: req.body.username
   });
