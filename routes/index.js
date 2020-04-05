@@ -45,7 +45,7 @@ function checkLogin(req, res, next){
     if(req.isAuthenticated()){
         return next();
     }
-    //  If not logged in, render index
+    //  If not logged in, redirect to index
     Blog.find({},(err, blogs) => {
         if(err){
             console.log("Error: Unable to retreive blog data.");
@@ -58,7 +58,6 @@ function checkLogin(req, res, next){
 // If user is administrator check if there are more than one administrator
 // and prevent user role change if there is only one
 function checkAdministratorCount() {
-        let singleAdmin = undefined;
         
         router.get("/",checkLogin,(req, res) => {
         // Is user logged in? in middleware
@@ -98,28 +97,81 @@ function checkAdministratorCount() {
                 }  
             }
         });
-        
-        
-        //  If no load index.
-        //  If yes NEXT
-        
-        // Is user an administrator?
-        
     });
 };
-checkAdministratorCount();
+//checkAdministratorCount();
+
+function getUserData(IDNumber){
+    return new Promise((resolve,reject)=>{
+        console.log("Requesting user data of: "+ IDNumber);
+        resolve(User.findById(IDNumber));
+    });
+}
+
+function getAdminStatus(userData){
+    return new Promise((resolve,reject)=>{
+       console.log("Retreiving user role of: " + userData.username);
+       if(userData.role === "Administrator"){
+           resolve(true);
+       } else {
+           reject("User is not administrator");
+       }
+    });
+}
+
+function getAdminCount(role){
+    return new Promise((resolve,reject)=>{
+        User.countDocuments({ role: role },(err, count) => {
+                            if(err){
+                                console.log(err);
+                            } else {
+                                if(count <= 1){
+                                    resolve(count);
+                                } else {
+                                    reject("There is more than 1 administrator");
+                                }
+                            }
+                        });
+    });
+}
+
+router.get("/",isLoggedIn,(req, res) => {
+    
+    async function checkAdminCount(){
+        try{
+            // login check will be done by router middleware
+        const currentUserData = await getUserData(res.locals.currentUser.id);
+        console.log("Current User: " + currentUserData.username);
+        const isAdmin = await getAdminStatus(currentUserData);
+        console.log("User is Administrator: " + isAdmin);
+        const numberOfAdmins = await getAdminCount('Administrator');
+        console.log("There are " + numberOfAdmins + " admins");
+        } catch(err) {
+            console.log(err);
+        }
+    }
+    checkAdminCount();
+    
+    // render index
+    Blog.find({},(err, blogs) => {
+        if(err){
+            console.log("Error: Unable to retreive blog data.");
+        } else {
+            res.render("index.ejs", {blogs:blogs});
+        }
+    });
+});
 
 // Is user logged in?
-//  If no load index. 
+//  If no redirect to homepage 
 //  If yes NEXT
-
 // Is user an administrator? 
-//  If no load index. 
+//  If no continue as normal 
 //  If yes NEXT
 // Get count of administrators. 
 // Is count <=1 ?
-//  If yes router.send("You cannot change role status of last administrator. There must be at least 1 administrator.");
-//  If no NEXT
+//  If yes prevent user from making changes
+//  If no continue as normal
 
 
 
