@@ -59,6 +59,7 @@ router.put("/:id",isLoggedIn,(req, res) => {
     req.body.user.lastname = req.sanitize(req.body.user.lastname);
     req.body.user.username = req.sanitize(req.body.user.username);
     
+    
     // find and update user
     User.findByIdAndUpdate(req.params.id, req.body.user,(err, foundUser) => {
         if(err){

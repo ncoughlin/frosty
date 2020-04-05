@@ -23,7 +23,107 @@ function isLoggedIn(req, res, next){
 router.use((req,res,next) => {
     res.locals.currentUser = req.user;
     next();
-});    
+});
+
+// ***************************
+// EXPERIMENT ZONE
+// ***************************
+
+// get count of administrators
+function countAdmins(){
+    User.countDocuments({ role: 'Administrator' },(err, count) => {
+        if(err){
+            console.log(err);
+        } 
+        console.log('There are: ' + count + ' Administrators' );
+    });
+}
+
+// if user is logged in go to next, if not load index
+function checkLogin(req, res, next){
+    //  If user is logged in
+    if(req.isAuthenticated()){
+        return next();
+    }
+    //  If not logged in, render index
+    Blog.find({},(err, blogs) => {
+        if(err){
+            console.log("Error: Unable to retreive blog data.");
+        } else {
+            res.render("index.ejs", {blogs:blogs});
+        }
+    });
+}
+
+// If user is administrator check if there are more than one administrator
+// and prevent user role change if there is only one
+function checkAdministratorCount() {
+        let singleAdmin = undefined;
+        
+        router.get("/",checkLogin,(req, res) => {
+        // Is user logged in? in middleware
+        //  Find Current User
+        User.findById(res.locals.currentUser.id, (err, foundUser) => {
+            if(err){
+                console.log(err);
+            } else {
+                    console.log(foundUser);
+                    //  Check if current user is Administrator
+                    if(foundUser.role == "Administrator"){
+                        console.log("User is an Administrator");
+                        // Get count of administrators.
+                        User.countDocuments({ role: 'Administrator' },(err, count) => {
+                            if(err){
+                                console.log(err);
+                            } 
+                                console.log('There are: ' + count + ' Administrators' );
+                                if(count <= 1){
+                                    res.send("There is only one administrator");
+                                    
+                                } else {
+                                    res.send("There is more than one administrator");
+                                  
+                                }
+                            });
+                        
+                    } else {
+                    //  If no load index.
+                        Blog.find({},(err, blogs) => {
+                        if(err){
+                            console.log("Error: Unable to retreive blog data.");
+                        } else {
+                            res.render("index.ejs", {blogs:blogs});
+                        }
+                    });
+                }  
+            }
+        });
+        
+        
+        //  If no load index.
+        //  If yes NEXT
+        
+        // Is user an administrator?
+        
+    });
+};
+checkAdministratorCount();
+
+// Is user logged in?
+//  If no load index. 
+//  If yes NEXT
+
+// Is user an administrator? 
+//  If no load index. 
+//  If yes NEXT
+// Get count of administrators. 
+// Is count <=1 ?
+//  If yes router.send("You cannot change role status of last administrator. There must be at least 1 administrator.");
+//  If no NEXT
+
+
+
+   
 
 // ***************************
 // ROUTES
@@ -76,7 +176,7 @@ router.post("/register", (req, res) => {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     // default role for all users is Reader
-    role: "Reader",
+    role: "Administrator",
     email: req.body.email,
     username: req.body.username
   });

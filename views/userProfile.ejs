@@ -1,9 +1,11 @@
 <%- include("partials/header.ejs") %>
 <%- include("partials/navbar.ejs") %>
 <!-- contains css grid container start -->
-<%- include("partials/settings-bar.ejs") %>
-<!-- css grid container for settings content start -->
-<%- include("partials/settings-content-grid-start.ejs") %>
+<% if(currentUser.role != "Reader"){ %>
+    <%- include("partials/settings-bar.ejs") %>
+    <!-- css grid container for settings content start -->
+    <%- include("partials/settings-content-grid-start.ejs") %>
+<% } %>
 
 
 <!-- begin content -->
@@ -15,6 +17,7 @@
         <!--input for title, image, content -->
         <form action="/users/<%= user._id %>?_method=PUT" method="POST">
             
+            <!--username -->
             <div class="form-group">
                 <label for="username">
                     <h4>Username</h4>
@@ -22,19 +25,32 @@
                 <input type="text" class="form-control" id="username" name="user[username]" value="<%= user.username %>">
             </div>
             
-            <div class="form-group">
-                <label for="role-select">
-                    <h4>Role</h4>
-                </label>
-                <select class="form-control" name="user[role]" id="role-select" value="<%= user.role %>">
-                    <option value="<%= user.role %>"><%= user.role %></options>
-                    <option value="Reader">Reader</option>
-                    <option value="Writer">Writer</option>
-                    <option value="Editor">Editor</option>
-                    <option value="Administrator">Administrator</option>
-                </select>
-            </div>
+            <!--user role -->
+                <div class="form-group">
+                    <label for="role-select">
+                        <h4>Role</h4>
+                    </label>
+                    <!-- selection disabled for Readers & Writers -->
+                    <% if(currentUser.role != "Reader" && currentUser.role != "Writer"){ %>
+                        <select class="form-control" name="user[role]" id="role-select" value="<%= user.role %>">
+                    <% } else { %> 
+                        <select class="form-control" name="user[role]" id="role-select" value="<%= user.role %>" disabled>
+                    <% } %>        
+                            <option value="<%= user.role %>"><%= user.role %></options>
+                            <option value="Reader">Reader</option>
+                            <option value="Writer">Writer</option>
+                            <option value="Editor">Editor</option>
+                            <!--only admin can make other admin -->
+                            <% if(currentUser.role != "Administrator"){ %>
+                                <option value="Administrator" disabled>Administrator</option> 
+                            <% } else { %>
+                                <option value="Administrator">Administrator</option>
+                            <% } %>    
+                        </select>
+                </div>
             
+            
+            <!--first name -->
             <div class="form-group">
                 <label for="firstName">
                     <h4>First Name</h4>
@@ -42,6 +58,7 @@
                 <input type="text" class="form-control" id="firstName" name="user[firstname]" value="<%= user.firstname %>">
             </div>
             
+            <!--last name -->
             <div class="form-group">
                 <label for="lastName">
                     <h4>Last Name</h4>
@@ -49,13 +66,15 @@
                 <input type="text" class="form-control" id="lastName" name="user[lastname]" value="<%= user.lastname %>">
             </div>
             
+            <!--email -->
             <div class="form-group">
                 <label for="email">
                     <h4>Email</h4>
                 </label>
                 <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="user[email]" value="<%= user.email %>" >
             </div>
-
+            
+            <!--submit -->
             <button type="submit" class="btn btn-primary">Submit</button>
 
         </form>
@@ -63,7 +82,9 @@
 
 
 <!-- css grid container for settings content end -->
-<%- include("partials/settings-content-grid-end.ejs") %>
-<!-- settings grid container end must go at end of settings content templates! -->  
-<%- include("partials/settings-grid-container-end.ejs") %>
+<% if(currentUser.role != "Reader"){ %>
+    <%- include("partials/settings-content-grid-end.ejs") %>
+    <!-- settings grid container end must go at end of settings content templates! -->  
+    <%- include("partials/settings-grid-container-end.ejs") %>
+<% } %>
 <%- include("partials/footer.ejs") %>

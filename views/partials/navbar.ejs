@@ -34,10 +34,12 @@
               <span class="sr-only">Login</span></a>
       </li>              
       <% } else { %>
-      <!-- new post button -->
+      <!-- new post button: not visible if you are a reader -->
+      <% if(currentUser.role != "Reader"){ %>
       <li class="nav-item">
         <a class="btn btn-outline-success nav-item mr-2" href="/blogs/new" role="button"> +New Post</a>
       </li>
+      <% } %>
       <li class="nav-item">
           <a class="nav-link mr-2" href="/users/<%= currentUser.id %>/profile">
               <u><%= currentUser.username %></u>
@@ -49,10 +51,12 @@
               Logout
               <span class="sr-only">Logout</span></a>
       </li>
-      <!-- settings icon -->
-      <li class="nav-item">
-        <a href="/settings/dashboard"><i class="material-icons md-36">settings</i></a>   
-      </li>  
+      <!-- settings icon: not visible if you are a reader -->
+      <% if(currentUser.role != "Reader"){ %>
+        <li class="nav-item">
+          <a href="/settings/dashboard"><i class="material-icons md-36">settings</i></a>   
+        </li>  
+      <% } %>  
       <% } %>
     </ul>
   </div>
