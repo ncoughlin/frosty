@@ -21,7 +21,14 @@ function isLoggedIn(req, res, next){
 router.use((req,res,next) => {
     res.locals.currentUser = req.user;
     next();
-});        
+});  
+
+// ***************************
+// FUNCTIONS
+// ***************************
+
+
+
 
 // ***************************
 // ROUTES
@@ -33,13 +40,85 @@ router.use((req,res,next) => {
 
 // user profile page
 router.get("/:id/profile",isLoggedIn, (req, res) => {
-    User.findById(req.params.id, (err, foundUser) => {
-        if(err){
+    
+    function getUserData(IDNumber){
+        return new Promise((resolve,reject)=>{
+            console.log("Requesting user data of: "+ IDNumber);
+            resolve(User.findById(IDNumber));
+        });
+    }
+
+    // if user is not administrator render profile page
+    function getAdminStatus(userData){
+        return new Promise((resolve,reject)=>{
+           console.log("Retreiving user role of: " + userData.username);
+           if(userData.role === "Administrator"){
+               resolve(true);
+           } else if(userData.role != "Administrator") {
+                User.findById(req.params.id, (err, foundUser) => {
+                    if(err) {
+                        console.log(err);
+                    } else {
+                    let adminDanger = false;
+                    console.log('No Admin Danger');
+                    res.render("userProfile.ejs", {user: foundUser, admindanger: adminDanger}); 
+                    }
+                });   
+           } else {   
+               console.log("Error retreiving status of user role.");
+               reject("Error retreiving status of user role.");
+           }
+        });
+    }
+
+    function getAdminCount(role){
+        return new Promise((resolve,reject)=>{
+            User.countDocuments({ role: role },(err, count) => {
+                                if(err){
+                                    console.log(err);
+                                } else {
+                                    resolve(count);
+                                }
+                            });
+        });
+    }
+    
+    // if user is the last administrator and is editing the profile
+    // of the last administrator, prevent them from changing roles
+    async function checkAdminDanger(){
+        try{
+            // login check handled by middleware
+            const currentUserData = await getUserData(res.locals.currentUser.id);
+            console.log("Current User: " + currentUserData.username);
+            const isAdmin = await getAdminStatus(currentUserData);
+            console.log("User is Administrator: " + isAdmin);
+            const numberOfAdmins = await getAdminCount('Administrator');
+            console.log("Current Number of Administrators: " + numberOfAdmins);
+            
+            User.findById(req.params.id, (err, foundUser) => {
+                // get role of current profile
+                let profileRole = foundUser.role;
+                console.log(profileRole);
+                if(err){
+                    console.log(err);
+                } else {
+                    if(isAdmin === true && numberOfAdmins <= 1 && profileRole === "Administrator"){
+                        let adminDanger = true;
+                        console.log('ADMIN DANGER: There is only 1 administrator');
+                        res.render("userProfile.ejs", {user: foundUser, admindanger: adminDanger});
+                    } else {
+                        let adminDanger = false;
+                        console.log('No Admin Danger');
+                        res.render("userProfile.ejs", {user: foundUser, admindanger: adminDanger});
+                    }   
+                }
+            });
+            
+        } catch(err) {
             console.log(err);
-        } else {
-            res.render("userProfile.ejs", {user: foundUser});     
         }
-    });
+    }
+    checkAdminDanger();
 });
 
 //----------------------------
