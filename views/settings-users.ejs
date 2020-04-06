@@ -34,11 +34,17 @@
             <td>
             <a href="/users/<%=user._id%>/profile" class="btn btn-outline-primary">Profile</a>
             </td>
-            <td>
-              <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
-              <button type="submit" class="btn btn-outline-danger">Delete</button>
-              </form>
-            </td>
+            <!-- Remove Delete Button if user is Administrator -->
+            <% if(user.role === "Administrator"){ %>
+              <td>
+              </td>
+            <% } else { %>
+              <td>
+                <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+                </form>
+              </td>
+            <% } %>
           </tr>
            <!-- The Loop Ends Here -->
           <% }); %>

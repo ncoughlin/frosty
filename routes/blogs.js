@@ -73,7 +73,7 @@ router.get("/new", isLoggedIn, (req, res) => {
 
 
 // edit blog form
-router.get("/:id/edit",checkBlogOwnership, (req, res) => {
+router.get("/:id/edit",isLoggedIn, (req, res) => {
     Blog.findById(req.params.id, (err, foundBlog) => {
         if(err){
             console.log(err);
@@ -149,7 +149,7 @@ router.post("/", isLoggedIn, (req, res) => {
 //----------------------------
 
 // edit blog
-router.put("/:id",checkBlogOwnership,(req, res) => {
+router.put("/:id",isLoggedIn,(req, res) => {
     // sanitize inputs
     req.body.blog.title = req.sanitize(req.body.blog.title);
     req.body.blog.short = req.sanitize(req.body.blog.short);
@@ -173,10 +173,10 @@ router.put("/:id",checkBlogOwnership,(req, res) => {
 //----------------------------
 
 // delete post
-router.delete("/:id",checkBlogOwnership,(req, res) => {
+router.delete("/:id",isLoggedIn,(req, res) => {
     Blog.findByIdAndRemove(req.params.id,(err) => {
         if(err){
-          console.log("failed to delete Mongo document");  
+          console.log("failed to .findByIdAndRemove Blog object");  
         } else {
             console.log("Blog with ID:" + req.params.id + " has been deleted");
             res.redirect("/settings/blogs");

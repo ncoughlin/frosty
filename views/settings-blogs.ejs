@@ -34,7 +34,7 @@
             <td><%= blog.author.username %></td>
             <td><span class="settings-table-id"><%=blog._id%></span></td>
             <td>
-            <% if(currentUser && blog.author.id.equals(currentUser._id)){ %>
+            <% if((currentUser && blog.author.id.equals(currentUser._id)) || (currentUser.role === "Administrator" || currentUser.role === "Editor")){ %>
             <a href="/blogs/<%=blog._id%>/edit" class="btn btn-outline-primary">Edit</a>
             </td>
             <td>

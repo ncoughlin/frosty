@@ -19,18 +19,24 @@
                         Blogs
                     </a>
                 </li>
+                <!-- Users only available to Administrators and Editors -->
+                <% if(currentUser.role === "Administrator" || currentUser.role === "Editor"){ %>
                 <li class="nav-item">
                     <a href="/settings/users" class="nav-link text-light bg-dark">
                     <i class="material-icons settings-menu-icons">face</i>
                         Users
                     </a>
                 </li>
+                <% } %>
+                <!-- General only available to Administrators -->
+                <% if(currentUser.role === "Administrator"){ %>
                 <li class="nav-item">
                     <a href="/settings/general" class="nav-link text-light bg-dark">
                     <i class="material-icons settings-menu-icons">settings</i>
                         General
                     </a>
                 </li>
+                <% } %>
             </ul> 
            
          <!-- settings grid zone one end -->    
