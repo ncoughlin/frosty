@@ -30,6 +30,8 @@ router.use((req,res,next) => {
 // ***************************
 
 
+
+
 // ***************************
 // ROUTES
 // ***************************
@@ -70,33 +72,65 @@ router.get("/logout",(req, res) => {
 // .POST routes
 //----------------------------
 
-// new user registration: save user to database and authenticate them
 router.post("/register", (req, res) => {
-    
-    req.body.firstname = req.sanitize(req.body.firstname);
-    req.body.lastname = req.sanitize(req.body.lastname);
-    req.body.username = req.sanitize(req.body.username);
-    
-  let newUser = new User({
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    // default role for all users is Reader
-    role: "Administrator",
-    email: req.body.email,
-    username: req.body.username
-  });
-  User.register(newUser, req.body.password, (err, user) => {
-    console.log("attempting user registration");
-    if (err) {
-      console.log(err);
-      return res.render("register.ejs");
+
+// new user registration: save user to database and authenticate them
+// count current users    
+// if current user count is 0 new user role is Administrator
+// otherwise new user role is Reader    
+
+    function constructUser(userCount){
+        return new Promise((resolve,reject)=>{
+            if(userCount === 0){
+                let newUser = new User({
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                // first user is administrator
+                role: "Administrator",
+                email: req.body.email,
+                username: req.body.username
+                });
+                resolve(newUser);
+            } else {
+                let newUser = new User({
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                // first user is administrator
+                role: "Reader",
+                email: req.body.email,
+                username: req.body.username
+                });
+                resolve(newUser);
+            }
+        });
     }
-    passport.authenticate("local")(req, res, () => {
-      res.redirect("/");
-    });
-    console.log("user registration successful: " + newUser.username);
-  });
+
+    async function firstUserIsAdmin(){
+        try{
+            const userCount = await User.countDocuments({});
+            console.log("Current number of users is: " + userCount);
+            const newUser = await constructUser(userCount); 
+            console.log("New User Information: " + newUser);
+            
+            User.register(newUser, req.body.password, (err, user) => {
+                console.log("attempting user registration");
+                if (err) {
+                    console.log(err);
+                    return res.render("register.ejs");
+                }
+                passport.authenticate("local")(req, res, () => {
+                    res.redirect("/");
+                });
+                console.log("user registration successful: " + newUser.username);
+            });
+            
+        } catch(err) {
+            console.log(err);
+        }
+    }
+    firstUserIsAdmin();
 });
+
 
 // login user: authenticate user
 // app.post("/login", middleware, callback)

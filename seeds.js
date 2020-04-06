@@ -91,10 +91,10 @@ const commentSeeds = [
 // Async version: remove current blog data
 async function seedDB(){
     try {
-//        await User.deleteMany({});
+        await User.deleteMany({});
 //        console.log("All Users Deleted");
-        await Comment.deleteMany({});
-        await Blog.deleteMany({});
+//        await Comment.deleteMany({});
+//        await Blog.deleteMany({});
 /*        console.log("All Blogs and Comments Deleted");
         for (const blogSeed of  blogSeeds) {
             let blog = await Blog.create(blogSeed);
