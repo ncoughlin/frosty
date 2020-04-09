@@ -23,31 +23,42 @@
             </tr>
           </thead>
         <tbody>
-          <!-- The Loop Starts Here -->  
-          <% blog.comments.forEach((comment) => { %>
-          <tr>
-            <td><%= comment.author.username %></td>
-            <td><%= user.role %></td>
-            <td><%= user.firstname %></td>
-            <td><%= user.lastname %></td>
-            <td><%= user.email %></td>
-            <td>
-            <a href="/users/<%=user._id%>/profile" class="btn btn-outline-primary">Profile</a>
-            </td>
-            <!-- Remove Delete Button if user is Administrator -->
-            <% if(user.role === "Administrator"){ %>
-              <td>
-              </td>
-            <% } else { %>
-              <td>
-                <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
-                <button type="submit" class="btn btn-outline-danger">Delete</button>
-                </form>
-              </td>
-            <% } %>
-          </tr>
-           <!-- The Loop Ends Here -->
+          <!-- The Comment Loop Starts Here -->
+          <% comments.forEach((comment) => { %>
+            
+            
+            <tr>
+                <td><a href="/users/<%= comment.author.id %>/profile"><%= comment.author.username %></a></td>
+                <td><a href="/blogs/<%=comment.blogTitle %>"><%=comment.blogTitle %></td>
+                <td><%= comment.content %></td>
+                
+                <!-- Only author, admin or editor can modify content -->
+                <% if((currentUser && comment.author.id.equals(currentUser._id)) || (currentUser.role === "Administrator" || currentUser.role === "Editor")){ %>
+                
+                <td>
+                <a class="btn btn-outline-warning" href="/blogs/<%= comment.blogID %>/comments/<%= comment._id %>/edit">Edit</a>
+                </td>
+                <td>
+                  <form action="/blogs/<%= comment.blogID %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-outline-danger">Delete</button>
+                  </form>
+                </td>
+                
+                <% } else { %>
+                
+                <td></td>
+                <td></td>
+            
+                <% } %>
+            
+           
+          <!-- The Comment Loop Ends Here -->
           <% }); %>
+          
+          
+          
+           <!-- The Loop Ends Here -->
+          
         </tbody>
       </table>
 </div>

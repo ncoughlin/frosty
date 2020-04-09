@@ -10,7 +10,10 @@ const commentSchema = new mongoose.Schema({
         username: String
     },
     date: {type: Date, default: Date.now},
-    content: String
+    content: String,
+    // References to blog where submitted
+    blogID: String,
+    blogTitle: String
 });
 
 // creating schema Model named Blog to be called later

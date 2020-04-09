@@ -62,9 +62,12 @@ router.post("/", isLoggedIn, (req,res) => {
             let blog = await Blog.findById(req.params.id);
             // create new comment
             let comment = await Comment.create(req.body.comment);
-            // add username and id to comment
+            // add author references
             comment.author.id = req.user._id;
-            comment.author.username = req.user.username
+            comment.author.username = req.user.username;
+            // add blog references
+            comment.blogID = blog._id;
+            comment.blogTitle = blog.title;
             // save comment
             comment.save();
             // connect new comment to blog

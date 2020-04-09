@@ -4,7 +4,9 @@
 const express          = require('express'),
       router           = express.Router({mergeParams: true}),
       Blog             = require('../models/blogs'),
+      Comment          = require('../models/comments'),
       User             = require('../models/users');
+      
     
 // ***************************
 // MIDDLEWARE FUNCTIONS
@@ -68,9 +70,17 @@ router.get("/blogs", isLoggedIn, (req, res) => {
 
 // settings/comments
 router.get("/comments", isLoggedIn, (req, res) => {
-    res.render("settings-comments.ejs");
+    
+    Comment.find({},(err,comments)=>{
+        if(err){
+            console.log(err);
+        } else {
+            res.render('settings-comments.ejs', {comments: comments});
+        }
+    });
 });
-
+   
+    
 
 //----------------------------
 // .POST routes

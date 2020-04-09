@@ -41,6 +41,23 @@ router.use((req,res,next) => {
 // user profile page
 router.get("/:id/profile",isLoggedIn, (req, res) => {
     
+    function checkProfileExists(requestedProfileID){
+        return new Promise((resolve,reject)=>{
+           console.log("Checking that Profile of User " + requestedProfileID + "still exists");
+           User.findById(requestedProfileID, (err, foundProfile) =>{
+               if(err){
+                   console.log(err);
+               } else if(!foundProfile) {
+                   console.log('Profile does not exist');
+                   resolve(false);
+               } else {
+                   console.log(foundProfile);
+                   resolve(true);
+               }
+           });
+        });
+    }
+    
     function getUserData(IDNumber){
         return new Promise((resolve,reject)=>{
             console.log("Requesting user data of: "+ IDNumber);
@@ -52,6 +69,7 @@ router.get("/:id/profile",isLoggedIn, (req, res) => {
     function getAdminStatus(userData){
         return new Promise((resolve,reject)=>{
            console.log("Retreiving user role of: " + userData.username);
+           
            if(userData.role === "Administrator"){
                resolve(true);
            } else if(userData.role != "Administrator") {
@@ -83,11 +101,15 @@ router.get("/:id/profile",isLoggedIn, (req, res) => {
         });
     }
     
+    
+    
+    // first check that user profile still exists (user was not deleted)
     // if user is the last administrator and is editing the profile
     // of the last administrator, prevent them from changing roles
-    async function checkAdminDanger(){
+    async function checkProfileExistsAndAdminDanger(){
         try{
             // login check handled by middleware
+            const profileExists = await checkProfileExists(req.params.id);
             const currentUserData = await getUserData(res.locals.currentUser.id);
             console.log("Current User: " + currentUserData.username);
             const isAdmin = await getAdminStatus(currentUserData);
@@ -95,30 +117,35 @@ router.get("/:id/profile",isLoggedIn, (req, res) => {
             const numberOfAdmins = await getAdminCount('Administrator');
             console.log("Current Number of Administrators: " + numberOfAdmins);
             
-            User.findById(req.params.id, (err, foundUser) => {
-                // get role of current profile
-                let profileRole = foundUser.role;
-                console.log(profileRole);
-                if(err){
-                    console.log(err);
-                } else {
-                    if(isAdmin === true && numberOfAdmins <= 1 && profileRole === "Administrator"){
-                        let adminDanger = true;
-                        console.log('ADMIN DANGER: There is only 1 administrator');
-                        res.render("userProfile.ejs", {user: foundUser, admindanger: adminDanger});
+            if(profileExists === false){
+                res.send("This user no longer exists.");
+            } else {
+                User.findById(req.params.id, (err, foundUser) => {
+                
+                    // get role of current profile
+                    let profileRole = foundUser.role;
+                    console.log('Current user is: ' + profileRole);
+                    if(err){
+                        console.log(err);
+                    } else if(profileExists === false){
+                        res.send("This user no longer exists.");
+                    } else if(isAdmin === true && numberOfAdmins <= 1 && profileRole === "Administrator"){
+                            let adminDanger = true;
+                            console.log('ADMIN DANGER: There is only 1 administrator');
+                            res.render("userProfile.ejs", {user: foundUser, admindanger: adminDanger});
                     } else {
                         let adminDanger = false;
                         console.log('No Admin Danger');
                         res.render("userProfile.ejs", {user: foundUser, admindanger: adminDanger});
                     }   
-                }
-            });
-            
+                    
+                });
+            }
         } catch(err) {
             console.log(err);
         }
     }
-    checkAdminDanger();
+    checkProfileExistsAndAdminDanger();
 });
 
 //----------------------------

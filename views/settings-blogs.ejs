@@ -30,8 +30,8 @@
                 alt="..."  
                 class="settings-table-image">
             </td>
-            <td><%= blog.title %></td>
-            <td><%= blog.author.username %></td>
+            <td><a href="/blogs/<%=blog._id%>"><%= blog.title %></a></td>
+            <td><a href="/users/<%=blog.author.id%>/profile"><%= blog.author.username %></a></td>
             <td><span class="settings-table-id"><%=blog._id%></span></td>
             
             <!-- Only author, admin or editor can modify content -->
