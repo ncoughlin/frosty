@@ -33,8 +33,10 @@
             <td><%= blog.title %></td>
             <td><%= blog.author.username %></td>
             <td><span class="settings-table-id"><%=blog._id%></span></td>
-            <td>
+            
+            <!-- Only author, admin or editor can modify content -->
             <% if((currentUser && blog.author.id.equals(currentUser._id)) || (currentUser.role === "Administrator" || currentUser.role === "Editor")){ %>
+            <td>
             <a href="/blogs/<%=blog._id%>/edit" class="btn btn-outline-primary">Edit</a>
             </td>
             <td>

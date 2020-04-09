@@ -1,0 +1,33 @@
+<%- include("partials/header.ejs") %>
+<%- include("partials/navbar.ejs") %>
+<!-- contains css grid container start -->
+<% if(currentUser.role != "Reader"){ %>
+    <%- include("partials/settings-bar.ejs") %>
+    <!-- css grid container for settings content start -->
+    <%- include("partials/settings-content-grid-start.ejs") %>
+<% } %>
+
+
+<!-- begin content -->
+<!-- fixed width container for content -->
+<div class="container-lg mt-5">
+    <h1 class="settings-title">Edit Comment</h1>
+    <h4> Author: <strong><%= comment.author.username %></strong></h4> 
+        <!--input for title, image, content -->
+        <form action="/blogs/<%= blog_id %>/comments/<%= comment._id %>?_method=PUT" method="POST">
+            <div class="form-group">
+                <label for="contentInput">
+                    <p><strong>Your Thoughts...</strong></p>
+                </label>
+            <textarea class="form-control" id="contentInput" rows="3" name="comment[content]"><%= comment.content %></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+</div>
+
+
+<!-- css grid container for settings content end -->
+<%- include("partials/settings-content-grid-end.ejs") %>
+<!-- settings grid container end must go at end of settings content templates! -->  
+<%- include("partials/settings-grid-container-end.ejs") %>
+<%- include("partials/footer.ejs") %>

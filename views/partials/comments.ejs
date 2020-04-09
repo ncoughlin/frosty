@@ -43,10 +43,33 @@
                 <% } %>
               </div>
             </div>
+            
             <!--Comments Loop -->
+            
             <% blog.comments.forEach((comment) => { %>
-                <p><strong><%= comment.author.username %></strong><em class="text-muted"> - <%= comment.date.toDateString() %></em></p>
+              
+                <p class="mt-4"><strong><%= comment.author.username %></strong><em class="text-muted"> - <%= comment.date.toDateString() %></em></p>
                 <p><%= comment.content %></p>
+                
+                <!--Edit and Delete Buttons -->  
+                <!-- Only author, admin or editor can modify content -->
+                <% if(currentUser && comment.author.id.equals(currentUser._id) || editPermission === true){ %>
+                
+                <div class="d-inline-flex">
+                  <span class="mr-2">
+                      <a class="btn btn-outline-warning btn-sm" href="/blogs/<%= blog._id %>/comments/<%= comment._id %>/edit">
+                        Edit
+                      </a>
+                  </span>
+                  <span>
+                      <form action="/blogs/<%= blog._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                      </form>
+                  </span>
+                </div>
+                
+                <% }; %>
+                
             <% }); %>   
           </div>
         </div>        

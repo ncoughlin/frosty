@@ -1,9 +1,11 @@
 <%- include("partials/header.ejs") %>
 <%- include("partials/navbar.ejs") %>
 <!-- contains css grid container start -->
-<%- include("partials/settings-bar.ejs") %>
-<!-- css grid container for settings content start -->
-<%- include("partials/settings-content-grid-start.ejs") %>
+<% if(currentUser.role != "Reader"){ %>
+    <%- include("partials/settings-bar.ejs") %>
+    <!-- css grid container for settings content start -->
+    <%- include("partials/settings-content-grid-start.ejs") %>
+<% } %>
 
 <!-- begin content -->
 

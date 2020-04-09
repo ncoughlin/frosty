@@ -66,6 +66,11 @@ router.get("/blogs", isLoggedIn, (req, res) => {
     });
 });
 
+// settings/comments
+router.get("/comments", isLoggedIn, (req, res) => {
+    res.render("settings-comments.ejs");
+});
+
 
 //----------------------------
 // .POST routes

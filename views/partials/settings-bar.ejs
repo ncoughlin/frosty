@@ -19,6 +19,12 @@
                         Blogs
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/settings/comments" class="nav-link text-light bg-dark">
+                    <i class="material-icons settings-menu-icons">chat</i>
+                        Comments
+                    </a>
+                </li>
                 <!-- Users only available to Administrators and Editors -->
                 <% if(currentUser.role === "Administrator" || currentUser.role === "Editor"){ %>
                 <li class="nav-item">

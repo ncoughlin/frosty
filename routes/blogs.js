@@ -87,19 +87,48 @@ router.get("/:id/edit",isLoggedIn, (req, res) => {
 // render individual blog. This is a wildcard link and must therefore be
 // placed after static links in the application!
 router.get("/:id",(req, res) => {
-    // Find Blog by ID and populate comments
-    Blog.findById(req.params.id).
-    // populate comments
-    populate("comments").
-    exec((err, dbData) => {
-        if(err){
-            console.log("error finding blog data by ID");
-        } else {
-            // render single post template with that post data
-            res.render("singleBlog.ejs", {blog: dbData});
-            console.log("Article: " + dbData.title + " has loaded.");
+    
+    
+    // First check if user is logged in
+    // If not then editorCheck is False
+    function editorCheck(){
+        return new Promise((resolve, reject)=>{
+            if(!req.isAuthenticated()){
+                resolve(false);
+            // If user role = Editor || Admin
+            //  let editAllow = true;    
+            } else if (req.user.role === "Administrator" || req.user.role === "Editor"){
+                resolve(true);
+            //  if the user is any other role    
+            } else {
+                resolve(false);
+            }
+        });
+    }    
+    
+    // check if user has blanket permission to edit a comment before loading page.
+    async function checkForEditOrAdmin(){
+        try {
+            const editPermission = await editorCheck();
+            console.log("User is Admin or Editor: " + editPermission);
+            // Find Blog by ID and populate comments
+            Blog.findById(req.params.id).
+            // populate comments
+            populate("comments").
+            exec((err, dbData) => {
+                if(err){
+                    console.log("error finding blog data by ID");
+                } else {
+                    // render single post template with that post data
+                    res.render("singleBlog.ejs", {blog: dbData, editPermission: editPermission});
+                    console.log("Article: " + dbData.title + " has loaded.");
+                }
+            });
+        } catch(err) {
+            console.log(err);
         }
-    });
+    }
+    checkForEditOrAdmin();
 });
 
 //----------------------------

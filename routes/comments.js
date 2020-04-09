@@ -32,7 +32,20 @@ router.use((req,res,next) => {
 // .GET routes
 //----------------------------
 
-// comments are rendered directly in blog pages
+// comments are rendered directly in blog pages with
+// partials/comments using blog.comments.forEach((comment)
+
+// edit comment form
+// /blogs/:id/comments/...
+router.get("/:comment_id/edit",isLoggedIn, (req, res) => {
+    Comment.findById(req.params.comment_id, (err,foundComment)=>{
+        if(err){
+            console.log(err);
+        } else {
+            res.render('editComment.ejs', {blog_id: req.params.id, comment: foundComment});
+        }
+    });
+});
 
 //----------------------------
 // .POST routes
@@ -71,9 +84,33 @@ router.post("/", isLoggedIn, (req,res) => {
 // .PUT routes
 //----------------------------
 
+// save updated comment
+router.put('/:comment_id', isLoggedIn, (req,res)=>{
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment)=>{
+        if(err){
+            console.log(err);
+            res.redirect('back');
+        } else {
+            res.redirect('/blogs/' + req.params.id);
+        }
+    });
+});
+
 //----------------------------
 // .DELETE routes
 //----------------------------
+
+// delete comments
+router.delete("/:comment_id",isLoggedIn,(req, res) => {
+    Comment.findByIdAndRemove(req.params.comment_id,(err) => {
+        if(err){
+          console.log("failed to .findByIdAndRemove Comment object");  
+        } else {
+            console.log("Comment with ID:" + req.params.comment_id + " has been deleted");
+            res.redirect('/blogs/' + req.params.id);
+        }
+    });
+});
 
 // export module
 module.exports = router;
