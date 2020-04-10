@@ -11,6 +11,11 @@
                   alt="Frosty CMS Logo"
                 /></a>
                 <h2 class="card-title text-center">Login</h2>
+                <% if(error != '') {%>
+                <div class="alert alert-danger" role="alert">
+                  <%= error %>
+                </div>
+                <% } %>
                 <form class="mt-4" action="/login" method="POST">
                   <div class="form-group">
                     <input type="text" class="form-control form-control-lg" placeholder="username" name="username">

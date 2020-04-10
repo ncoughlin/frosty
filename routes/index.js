@@ -104,12 +104,16 @@ router.post("/register", (req, res) => {
                 console.log("attempting user registration");
                 if (err) {
                     console.log(err);
-                    return res.render("register.ejs");
+                    // populating flash with default messages from passport
+                    req.flash('error', err.message);
+                    res.redirect('back');
+                    return;
                 }
                 
                 passport.authenticate("local")(req, res, () => {
                     req.flash('success', 'New user registered.');
                     res.redirect("/");
+                    return;
                 });
                 console.log("user registration successful: " + newUser.username);
             });
@@ -126,7 +130,8 @@ router.post("/register", (req, res) => {
 // app.post("/login", middleware, callback)
 router.post("/login",passport.authenticate("local", {
                                                     successRedirect: "..",
-                                                    failureRedirect: "/login"
+                                                    failureRedirect: "/login",
+                                                    failureFlash: true
                                                 }), (req, res) => {}
 );
 

@@ -43,7 +43,7 @@ router.get("/users", middleware.isLoggedIn, (req, res) => {
         } else {
             res.render("settings-users.ejs", {users:users});
         }
-    })
+    });
 });
 
 // settings/general

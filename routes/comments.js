@@ -69,10 +69,13 @@ router.post("/", middleware.isLoggedIn, (req,res) => {
             blog.comments.push(comment);
             blog.save();
             console.log("New Comment: " + comment);
-            // redirect    
-            res.redirect("/blogs/" + blog._id);
+            // redirect
+            req.flash('success', 'Comment Saved.');
+            res.redirect('back');
         } catch(err) {
             console.log(err);
+            req.flash('error', 'Comment failed to save.');
+            res.redirect('back');
         }
     }
     saveComment();
@@ -89,7 +92,8 @@ router.put('/:comment_id', middleware.isLoggedIn, (req,res)=>{
             console.log(err);
             res.redirect('back');
         } else {
-            res.redirect('/blogs/' + req.params.id);
+            req.flash('success', 'Comment updated.');
+            res.redirect('back');
         }
     });
 });
@@ -105,7 +109,8 @@ router.delete("/:comment_id",middleware.isLoggedIn,(req, res) => {
           console.log("failed to .findByIdAndRemove Comment object");  
         } else {
             console.log("Comment with ID:" + req.params.comment_id + " has been deleted");
-            res.redirect('/blogs/' + req.params.id);
+            req.flash('success', 'Comment deleted.');
+            res.redirect('back');
         }
     });
 });

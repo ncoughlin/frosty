@@ -38,7 +38,9 @@ router.get("/:id/profile",middleware.isLoggedIn, (req, res) => {
                } else if(!foundProfile) {
                    req.flash('error', 'Profile does not exist.');
                    res.redirect('back');
-                   // resolve(false);
+                   // redirect does not end statement like res.render
+                   // so we must return to end process
+                   return;
                } else {
                    console.log(foundProfile);
                    resolve(true);
@@ -162,6 +164,7 @@ router.put("/:id",middleware.isLoggedIn,(req, res) => {
         } else {
             console.log("Success: User updated");
             // redirect to updated user profile
+            req.flash('success', 'User profile updated.');
             res.redirect("/users/" + req.params.id + "/profile");
         }
     });
@@ -179,6 +182,7 @@ router.delete("/:id",middleware.isLoggedIn,(req, res) => {
           console.log("Error: failed to delete user");  
         } else {
             console.log("User with username:" + req.params.username + " has been deleted");
+            req.flash('success', 'User has been deleted.');
             res.redirect("/settings/users");
         }
     });

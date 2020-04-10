@@ -35,6 +35,11 @@ router.get("/",(req, res) => {
     Blog.find({},(err, blogs) => {
         if(err){
             console.log("Error: Unable to retreive blog data.");
+            req.flash('error', 'Unable to retreive blog data.');
+            res.redirect('/');
+            // redirect does not end statement like res.render
+            // so we must return to end process
+            return;
         } else {
             res.render("index.ejs", {blogs:blogs});
         }
@@ -52,6 +57,11 @@ router.get("/:id/edit",middleware.isLoggedIn, (req, res) => {
     Blog.findById(req.params.id, (err, foundBlog) => {
         if(err){
             console.log(err);
+            req.flash('error', 'Unable to edit blog.');
+            res.redirect('back');
+            // redirect does not end statement like res.render
+            // so we must return to end process
+            return;
         } else {
             res.render("editBlog.ejs", {blog: foundBlog});     
         }
@@ -81,7 +91,7 @@ router.get("/:id",(req, res) => {
     }    
     
     // check if user has blanket permission to edit a comment before loading page.
-    async function checkForEditOrAdmin(){
+    async function loadSingleBlogWithPermissionCheck(){
         try {
             const editPermission = await editorCheck();
             console.log("User is Admin or Editor: " + editPermission);
@@ -92,6 +102,11 @@ router.get("/:id",(req, res) => {
             exec((err, dbData) => {
                 if(err){
                     console.log("error finding blog data by ID");
+                    req.flash('error', 'error finding blog data by ID');
+                    res.redirect('/');
+                    // redirect does not end statement like res.render
+                    // so we must return to end process
+                    return;
                 } else {
                     // render single post template with that post data
                     res.render("singleBlog.ejs", {blog: dbData, editPermission: editPermission});
@@ -102,7 +117,7 @@ router.get("/:id",(req, res) => {
             console.log(err);
         }
     }
-    checkForEditOrAdmin();
+    loadSingleBlogWithPermissionCheck();
 });
 
 //----------------------------
@@ -141,6 +156,7 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
         } else {
             console.log("Blog successfully saved to database.");
             console.log(newDatabaseRecord);
+            req.flash('success', 'New blog saved to database.');
             // redirect back to blogs page
              res.redirect("/");
         }
@@ -163,6 +179,7 @@ router.put("/:id",middleware.isLoggedIn,(req, res) => {
             console.log("Failed to update database");
         } else {
             console.log("Blog successfully updated in database.");
+            req.flash('success', 'Blog updated.');
             // redirect to updated single post page
             res.redirect("/blogs/" + req.params.id);
         }
@@ -182,7 +199,8 @@ router.delete("/:id",middleware.isLoggedIn,(req, res) => {
           console.log("failed to .findByIdAndRemove Blog object");  
         } else {
             console.log("Blog with ID:" + req.params.id + " has been deleted");
-            res.redirect("/settings/blogs");
+            req.flash('success', 'Blog has been deleted.');
+            res.redirect("back");
         }
     });
 });
