@@ -19,6 +19,21 @@ html,body {
     height: 50px;
 }
 
+/* Alert Wrapper to center alert*/
+.alert-wrapper {
+  position: absolute;
+  top: 0px; 
+  left: 50%;
+  z-index:9999;
+}
+
+/* Alert Box*/
+.alert-fixed {
+    position: relative; 
+    left: -50%;
+    border-radius:0px
+}
+
 /* Login Logo*/
 .login-logo {
     height: 100px;

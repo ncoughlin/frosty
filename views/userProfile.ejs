@@ -13,6 +13,11 @@
     <div class="container-lg mt-5">
     <h1 class="settings-title">User Profile: <%= user.username %></h1>
     <h4> Role: <strong><%= user.role %></strong></h4>
+    <% if(user.role != 'Administrator'){%>
+        <div class="alert alert-primary" role="alert">
+        If you would like additional permissions  you must contact an Administrator.
+        </div>
+    <% }%>
     <p class="text-muted"> ID: <%= user._id %></p>
         <!--input for title, image, content -->
         <form action="/users/<%= user._id %>?_method=PUT" method="POST">

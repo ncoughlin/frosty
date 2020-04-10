@@ -62,3 +62,19 @@
   </div>
 </nav>
 
+<!-- flash messages -->
+<% if(success != ""){ %>
+  <div class='alert-wrapper'>
+    <div class="alert alert-success alert-fixed" role="alert">
+      <%= success %>
+    </div>
+  </div> 
+<% } %>
+<% if(error != ""){ %>
+  <div class='alert-wrapper'>
+    <div class="alert alert-danger alert-fixed" role="alert">
+      <%= error %>
+    </div>
+  </div> 
+<% } %>
+

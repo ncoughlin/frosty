@@ -14,6 +14,7 @@ const express          = require('express'),
       expressSanitizer = require('express-sanitizer'),
       passport         = require('passport'),
       LocalStrategy    = require('passport-local'),
+      flash            = require('connect-flash'),
       Blog             = require('./models/blogs'),
       Comment          = require('./models/comments'),
       User             = require('./models/users'),
@@ -41,6 +42,8 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 // use express-sanitizer
 app.use(expressSanitizer());
+// use flash
+app.use(flash()); 
 
 // ***************************
 // MONGO CONFIGURATION
@@ -92,20 +95,14 @@ app.use(indexRoutes);
 
 
 // ***************************
-// MIDDLEWARE FUNCTIONS
+// GLOBAL VARIABLES
 // ***************************
-
-// check if user is logged in
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
 
 // pass through user data on every route
 app.use((req,res,next) => {
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
     next();
 });
 

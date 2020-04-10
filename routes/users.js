@@ -13,6 +13,8 @@ const express          = require("express"),
 // pass through user data on every route
 router.use((req,res,next) => {
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
     next();
 });  
 
@@ -34,8 +36,9 @@ router.get("/:id/profile",middleware.isLoggedIn, (req, res) => {
                if(err){
                    console.log(err);
                } else if(!foundProfile) {
-                   console.log('Profile does not exist');
-                   resolve(false);
+                   req.flash('error', 'Profile does not exist.');
+                   res.redirect('back');
+                   // resolve(false);
                } else {
                    console.log(foundProfile);
                    resolve(true);

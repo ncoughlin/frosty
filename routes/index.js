@@ -14,6 +14,8 @@ const express          = require("express"),
 // pass through user data on every route
 router.use((req,res,next) => {
     res.locals.currentUser = req.user;
+    res.locals.error = req.flash('error');
+    res.locals.success = req.flash('success');
     next();
 });
 
@@ -50,6 +52,7 @@ router.get("/register",(req, res) => {
 // logout user
 router.get("/logout",(req, res) => {
     req.logout();
+    req.flash('success', 'You have been logged out.');
     res.redirect("/");
 });
 
@@ -103,7 +106,9 @@ router.post("/register", (req, res) => {
                     console.log(err);
                     return res.render("register.ejs");
                 }
+                
                 passport.authenticate("local")(req, res, () => {
+                    req.flash('success', 'New user registered.');
                     res.redirect("/");
                 });
                 console.log("user registration successful: " + newUser.username);
