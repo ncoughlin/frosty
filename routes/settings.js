@@ -3,22 +3,15 @@
 // ***************************
 const express          = require('express'),
       router           = express.Router({mergeParams: true}),
+      middleware       = require('../middleware'),
       Blog             = require('../models/blogs'),
       Comment          = require('../models/comments'),
       User             = require('../models/users');
       
     
 // ***************************
-// MIDDLEWARE FUNCTIONS
+// PASSPORT
 // ***************************
-
-// check if user is logged in
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
 
 // pass through user data on every route
 router.use((req,res,next) => {
@@ -35,12 +28,12 @@ router.use((req,res,next) => {
 //----------------------------
 
 // settings/dashboard
-router.get("/dashboard", isLoggedIn, (req, res) => {
+router.get("/dashboard", middleware.isLoggedIn, (req, res) => {
     res.render("settings-dashboard.ejs");
 });
 
 // settings/users
-router.get("/users", isLoggedIn, (req, res) => {
+router.get("/users", middleware.isLoggedIn, (req, res) => {
     // get users from database
     User.find({},(err, users) => {
         if(err){
@@ -52,12 +45,12 @@ router.get("/users", isLoggedIn, (req, res) => {
 });
 
 // settings/general
-router.get("/general", isLoggedIn, (req, res) => {
+router.get("/general", middleware.isLoggedIn, (req, res) => {
     res.render("settings-general.ejs");
 });
 
 // settings/blogs
-router.get("/blogs", isLoggedIn, (req, res) => {
+router.get("/blogs", middleware.isLoggedIn, (req, res) => {
     // get blogs from database 
     Blog.find({},(err, blogs) => {
         if(err){
@@ -69,7 +62,7 @@ router.get("/blogs", isLoggedIn, (req, res) => {
 });
 
 // settings/comments
-router.get("/comments", isLoggedIn, (req, res) => {
+router.get("/comments", middleware.isLoggedIn, (req, res) => {
     
     Comment.find({},(err,comments)=>{
         if(err){

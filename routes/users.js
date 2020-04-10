@@ -3,32 +3,18 @@
 // ***************************
 const express          = require("express"),
       router           = express.Router({mergeParams: true}),
+      middleware       = require('../middleware'),
       User             = require('../models/users');
     
 // ***************************
-// MIDDLEWARE FUNCTIONS
+// PASSPORT
 // ***************************
-
-// check if user is logged in
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
 
 // pass through user data on every route
 router.use((req,res,next) => {
     res.locals.currentUser = req.user;
     next();
 });  
-
-// ***************************
-// FUNCTIONS
-// ***************************
-
-
-
 
 // ***************************
 // ROUTES
@@ -39,7 +25,7 @@ router.use((req,res,next) => {
 //----------------------------
 
 // user profile page
-router.get("/:id/profile",isLoggedIn, (req, res) => {
+router.get("/:id/profile",middleware.isLoggedIn, (req, res) => {
     
     function checkProfileExists(requestedProfileID){
         return new Promise((resolve,reject)=>{
@@ -159,7 +145,7 @@ router.get("/:id/profile",isLoggedIn, (req, res) => {
 //----------------------------
 
 // edit user
-router.put("/:id",isLoggedIn,(req, res) => {
+router.put("/:id",middleware.isLoggedIn,(req, res) => {
     // sanitize inputs
     req.body.user.firstname = req.sanitize(req.body.user.firstname);
     req.body.user.lastname = req.sanitize(req.body.user.lastname);
@@ -184,7 +170,7 @@ router.put("/:id",isLoggedIn,(req, res) => {
 //----------------------------
 
 // delete user
-router.delete("/:id",isLoggedIn,(req, res) => {
+router.delete("/:id",middleware.isLoggedIn,(req, res) => {
     User.findByIdAndRemove(req.params.id,(err) => {
         if(err){
           console.log("Error: failed to delete user");  

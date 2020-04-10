@@ -8,29 +8,14 @@ const express          = require("express"),
       Blog             = require('../models/blogs');
     
 // ***************************
-// MIDDLEWARE FUNCTIONS
+// PASSPORT
 // ***************************
-
-// check if user is logged in
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
 
 // pass through user data on every route
 router.use((req,res,next) => {
     res.locals.currentUser = req.user;
     next();
 });
-
-// ***************************
-// EXPERIMENT ZONE
-// ***************************
-
-
-
 
 // ***************************
 // ROUTES

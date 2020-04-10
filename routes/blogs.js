@@ -3,40 +3,13 @@
 // ***************************
 const express          = require("express"),
       router           = express.Router({mergeParams: true}),
+      middleware       = require('../middleware'),
       Blog             = require('../models/blogs');
+      
     
 // ***************************
-// MIDDLEWARE FUNCTIONS
+// PASSPORT
 // ***************************
-
-// check if user is logged in
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
-
-
-// check if blog author id matches user id
-function checkBlogOwnership(req,res,next){
-    // check if user is logged in
-    if(req.isAuthenticated()){
-        // find blog
-        Blog.findById(req.params.id, function(err, foundBlog){
-            if(err){
-                res.send("Could Not Find Blog by ID");
-            } else {
-                // check for matching id
-                if(foundBlog.author.id.equals(req.user._id)) {
-                    next();
-                } else {
-                    res.send("You do not have permission to do that.");
-                }
-            }
-        });
-    }
-}
 
 // pass through user data on every route
 router.use((req,res,next) => {
@@ -67,13 +40,13 @@ router.get("/",(req, res) => {
 });
 
 // new blog form
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", middleware.isLoggedIn, (req, res) => {
     res.render("newBlog.ejs");
 });
 
 
 // edit blog form
-router.get("/:id/edit",isLoggedIn, (req, res) => {
+router.get("/:id/edit",middleware.isLoggedIn, (req, res) => {
     Blog.findById(req.params.id, (err, foundBlog) => {
         if(err){
             console.log(err);
@@ -88,11 +61,10 @@ router.get("/:id/edit",isLoggedIn, (req, res) => {
 // placed after static links in the application!
 router.get("/:id",(req, res) => {
     
-    
-    // First check if user is logged in
-    // If not then editorCheck is False
+    // evaluate if the user should be able to edit
     function editorCheck(){
         return new Promise((resolve, reject)=>{
+            // First check if user is logged in
             if(!req.isAuthenticated()){
                 resolve(false);
             // If user role = Editor || Admin
@@ -136,7 +108,7 @@ router.get("/:id",(req, res) => {
 //----------------------------
 
 // new blog: receive and save
-router.post("/", isLoggedIn, (req, res) => {
+router.post("/", middleware.isLoggedIn, (req, res) => {
     // sanitize inputs
     req.body.blog.title   = req.sanitize(req.body.blog.title);
     req.body.blog.short   = req.sanitize(req.body.blog.short);
@@ -178,7 +150,7 @@ router.post("/", isLoggedIn, (req, res) => {
 //----------------------------
 
 // edit blog
-router.put("/:id",isLoggedIn,(req, res) => {
+router.put("/:id",middleware.isLoggedIn,(req, res) => {
     // sanitize inputs
     req.body.blog.title = req.sanitize(req.body.blog.title);
     req.body.blog.short = req.sanitize(req.body.blog.short);
@@ -202,7 +174,7 @@ router.put("/:id",isLoggedIn,(req, res) => {
 //----------------------------
 
 // delete post
-router.delete("/:id",isLoggedIn,(req, res) => {
+router.delete("/:id",middleware.isLoggedIn,(req, res) => {
     Blog.findByIdAndRemove(req.params.id,(err) => {
         if(err){
           console.log("failed to .findByIdAndRemove Blog object");  

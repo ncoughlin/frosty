@@ -3,20 +3,13 @@
 // ***************************
 const express          = require("express"),
       router           = express.Router({mergeParams: true}),
+      middleware       = require('../middleware'),
       Comment          = require('../models/comments'),
       Blog             = require('../models/blogs');
     
 // ***************************
-// MIDDLEWARE FUNCTIONS
+// PASSPORT
 // ***************************
-
-// check if user is logged in
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
 
 // pass through user data on every route
 router.use((req,res,next) => {
@@ -37,7 +30,7 @@ router.use((req,res,next) => {
 
 // edit comment form
 // /blogs/:id/comments/...
-router.get("/:comment_id/edit",isLoggedIn, (req, res) => {
+router.get("/:comment_id/edit",middleware.isLoggedIn, (req, res) => {
     Comment.findById(req.params.comment_id, (err,foundComment)=>{
         if(err){
             console.log(err);
@@ -52,7 +45,7 @@ router.get("/:comment_id/edit",isLoggedIn, (req, res) => {
 //----------------------------
 
 // /blogs/:id/comments - new comment: receive and save to blog
-router.post("/", isLoggedIn, (req,res) => {
+router.post("/", middleware.isLoggedIn, (req,res) => {
     // sanitize inputs
     req.body.comment.content = req.sanitize(req.body.comment.content);
         
@@ -88,7 +81,7 @@ router.post("/", isLoggedIn, (req,res) => {
 //----------------------------
 
 // save updated comment
-router.put('/:comment_id', isLoggedIn, (req,res)=>{
+router.put('/:comment_id', middleware.isLoggedIn, (req,res)=>{
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment)=>{
         if(err){
             console.log(err);
@@ -104,7 +97,7 @@ router.put('/:comment_id', isLoggedIn, (req,res)=>{
 //----------------------------
 
 // delete comments
-router.delete("/:comment_id",isLoggedIn,(req, res) => {
+router.delete("/:comment_id",middleware.isLoggedIn,(req, res) => {
     Comment.findByIdAndRemove(req.params.comment_id,(err) => {
         if(err){
           console.log("failed to .findByIdAndRemove Comment object");  
