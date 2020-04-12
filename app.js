@@ -60,6 +60,12 @@ db.once('open', function() {
 });
 
 // ***************************
+// MOMENT
+// ***************************
+
+app.locals.moment = require('moment');
+
+// ***************************
 // PASSPORT CONFIGURATION
 // ***************************
 
