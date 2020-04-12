@@ -48,7 +48,7 @@
             
             <% blog.comments.forEach((comment) => { %>
               
-                <p class="mt-4"><strong><%= comment.author.username %></strong><em class="text-muted"> - <%= comment.date.toDateString() %></em></p>
+                <p class="mt-4"><strong><%= comment.author.username %></strong><em class="text-muted"> - <%= moment(comment.date).fromNow() %></em></p>
                 <p><%= comment.content %></p>
                 
                 <!--Edit and Delete Buttons -->  

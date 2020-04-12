@@ -33,7 +33,7 @@
                 <label for="dateInput">
                     <h4>Date</h4>
                 </label>
-                <input type="date" class="form-control" id="dateInput" name="blog[date]" value="<%= blog.date %>">
+                <input type="date" class="form-control" id="dateInput" name="blog[date]" value="<%= moment(blog.date).format('YYYY-MM-DD') %>">
                 <small id="dateInputHelp" class="form-text text-muted">If left blank will default to current date.</small>
             </div>
             

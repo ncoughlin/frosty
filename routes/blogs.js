@@ -4,6 +4,7 @@
 const express          = require("express"),
       router           = express.Router({mergeParams: true}),
       middleware       = require('../middleware'),
+      moment           = require('moment'),
       Blog             = require('../models/blogs');
       
     
@@ -17,7 +18,7 @@ router.use((req,res,next) => {
     res.locals.error = req.flash('error');
     res.locals.success = req.flash('success');
     next();
-});       
+});     
 
 // ***************************
 // ROUTES
@@ -63,6 +64,7 @@ router.get("/:id/edit",middleware.isLoggedIn, (req, res) => {
             // so we must return to end process
             return;
         } else {
+            console.log( moment(foundBlog.date).format('YYYY-MM-DD'));
             res.render("editBlog.ejs", {blog: foundBlog});     
         }
     });

@@ -18,7 +18,8 @@ const express          = require('express'),
       Blog             = require('./models/blogs'),
       Comment          = require('./models/comments'),
       User             = require('./models/users'),
-      seedDB           = require('./seeds');
+      seedDB           = require('./seeds'),
+      moment           = require('moment');
 
 //import comment routes
 const commentRoutes    = require("./routes/comments"),
