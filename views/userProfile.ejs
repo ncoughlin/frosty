@@ -20,8 +20,15 @@
     <% }%>
     <p class="text-muted"> ID: <%= user._id %></p>
         <!--input for title, image, content -->
-        <form action="/users/<%= user._id %>?_method=PUT" method="POST">
-            
+        <form action="/users/<%= user._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+            <!--profile photo -->
+            <img src="<%= user.photo %>" class="profile-photo" >
+            <div class="form-group">
+                <label for="profilePhoto">
+                    <h4>Profile Image</h4>
+                </label>
+                <input type="file" id="profilePhoto" name="user[photo]" accept="image/*" required>
+            </div>
             <!--username -->
             <div class="form-group">
                 <label for="username">

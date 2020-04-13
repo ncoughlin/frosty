@@ -21,11 +21,12 @@ const express          = require("express"),
       upload           = multer({storage: storage, fileFilter: imageFilter}),    
       cloudinary       = require('cloudinary'),
       Blog             = require('../models/blogs');
+      
 
 // ***************************
 // Cloudinary Config
 // *************************** 
- cloudinary.config({ 
+cloudinary.config({ 
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
   api_key: process.env.CLOUDINARY_API_KEY, 
   api_secret: process.env.CLOUDINARY_API_SECRET
@@ -64,9 +65,6 @@ router.get("/",(req, res) => {
             res.redirect('/');
             return;
         } else {
-            console.log('Cloud Name: ' + process.env.CLOUDINARY_CLOUD_NAME);
-            console.log('API Key: ' + process.env.CLOUDINARY_API_KEY);
-            console.log('Secret: ' + process.env.CLOUDINARY_API_SECRET);
             res.render("index.ejs", {blogs:blogs});
         }
     });
@@ -245,10 +243,6 @@ router.put("/:id",middleware.isLoggedIn, upload.single('blog[image]'), (req, res
     });
 });    
     
-   
-    
-    
-
 
 //----------------------------
 // .DELETE routes
