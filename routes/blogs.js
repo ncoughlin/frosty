@@ -1,11 +1,35 @@
 // ***************************
-// EXPRESS SETUP
+// IMPORT PACKAGES
 // ***************************
 const express          = require("express"),
       router           = express.Router({mergeParams: true}),
       middleware       = require('../middleware'),
       moment           = require('moment'),
+      multer           = require('multer'),
+      storage          = multer.diskStorage({
+          filename: (req, file, callback)=>{
+              callback(null, Date.now() + file.originalname);
+          }
+      }),
+      imageFilter      = (req, file, cb)=>{
+        // accept image files only
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+            return cb(new Error('Only image files are allowed!'), false);
+        }
+        cb(null, true);
+        },
+      upload           = multer({storage: storage, fileFilter: imageFilter}),    
+      cloudinary       = require('cloudinary'),
       Blog             = require('../models/blogs');
+
+// ***************************
+// Cloudinary Config
+// *************************** 
+ cloudinary.config({ 
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});     
       
     
 // ***************************
@@ -38,10 +62,11 @@ router.get("/",(req, res) => {
             console.log("Error: Unable to retreive blog data.");
             req.flash('error', 'Unable to retreive blog data.');
             res.redirect('/');
-            // redirect does not end statement like res.render
-            // so we must return to end process
             return;
         } else {
+            console.log('Cloud Name: ' + process.env.CLOUDINARY_CLOUD_NAME);
+            console.log('API Key: ' + process.env.CLOUDINARY_API_KEY);
+            console.log('Secret: ' + process.env.CLOUDINARY_API_SECRET);
             res.render("index.ejs", {blogs:blogs});
         }
     });
@@ -60,8 +85,6 @@ router.get("/:id/edit",middleware.isLoggedIn, (req, res) => {
             console.log(err);
             req.flash('error', 'Unable to edit blog.');
             res.redirect('back');
-            // redirect does not end statement like res.render
-            // so we must return to end process
             return;
         } else {
             console.log( moment(foundBlog.date).format('YYYY-MM-DD'));
@@ -106,8 +129,6 @@ router.get("/:id",(req, res) => {
                     console.log("error finding blog data by ID");
                     req.flash('error', 'error finding blog data by ID');
                     res.redirect('/');
-                    // redirect does not end statement like res.render
-                    // so we must return to end process
                     return;
                 } else {
                     // render single post template with that post data
@@ -127,7 +148,7 @@ router.get("/:id",(req, res) => {
 //----------------------------
 
 // new blog: receive and save
-router.post("/", middleware.isLoggedIn, (req, res) => {
+router.post("/", middleware.isLoggedIn, upload.single('blog[image]'), (req, res) => {
     // sanitize inputs
     req.body.blog.title   = req.sanitize(req.body.blog.title);
     req.body.blog.short   = req.sanitize(req.body.blog.short);
@@ -135,7 +156,6 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
     
     // assign variables to incoming data
     let title   = req.body.blog.title,
-        image   = req.body.blog.image,
         short   = req.body.blog.short,
         content = req.body.blog.content,
         date    = req.body.blog.date;
@@ -148,20 +168,32 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
         lastname: req.user.lastname
     };
     
-    // combine all data into new variable
-    let newBlog = {title: title, image: image, short: short, content: content, date: date, author: author};
-    
-    // save combined data to new blog
-    Blog.create(newBlog,(err, newDatabaseRecord) => {
-        if(err){
-            console.log("Failed to write post to database.");
-        } else {
-            console.log("Blog successfully saved to database.");
-            console.log(newDatabaseRecord);
-            req.flash('success', 'New blog saved to database.');
-            // redirect back to blogs page
-             res.redirect("/");
-        }
+    // add cloudinary url for the image to the blog object under image property
+    cloudinary.v2.uploader.upload(req.file.path, (error, result)=> {
+        console.log(result, error);
+        
+        let image   = result.secure_url,
+            imageId = result.public_id;
+        
+        // combine all data into new variable
+        let newBlog = {title: title, image: image, imageId: imageId, short: short, content: content, date: date, author: author};
+        
+        // save combined data to new blog
+        Blog.create(newBlog,(err, newDatabaseRecord) => {
+            if(err){
+                console.log(err);
+                req.flash('error', "Failed to write post to database.");
+                res.redirect('back');
+                return;
+            } else {
+                console.log("Blog successfully saved to database.");
+                console.log(newDatabaseRecord);
+                req.flash('success', 'New blog saved to database.');
+                // redirect back to blogs page
+                 res.redirect("/");
+                 return;
+            }
+        });
     });
 });
 
@@ -170,24 +202,52 @@ router.post("/", middleware.isLoggedIn, (req, res) => {
 //----------------------------
 
 // edit blog
-router.put("/:id",middleware.isLoggedIn,(req, res) => {
-    // sanitize inputs
-    req.body.blog.title = req.sanitize(req.body.blog.title);
-    req.body.blog.short = req.sanitize(req.body.blog.short);
-    req.body.blog.content = req.sanitize(req.body.blog.content);
-    // find and update blog
-    Blog.findByIdAndUpdate(req.params.id, req.body.blog,(err, oldBlog) => {
-        if(err){
-            console.log("Failed to update database");
-        } else {
-            console.log("Blog successfully updated in database.");
-            req.flash('success', 'Blog updated.');
-            // redirect to updated single post page
-            res.redirect("/blogs/" + req.params.id);
-        }
+router.put("/:id",middleware.isLoggedIn, upload.single('blog[image]'), (req, res) => {
+    // only upload new photo if requested
+    Blog.findById(req.params.id, async function(err, blog){
+       if(err){
+           req.flash('error', err.message);
+           res.redirect('back');
+           return;
+       } else {
+           if (req.file) {
+               try {
+                   await cloudinary.v2.uploader.destroy(blog.imageId);
+                   let newImage = await cloudinary.v2.uploader.upload(req.file.path);
+                   blog.imageId = newImage.public_id;
+                   blog.image = newImage.secure_url;
+                   
+               } catch(err) {
+                   req.flash('error', err.message);
+                   res.redirect('back');
+                   return;
+               }
+           }
+            // sanitize inputs
+            req.body.blog.title = req.sanitize(req.body.blog.title);
+            req.body.blog.short = req.sanitize(req.body.blog.short);
+            req.body.blog.content = req.sanitize(req.body.blog.content);
+            
+            // assign variables to incoming data
+            blog.title   = req.body.blog.title;
+            blog.author  = blog.author;
+            blog.short   = req.body.blog.short;
+            blog.content = req.body.blog.content;
+            blog.date    = req.body.blog.date;
+            blog.imageId = blog.imageId;
+            blog.image   = blog.image;
+            
+            blog.save();
+            req.flash('success', "Blog updated.");
+            res.redirect('/blogs/' + blog._id);
+            return;
+       }
     });
+});    
     
-}); 
+   
+    
+    
 
 
 //----------------------------
@@ -196,13 +256,26 @@ router.put("/:id",middleware.isLoggedIn,(req, res) => {
 
 // delete post
 router.delete("/:id",middleware.isLoggedIn,(req, res) => {
-    Blog.findByIdAndRemove(req.params.id,(err) => {
+    Blog.findById(req.params.id, async function (err,blog){
         if(err){
-          console.log("failed to .findByIdAndRemove Blog object");  
+            console.log("failed to .findByIdAndRemove Blog object");
+            req.flash('error', err.message);
+            res.redirect('back');
+            return;
         } else {
-            console.log("Blog with ID:" + req.params.id + " has been deleted");
-            req.flash('success', 'Blog has been deleted.');
-            res.redirect("back");
+            try {
+                await cloudinary.v2.uploader.destroy(blog.imageId);
+                console.log("Blog image with ID:" + blog.imageId + " has been deleted from cloudinary.");
+                blog.remove();
+                console.log("Blog with ID:" + req.params.id + " has been deletedj.");
+                req.flash('success', 'Blog has been deleted.');
+                res.redirect("back");
+                return;
+            } catch(err) {
+                req.flash('error', err.message);
+                res.redirect('back');
+                return;
+            }
         }
     });
 });

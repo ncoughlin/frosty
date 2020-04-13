@@ -1,9 +1,12 @@
 
 // ***************************
-// EXPRESS SETUP
+// IMPORT PACKAGES
 // ***************************
 
 console.log("app.js is connected");
+
+// environment variables managed by dotenv
+require('dotenv').config();
 
 // import modules
 const express          = require('express'),
@@ -18,8 +21,7 @@ const express          = require('express'),
       Blog             = require('./models/blogs'),
       Comment          = require('./models/comments'),
       User             = require('./models/users'),
-      seedDB           = require('./seeds'),
-      moment           = require('moment');
+      seedDB           = require('./seeds');
 
 //import comment routes
 const commentRoutes    = require("./routes/comments"),
@@ -27,6 +29,12 @@ const commentRoutes    = require("./routes/comments"),
       settingRoutes    = require("./routes/settings"),
       userRoutes       = require("./routes/users"),
       indexRoutes      = require("./routes/index");
+ 
+ 
+// ***************************
+// MISC CONFIG
+// ***************************
+      
 
 // set listen port
 // must set listen port to 8080 for public viewing. see https://ncoughlin.com/aws-cloud9-making-express-js-server-publicly-available/
@@ -34,6 +42,10 @@ app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Listening on PORT: " + process.env.PORT + " at IP: " + process.env.IP);
 });
 
+
+// ***************************
+// DEPENDENCIES
+// ***************************
 
 // direct express to static files like CSS and Logos
 app.use(express.static("public"));
@@ -45,6 +57,7 @@ app.use(methodOverride("_method"));
 app.use(expressSanitizer());
 // use flash
 app.use(flash()); 
+
 
 // ***************************
 // MONGO CONFIGURATION
@@ -61,7 +74,7 @@ db.once('open', function() {
 });
 
 // ***************************
-// MOMENT
+// MOMENT (timestamp manipulation)
 // ***************************
 
 app.locals.moment = require('moment');
@@ -83,6 +96,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
 // ***************************
 // ROUTE CONFIGURATION
 // ***************************
@@ -92,6 +106,7 @@ app.use("/blogs/:id/comments", commentRoutes);
 app.use("/users", userRoutes);
 app.use("/settings", settingRoutes);
 app.use(indexRoutes);
+
 
 // ***************************
 // DATABASE SEEDING

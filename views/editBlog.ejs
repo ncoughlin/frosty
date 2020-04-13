@@ -12,14 +12,15 @@
     <h1 class="settings-title">Edit Blog</h1>
     <h4> Author: <strong><%= blog.author.username %></strong></h4>
         <!--input for title, image, content -->
-        <form action="/blogs/<%= blog._id %>?_method=PUT" method="POST">
-
+        <form action="/blogs/<%= blog._id %>?_method=PUT" method="POST" enctype='multipart/form-data'>
+            
+            <img src="<%= blog.image %>" class="img-fluid" >
+            
             <div class="form-group">
-                <label for="featuredImageURL">
-                    <h4>Featured Image URL</h4>
+                <label for="featuredImageUpload">
+                    <h4>Change Image</h4>
                 </label>
-                <input type="text" class="form-control" id="featuredImageURL" name="blog[image]" value="<%= blog.image %>">
-                <small id="imageHelp" class="form-text text-muted">Paste URL of a hosted image. Will create media database in future update.</small>
+                <input type="file" id="featuredImageUpload" name="blog[image]" accept="image/*" >
             </div>
 
             <div class="form-group">
@@ -34,7 +35,6 @@
                     <h4>Date</h4>
                 </label>
                 <input type="date" class="form-control" id="dateInput" name="blog[date]" value="<%= moment(blog.date).format('YYYY-MM-DD') %>">
-                <small id="dateInputHelp" class="form-text text-muted">If left blank will default to current date.</small>
             </div>
             
             <div class="form-group">
