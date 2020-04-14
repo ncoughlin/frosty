@@ -52,7 +52,7 @@ router.use((req,res,next) => {
 //----------------------------
 
 // user profile page
-router.get("/:id/profile",middleware.isLoggedIn, (req, res) => {
+router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsBack, (req, res) => {
     
     function checkProfileExists(requestedProfileID){
         return new Promise((resolve,reject)=>{
@@ -81,23 +81,15 @@ router.get("/:id/profile",middleware.isLoggedIn, (req, res) => {
         });
     }
 
-    // if user is not administrator render profile page
+    // is user an administrator?
     function getAdminStatus(userData){
         return new Promise((resolve,reject)=>{
            console.log("Retreiving user role of: " + userData.username);
            
            if(userData.role === "Administrator"){
-               resolve(true);
+                resolve(true);
            } else if(userData.role != "Administrator") {
-                User.findById(req.params.id, (err, foundUser) => {
-                    if(err) {
-                        console.log(err);
-                    } else {
-                    let adminDanger = false;
-                    console.log('No Admin Danger');
-                    res.render("userProfile.ejs", {user: foundUser, admindanger: adminDanger}); 
-                    }
-                });   
+                resolve(false);
            } else {   
                console.log("Error retreiving status of user role.");
                reject("Error retreiving status of user role.");
@@ -139,16 +131,39 @@ router.get("/:id/profile",middleware.isLoggedIn, (req, res) => {
         });
     }
     
-    
+    // is user reader or writer?
+    function readerOrWriter(){
+        return new Promise((resolve, reject)=>{
+            if(res.locals.currentUser.role === 'Reader' || res.locals.currentUser.role === 'Writer'){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    }
+   
+   // is user requesting their own profile? 
+    function matchingProfile(){
+        return new Promise((resolve, reject)=>{
+            if(res.locals.currentUser.id === req.params.id) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    }
     
     // first check that user profile still exists (user was not deleted)
     // if user is the last administrator and is editing the profile
     // of the last administrator, prevent them from changing roles
     // check if user already has a profile photo and if not use default photo
-    async function checkProfileExistsAndAdminDangerandProfilePhoto(){
+    async function profileRequestHandler(){
         try{
             // login check handled by middleware
+            
             const profileExists = await checkProfileExists(req.params.id);
+            const isReaderOrWriter = await readerOrWriter();
+            const profileOwner = await matchingProfile();
             const currentUserData = await getUserData(res.locals.currentUser.id);
             console.log("Current User: " + currentUserData.username);
             const isAdmin = await getAdminStatus(currentUserData);
@@ -157,24 +172,36 @@ router.get("/:id/profile",middleware.isLoggedIn, (req, res) => {
             console.log("Current Number of Administrators: " + numberOfAdmins);
             const userPhoto = await checkProfilePhoto(req.params.id);
             
+            
+            // if no profile go back
             if(profileExists === false){
                 req.flash('error', "That user no longer exists");
                 res.redirect('back');
                 return;
+            // if not profile owner, admin or editor go back    
+            } else if(isReaderOrWriter === true && profileOwner === false) {
+                req.flash('error', "You do not have permission to view that profile");
+                res.redirect('back');
+                return;
+            // if authorized to view the profile
+            // look up the profile
             } else {
                 User.findById(req.params.id, (err, foundUser) => {
                 
-                // photo is result of checkProfilePhoto()    
+                // photo is determined by checkProfilePhoto()    
                 foundUser.photo = userPhoto;    
                 
-                // get role of current profile
+                // set role of user to variable to modify profile template
                 let profileRole = foundUser.role;
                 console.log('Current user is: ' + profileRole);
+                
                 if(err){
                     console.log(err);
                     req.flash('error', "Could not find User Profile");
                     res.redirect('back');
                     return;
+                
+                // check for adminDanger and then render template    
                 } else if(isAdmin === true && numberOfAdmins <= 1 && profileRole === "Administrator"){
                         let adminDanger = true;
                         console.log('ADMIN DANGER: There is only 1 administrator');
@@ -191,7 +218,7 @@ router.get("/:id/profile",middleware.isLoggedIn, (req, res) => {
             console.log(err);
         }
     }
-    checkProfileExistsAndAdminDangerandProfilePhoto();
+    profileRequestHandler();
 });
 
 //----------------------------

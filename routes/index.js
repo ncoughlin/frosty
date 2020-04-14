@@ -3,6 +3,7 @@
 // ***************************
 const express          = require("express"),
       router           = express.Router({mergeParams: true}),
+      middleware       = require('../middleware'),
       passport         = require('passport'),
       User             = require('../models/users'),
       Blog             = require('../models/blogs');
@@ -28,7 +29,7 @@ router.use((req,res,next) => {
 //----------------------------
 
 // landing page
-router.get("/",(req, res) => {
+router.get("/", middleware.profilePhoto, (req, res) => {
     // get blogs from database 
     Blog.find({},(err, blogs) => {
         if(err){

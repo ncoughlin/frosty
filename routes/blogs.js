@@ -94,7 +94,7 @@ router.get("/:id/edit",middleware.isLoggedIn, (req, res) => {
 
 // render individual blog. This is a wildcard link and must therefore be
 // placed after static links in the application!
-router.get("/:id",(req, res) => {
+router.get("/:id", middleware.profilePhoto2LevelsBack, (req, res) => {
     
     // evaluate if the user should be able to edit
     function editorCheck(){

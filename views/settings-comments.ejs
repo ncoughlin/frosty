@@ -28,7 +28,17 @@
             
             
             <tr>
-                <td><a href="/users/<%= comment.author.id %>/profile"><%= comment.author.username %></a></td>
+                <!-- Only author, admin or editor can modify content -->
+                <% if((currentUser && comment.author.id.equals(currentUser._id)) || (currentUser.role === "Administrator" || currentUser.role === "Editor")){ %>
+                
+                    <td><a href="/users/<%= comment.author.id %>/profile"><%= comment.author.username %></a></td>
+                
+                <% } else { %>
+                
+                    <td><%= comment.author.username %></td>
+            
+                <% } %>
+                
                 <td><a href="/blogs/<%=comment.blogTitle %>"><%=comment.blogTitle %></td>
                 <td><%= comment.content %></td>
                 

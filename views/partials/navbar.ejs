@@ -21,47 +21,67 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    
     <!-- registration and login -->
     <ul class="navbar-nav flex-nowrap ml-auto">
+      
       <% if(!currentUser){ %>
-      <li class="nav-item">
-        <a href="/register" class="btn btn-outline-success mr-2" role="button">Register</a>
-        <span class="sr-only">Register</span></a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link" href="/login">
-              Login
-              <span class="sr-only">Login</span></a>
-      </li>              
+      
+        <!-- Register -->
+        <li class="nav-item">
+          <a href="/register" class="btn btn-outline-success mr-2" role="button">Register</a>
+          <span class="sr-only">Register</span></a>
+        </li>
+        
+        <!-- Login -->
+        <li class="nav-item">
+            <a class="nav-link" href="/login">
+                Login
+                <span class="sr-only">Login</span></a>
+        </li>
+      
       <% } else { %>
+      
       <!-- new post button: not visible if you are a reader -->
       <% if(currentUser.role != "Reader"){ %>
-      <li class="nav-item">
-        <a class="btn btn-outline-success nav-item mr-2" href="/blogs/new" role="button"> +New Post</a>
-      </li>
-      <% } %>
-      <li class="nav-item">
-          <a class="nav-link mr-2" href="/users/<%= currentUser.id %>/profile">
-              <u><%= currentUser.username %></u>
-              <span class="sr-only"><%= currentUser.username %></span>
-          </a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link mr-2" href="/logout">
-              Logout
-              <span class="sr-only">Logout</span></a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link mr-2" href="/users/<%= currentUser.id %>/profile">
-              <img src="/images/default_user_logo.svg" class='default-user-logo' alt='default user logo'/>
-          </a>
-      </li>
-      <!-- settings icon: not visible if you are a reader -->
-      <% if(currentUser.role != "Reader"){ %>
+      
         <li class="nav-item">
-          <a href="/settings/dashboard"><i class="material-icons md-36">settings</i></a>   
-        </li>  
-      <% } %>  
+          <a class="btn btn-outline-success nav-item mr-2" href="/blogs/new" role="button"> +New Post</a>
+        </li>
+      
+      <% } %>
+        
+        <!-- username/profile link -->
+        <li class="nav-item">
+            <a class="nav-link mr-2" href="/users/<%= currentUser.id %>/profile">
+                <u><%= currentUser.username %></u>
+                <span class="sr-only"><%= currentUser.username %></span>
+            </a>
+        </li>
+        
+        <!-- logout -->
+        <li class="nav-item">
+            <a class="nav-link mr-2" href="/logout">
+                Logout
+                <span class="sr-only">Logout</span></a>
+        </li>
+        
+        <!-- profile picture -->
+        <li class="nav-item">
+            <a class="nav-link mr-2" href="/users/<%= currentUser.id %>/profile">
+                <img src="<%= currentUser.photo %>" class='navbar-profile-photo'/>
+            </a>
+        </li>
+        
+        <!-- settings icon: not visible if you are a reader -->
+        <% if(currentUser.role != "Reader"){ %>
+        
+          <li class="nav-item">
+            <a href="/settings/dashboard"><i class="material-icons md-36">settings</i></a>   
+          </li> 
+          
+        <% } %>  
+      
       <% } %>
     </ul>
   </div>

@@ -16,7 +16,7 @@
               <th scope="col">Image</th>
               <th scope="col">Title</th>
               <th scope="col">Author</th>
-              <th scope="col">ID</th>
+              <th scope="col">Blog ID</th>
               <th scope="col"></th>
               <th scope="col"></th>
             </tr>
@@ -25,13 +25,26 @@
           <!-- The Loop Starts Here -->  
           <% blogs.forEach((blog) => { %>
           <tr>
+            
             <td><img 
                 src="<%= blog.image %>" 
                 alt="..."  
                 class="settings-table-image">
             </td>
+            
             <td><a href="/blogs/<%=blog._id%>"><%= blog.title %></a></td>
-            <td><a href="/users/<%=blog.author.id%>/profile"><%= blog.author.username %></a></td>
+            
+            <!-- Only author, admin or editor can modify content -->
+            <% if((currentUser && blog.author.id.equals(currentUser._id)) || (currentUser.role === "Administrator" || currentUser.role === "Editor")){ %>
+            
+              <td><a href="/users/<%=blog.author.id%>/profile"><%= blog.author.username %></a></td>
+            
+            <% } else { %>
+            
+              <td><%= blog.author.username %></td>
+              
+            <% } %>
+            
             <td><span class="settings-table-id"><%=blog._id%></span></td>
             
             <!-- Only author, admin or editor can modify content -->

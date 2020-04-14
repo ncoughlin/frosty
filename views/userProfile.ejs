@@ -23,12 +23,15 @@
         <form action="/users/<%= user._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
             <!--profile photo -->
             <img src="<%= user.photo %>" class="profile-photo" >
-            <div class="form-group">
-                <label for="profilePhoto">
-                    <h4>Profile Image</h4>
-                </label>
-                <input type="file" id="profilePhoto" name="user[photo]" accept="image/*" required>
-            </div>
+            <% if(user.role === 'Administrator' || user.role === 'Editor' || user.role === 'Writer'){%>
+                <div class="form-group">
+                    <label for="profilePhoto">
+                        <h4>Profile Image</h4>
+                    </label>
+                    <input type="file" id="profilePhoto" name="user[photo]" accept="image/*" aria-describedby="photoUploadHelp"required>
+                    <small id='photoUploadHelp' class="form-text text-muted">Photo should be square. Preferably 200x200 px.</small>
+                </div>
+            <% } %>    
             <!--username -->
             <div class="form-group">
                 <label for="username">

@@ -15,11 +15,11 @@
     <table class="table">
         <thead>
             <tr>
+              <th></th>
               <th scope="col">Username</th>
               <th scope="col">Role</th>
               <th scope="col">First Name</th>
               <th scope="col">Last Name</th>
-              <th scope="col">Email</th>
               <th scope="col"></th>
               <th scope="col"></th>
             </tr>
@@ -28,11 +28,11 @@
           <!-- The Loop Starts Here -->  
           <% users.forEach((user) => { %>
           <tr>
+            <td><img src="<%= user.photo %>" class='navbar-profile-photo' /></td>
             <td><a href="/users/<%=user._id%>/profile"><%= user.username %></a></td>
             <td><%= user.role %></td>
             <td><%= user.firstname %></td>
             <td><%= user.lastname %></td>
-            <td><%= user.email %></td>
             <td>
             <a href="/users/<%=user._id%>/profile" class="btn btn-outline-primary">Profile</a>
             </td>
