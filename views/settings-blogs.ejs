@@ -34,13 +34,19 @@
             
             <td><a href="/blogs/<%=blog._id%>"><%= blog.title %></a></td>
             
-            <!-- Only author, admin or editor can modify content -->
-            <% if((currentUser && blog.author.id.equals(currentUser._id)) || (currentUser.role === "Administrator" || currentUser.role === "Editor")){ %>
+            <!-- if user is writer and commenter is reader, hide profile for privacy -->
+            <% if(currentUser.role === 'Writer' && blog.author.role === 'Reader'){ %>
+            
+              <td><%= blog.author.username %></td>
+            
+            <!-- show profile link if user is blog author, or administrator, editor or writer -->
+            <% } else if((currentUser && blog.author.id.equals(currentUser._id)) || (currentUser.role === "Administrator" || currentUser.role === "Editor" || currentUser.role === "Writer")) { %>
             
               <td><a href="/users/<%=blog.author.id%>/profile"><%= blog.author.username %></a></td>
             
+            <!-- otherwise do not show profile link -->  
             <% } else { %>
-            
+              
               <td><%= blog.author.username %></td>
               
             <% } %>

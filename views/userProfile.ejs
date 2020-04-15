@@ -14,20 +14,27 @@
     <h1 class="settings-title">User Profile: <%= profile.username %></h1>
     <h4> Role: <strong><%= profile.role %></strong></h4>
     
-    <!-- SECTION 1 -->
-    <!-- User is Owner || User is Admin -->
+    <!-- SECTION 1: EDITABLE CONTENTS-->
+    <!-- Everyone can edit their own profiles -->
+    <!-- Administrators can edit all profiles -->
+    <!-- Editors cannot edit other editors or administrators -->
+    <% if(
+        (profileowner === true) || 
+        (currentUser.role === 'Administrator') || 
+        (currentUser.role === 'Editor' && profileisadminoreditor === false) 
+          ){%>
     
-    
-    <% if(profile.role != 'Administrator'){%>
-    
-        <div class="alert alert-primary" role="alert">
-        If you would like additional permissions  you must contact an Administrator.
-        </div>
+        <!-- Alert non administrators that they must contact administrators for permissions-->
+        <% if(profile.role != 'Administrator' || currentUser.role != 'Administrator'){%>
         
-    <% }%>
-    
-    <p class="text-muted"> ID: <%= profile._id %></p>
-    
+            <div class="alert alert-primary" role="alert">
+            If you would like additional permissions  you must contact an Administrator.
+            </div>
+            
+        <% }%>
+        
+        <p class="text-muted"> ID: <%= profile._id %></p>
+        
         <!--input for title, image, content -->
         <form action="/users/<%= profile._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
             <!--profile photo -->
@@ -39,7 +46,7 @@
                     <label for="profilePhoto">
                         <h4>Profile Image</h4>
                     </label>
-                    <input type="file" id="profilePhoto" name="user[photo]" accept="image/*" aria-describedby="photoUploadHelp"required>
+                    <input type="file" id="profilePhoto" name="user[photo]" accept="image/*" aria-describedby="photoUploadHelp">
                     <small id='photoUploadHelp' class="form-text text-muted">Photo should be square. Preferably 200x200 px.</small>
                 </div>
                 
@@ -47,10 +54,12 @@
             
             <!--username -->
             <div class="form-group">
+                
                 <label for="username">
                     <h4>Username</h4>
                 </label>
                 <input type="text" class="form-control" id="username" name="user[username]" value="<%= profile.username %>">
+                
             </div>
             
             <!--user role -->
@@ -58,34 +67,44 @@
             <% if(currentUser.role === "Administrator" || currentUser.role === "Editor"){ %>
             
                 <div class="form-group">
+                    
                     <label for="role-select">
                         <h4>Role</h4>
                     </label>
-                        <!-- cannot change user role if user is the last administrator -->
+                    
+                    <!-- cannot change user role if user is the last administrator -->
+                    
+                    <% if(admindanger === true){ %>
+                    
+                        <div class="alert alert-info" role="alert">
+                            You cannot remove the last Administrator.
+                        </div>
                         
-                        <% if(admindanger === true){ %>
-                        
-                            <div class="alert alert-info" role="alert">
-                                You cannot remove the last Administrator.
-                            </div>
-                            <select class="form-control" name="user[role]" id="role-select" value="<%= profile.role %>" disabled>
-                        <% } else { %>    
-                            <select class="form-control" name="user[role]" id="role-select" value="<%= profile.role %>">
-                        <% } %>
-                        
-                                <option value="<%= profile.role %>"><%= profile.role %></options>
-                                <option value="Reader">Reader</option>
-                                <option value="Writer">Writer</option>
-                                <option value="Editor">Editor</option>
+                        <select class="form-control" name="user[role]" id="role-select" value="<%= profile.role %>" disabled>
+                            
+                    <% } else { %>
+                    
+                        <select class="form-control" name="user[role]" id="role-select" value="<%= profile.role %>">
+                            
+                    <% } %>
+                    
+                            <option value="<%= profile.role %>"><%= profile.role %></options>
+                            <option value="Reader">Reader</option>
+                            <option value="Writer">Writer</option>
+                            <option value="Editor">Editor</option>
+                            
+                            <!--only admin can make other admin -->
+                            <% if(currentUser.role != "Administrator"){ %>
+                            
+                                <option value="Administrator" disabled>Administrator</option> 
                                 
-                                <!--only admin can make other admin -->
-                                <% if(currentUser.role != "Administrator"){ %>
-                                    <option value="Administrator" disabled>Administrator</option> 
-                                <% } else { %>
-                                    <option value="Administrator">Administrator</option>
-                                <% } %>
+                            <% } else { %>
+                            
+                                <option value="Administrator">Administrator</option>
                                 
-                            </select>    
+                            <% } %>
+                            
+                        </select>    
                 </div>
             
             <% } %>
@@ -119,13 +138,42 @@
             <button type="submit" class="btn btn-primary">Submit</button>
 
         </form>
+    <!-- END SECTION 1 -->    
+    <% } else { %>
+    <!-- SECTION 2: UNEDITABLE CONTENTS -->
     
-    <!-- END SECTION 1 -->
-    
-    <!-- SECTION 2 -->
-    <!-- Else -->
-    
+        <!-- Alert non administrators that they must contact administrators for permissions-->
+        <% if(profile.role != 'Administrator' || currentUser.role != 'Administrator'){%>
         
+            <div class="alert alert-primary" role="alert">
+            If you would like additional permissions  you must contact an Administrator.
+            </div>
+            
+        <% }%>
+        
+        <!-- profile ID -->
+        <p class="text-muted"> ID: <%= profile._id %></p>
+        
+        <!-- profile photo -->
+        <div>
+            <img src="<%= profile.photo %>" class="profile-photo" >
+        </div>
+        
+        <div class="mt-4">    
+            <!--username -->
+            <p><strong>Username: </strong><%= profile.username %></p>
+            
+            <!--first name -->
+            <p><strong>First Name: </strong><%= profile.firstname %></p>
+            
+            <!--last name -->
+            <p><strong>Last Name: </strong><%= profile.lastname %></p>
+    
+            <!--email -->
+            <p><strong>Email: </strong><%= profile.email %></p>
+        </div>
+       
+    <% } %>    
 </div>
     
     

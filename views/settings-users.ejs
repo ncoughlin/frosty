@@ -19,7 +19,6 @@
               <th scope="col">Username</th>
               <th scope="col">Role</th>
               <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
               <th scope="col"></th>
               <th scope="col"></th>
             </tr>
@@ -27,28 +26,86 @@
         <tbody>
           <!-- The Loop Starts Here -->  
           <% users.forEach((user) => { %>
-          <tr>
-            <td><img src="<%= user.photo %>" class='navbar-profile-photo' /></td>
-            <td><a href="/users/<%=user._id%>/profile"><%= user.username %></a></td>
-            <td><%= user.role %></td>
-            <td><%= user.firstname %></td>
-            <td><%= user.lastname %></td>
-            <td>
-            <a href="/users/<%=user._id%>/profile" class="btn btn-outline-primary">Profile</a>
-            </td>
-            <!-- Remove Delete Button if user is Administrator -->
-            <% if(user.role === "Administrator"){ %>
-              <td>
-              </td>
-            <% } else { %>
-              <td>
-                <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
-                <button type="submit" class="btn btn-outline-danger">Delete</button>
-                </form>
-              </td>
-            <% } %>
-          </tr>
-           <!-- The Loop Ends Here -->
+            <tr>
+              
+              <!-- PROFILE ICON  -->
+              <!-- if user is writer and commenter is reader, no link to profile for privacy -->
+              <% if(currentUser.role === 'Writer' && user.role === 'Reader'){ %>
+              
+                <td><img src="<%= user.photo %>" class='navbar-profile-photo' /></td>
+              
+              <!-- show profile link if user is blog author, or administrator, editor or writer -->
+              <% } else if((currentUser && user.id === currentUser._id) || (currentUser.role === "Administrator" || currentUser.role === "Editor" || currentUser.role === "Writer")) { %>
+              
+                <td><a href="/users/<%=user.id%>/profile"><img src="<%= user.photo %>" class='navbar-profile-photo' /></a></td>
+              
+              <!-- otherwise do not show profile link -->  
+              <% } else { %>
+                
+                <td><img src="<%= user.photo %>" class='navbar-profile-photo' /></td>
+                
+              <% } %>
+      
+              <!-- USERNAME  -->
+              <!-- if user is writer and commenter is reader, hide profile for privacy -->
+              <% if(currentUser.role === 'Writer' && user.role === 'Reader'){ %>
+              
+                <td><%= user.username %></td>
+              
+              <!-- show profile link if user is blog author, or administrator, editor or writer -->
+              <% } else if((currentUser && user.id === currentUser._id) || (currentUser.role === "Administrator" || currentUser.role === "Editor" || currentUser.role === "Writer")) { %>
+              
+                <td><a href="/users/<%=user.id%>/profile"><%= user.username %></a></td>
+              
+              <!-- otherwise do not show profile link -->  
+              <% } else { %>
+                
+                <td><%= user.username %></td>
+                
+              <% } %>
+  
+              <td><%= user.role %></td>
+              <td><%= user.firstname %></td>
+              
+              <!-- PROFILE BUTTON  -->
+              <!-- if user is writer and commenter is reader, hide profile button for privacy -->
+              <% if(currentUser.role === 'Writer' && user.role === 'Reader'){ %>
+              
+                <td></td>
+              
+              <!-- show profile link if user is blog author, or administrator, editor or writer -->
+              <% } else if((currentUser && user.id === currentUser._id) || (currentUser.role === "Administrator" || currentUser.role === "Editor" || currentUser.role === "Writer")) { %>
+              
+                <td>
+                  <a href="/users/<%=user._id%>/profile" class="btn btn-outline-primary">Profile</a>
+                </td>
+              
+              <!-- otherwise do not show profile link -->  
+              <% } else { %>
+                
+                <td></td>
+                
+              <% } %>
+              
+              <!-- DELETE BUTTON  -->
+              <!-- Remove Delete Button if profile is Administrator, and also if user is Editor and profile is Editor -->
+              <% if((user.role === "Administrator")||(currentUser.role === "Editor" && user.role === "Editor")){ %>
+              
+                <td>
+                </td>
+                
+              <% } else { %>
+              
+                <td>
+                  <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-outline-danger">Delete</button>
+                  </form>
+                </td>
+                
+              <% } %>
+              
+            </tr>
+          <!-- The Loop Ends Here -->
           <% }); %>
         </tbody>
       </table>

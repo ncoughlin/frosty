@@ -7,13 +7,14 @@ const commentSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectID,
             ref: "User"
         },
-        username: String
+        username: String,
+        role: String
     },
     date: {type: Date, default: Date.now},
     content: String,
     // References to blog where submitted
     blogID: String,
-    blogTitle: String
+    blogTitle: String,
 });
 
 // creating schema Model named Blog to be called later

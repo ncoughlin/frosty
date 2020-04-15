@@ -30,12 +30,12 @@ router.use((req,res,next) => {
 //----------------------------
 
 // settings/dashboard
-router.get("/dashboard", middleware.isLoggedIn, (req, res) => {
+router.get("/dashboard", middleware.isLoggedIn, middleware.profilePhoto2LevelsBack, (req, res) => {
     res.render("settings-dashboard.ejs");
 });
 
 // settings/users
-router.get("/users", middleware.isLoggedIn, (req, res) => {
+router.get("/users", middleware.isLoggedIn, middleware.profilePhoto2LevelsBack, (req, res) => {
     function gatherUserProfiles(){
         return new Promise((resolve, reject)=>{
             User.find({}, (err, users)=>{
@@ -79,47 +79,116 @@ async function settingsUsersHandler(){
     settingsUsersHandler();
 });    
 
-/*router.get("/users", middleware.isLoggedIn, (req, res) => {
-    // get users from database
-    User.find({},(err, users) => {
-        if(err){
-            console.log("Error: Unable to retrieve user data");
-        } else {
-            res.render("settings-users.ejs", {users:users});
-        }
-    });
-});*/
-
 // settings/general
-router.get("/general", middleware.isLoggedIn, (req, res) => {
+router.get("/general", middleware.isLoggedIn, middleware.profilePhoto2LevelsBack, (req, res) => {
     res.render("settings-general.ejs");
 });
 
 // settings/blogs
-router.get("/blogs", middleware.isLoggedIn, (req, res) => {
-    // get blogs from database 
-    Blog.find({},(err, blogs) => {
-        if(err){
-            console.log("Error: Unable to retrieve blog data.");
-        } else {
-            res.render("settings-blogs.ejs", {blogs:blogs});
+
+router.get("/blogs", middleware.isLoggedIn, middleware.profilePhoto2LevelsBack, (req, res) => {
+    
+    // find all blogs
+    function gatherBlogs(){
+        return new Promise((resolve, reject)=>{
+            Blog.find({}, (err, blogs)=>{
+               if(err){
+                    req.flash('error', "Unable to retrieve Blogs");
+                    res.redirect('back');
+                    return;
+               } else {
+                    resolve(blogs);
+               }
+            });
+        });
+    }
+    
+    // check the current role of the blog authors and save it to blogs
+    function checkCurrentRoleOfAuthor(blogs){
+        return new Promise((resolve, reject)=>{
+            blogs.forEach((blog)=>{
+                User.findById(blog.author.id, (err, user)=>{
+                    if(err){
+                        req.flash('error', "unable to retrieve blog author");
+                        res.redirect('back');
+                        return;    
+                    } else {
+                        blog.author.role = user.role;
+                        blog.save();
+                    }
+                });
+            });
+            resolve(blogs);
+        });
+    }
+
+async function settingsBlogsHandler(){
+        try{
+            const allBlogs                       = await gatherBlogs();
+            const blogsWithUpdatedAuthorRole     = await checkCurrentRoleOfAuthor(allBlogs);
+            
+            res.render("settings-blogs.ejs", {blogs: blogsWithUpdatedAuthorRole});
+            
+        } catch(err){
+            console.log(err);
         }
-    });
-});
+    }
+    settingsBlogsHandler();
+});    
+
 
 // settings/comments
-router.get("/comments", middleware.isLoggedIn, (req, res) => {
+router.get("/comments", middleware.isLoggedIn, middleware.profilePhoto2LevelsBack, (req, res) => {
     
-    Comment.find({},(err,comments)=>{
-        if(err){
+    // find all comments
+    function gatherComments(){
+        return new Promise((resolve, reject)=>{
+            Comment.find({}, (err, comments)=>{
+               if(err){
+                    req.flash('error', "Unable to retrieve Comments");
+                    res.redirect('back');
+                    return;
+               } else {
+                    resolve(comments);
+               }
+            });
+        });
+    }
+    
+    // check the current role of the comment authors and save it to comments
+    function checkCurrentRoleOfAuthor(comments){
+        return new Promise((resolve, reject)=>{
+            comments.forEach((comment)=>{
+                User.findById(comment.author.id, (err, user)=>{
+                    if(err){
+                        req.flash('error', "unable to retrieve comment user");
+                        res.redirect('back');
+                        return;    
+                    } else {
+                        comment.author.role = user.role;
+                        comment.save();
+                    }
+                });
+            });
+            resolve(comments);
+        });
+    }
+
+async function settingsCommentsHandler(){
+        try{
+            const allComments                       = await gatherComments();
+            const commentsWithUpdatedAuthorRole     = await checkCurrentRoleOfAuthor(allComments);
+            
+            res.render("settings-comments.ejs", {comments: commentsWithUpdatedAuthorRole});
+            
+        } catch(err){
             console.log(err);
-        } else {
-            res.render('settings-comments.ejs', {comments: comments});
         }
-    });
-});
-   
-    
+    }
+    settingsCommentsHandler();
+});    
+
+
 
 //----------------------------
 // .POST routes

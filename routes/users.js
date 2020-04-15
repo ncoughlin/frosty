@@ -89,9 +89,20 @@ router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsB
     }
     
     // is user reader or writer?
-    function readerOrWriter(user){
+    function checkIfUserIsReader(user){
         return new Promise((resolve, reject)=>{
-            if(user.role === 'Reader' || user.role === 'Writer'){
+            if(user.role === 'Reader'){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    }
+    
+    // is user reader or writer?
+    function checkIfUserIsWriter(user){
+        return new Promise((resolve, reject)=>{
+            if(user.role === 'Writer'){
                 resolve(true);
             } else {
                 resolve(false);
@@ -100,9 +111,9 @@ router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsB
     }
     
     // is user editor or admin?
-    function adminOrEditor(user){
+    function checkAdminEditorOrWriter(user){
         return new Promise((resolve, reject)=>{
-            if(user.role === 'Editor' || user.role === 'Administrator'){
+            if(user.role === 'Editor' || user.role === 'Administrator' || user.role === 'Writer'){
                 resolve(true);
             } else {
                 resolve(false);
@@ -148,6 +159,28 @@ router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsB
     function getProfileAdminStatus(profile){
         return new Promise((resolve,reject)=>{
             if(profile.role === 'Administrator'){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    }
+    
+    // is profile reader?
+    function checkIfProfileIsReader(profile){
+        return new Promise((resolve,reject)=>{
+            if(profile.role === 'Reader'){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    }
+    
+    // is profile admin or editor?
+    function CheckProfileIsAdminOrEditor(profile){
+        return new Promise((resolve,reject)=>{
+            if(profile.role === 'Administrator' || profile.role === 'Editor'){
                 resolve(true);
             } else {
                 resolve(false);
@@ -204,17 +237,20 @@ router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsB
         try{
             // login check handled by middleware
             
-            const profileExists        = await checkProfileExists(req.params.id);
-            const profileData          = await retrieveProfileData(req.params.id);
-            const currentUserData      = await getUserData(res.locals.currentUser.id);
-            const userIsReaderOrWriter = await readerOrWriter(currentUserData);
-            const userIsAdminOrEditor  = await adminOrEditor(currentUserData);
-            const profileOwner         = await matchingProfile();
-            const userIsAdmin          = await getUserAdminStatus(currentUserData);
-            const profileIsAdmin       = await getProfileAdminStatus(profileData);
-            const numberOfAdmins       = await getAdminCount('Administrator');
-            const profilePhoto         = await checkProfilePhoto(profileData);
-            const adminDanger          = await checkAdminDanger(userIsAdmin,numberOfAdmins,profileIsAdmin);
+            const profileExists              = await checkProfileExists(req.params.id);
+            const profileData                = await retrieveProfileData(req.params.id);
+            const userData                   = await getUserData(res.locals.currentUser.id);
+            const userIsReader               = await checkIfUserIsReader(userData);
+            const userIsWriter               = await checkIfUserIsWriter(userData);
+            const userIsAdminEditorOrWriter  = await checkAdminEditorOrWriter(userData);
+            const profileOwner               = await matchingProfile();
+            const userIsAdmin                = await getUserAdminStatus(userData);
+            const profileIsAdmin             = await getProfileAdminStatus(profileData);
+            const profileIsReader            = await checkIfProfileIsReader(profileData);
+            const profileIsAdminOrEditor     = await CheckProfileIsAdminOrEditor(profileData);
+            const numberOfAdmins             = await getAdminCount('Administrator');
+            const profilePhoto               = await checkProfilePhoto(profileData);
+            const adminDanger                = await checkAdminDanger(userIsAdmin,numberOfAdmins,profileIsAdmin);
             
             // photo is determined by checkProfilePhoto()    
             profileData.photo = profilePhoto;   
@@ -226,17 +262,21 @@ router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsB
                 req.flash('error', "That user no longer exists");
                 res.redirect('back');
                 return;
-            // if not profile owner, admin or editor go back    
-            } else if(userIsReaderOrWriter === true && profileOwner === false) {
-                req.flash('error', "You do not have permission to view that profile");
+            // if user is reader and it's not their profile go back    
+            } else if(userIsReader === true && profileOwner === false) {
+                req.flash('error', "Readers can only view their own profiles");
                 res.redirect('back');
                 return;
-            // if authorized to view the profile
-            // look up the profile
-            } else if(userIsAdminOrEditor === true || profileOwner === true){
+            // writers cannot view reader profiles
+            } else if(userIsWriter === true && profileIsReader === true) {
+                req.flash('error', "Writers cannot view readers profiles for privacy reasons");
+                res.redirect('back');
+                return;
+            // if  Admin Editor, Writer or Profile Owner, load profile   
+            } else if(userIsAdminEditorOrWriter === true || profileOwner === true){
             
                 console.log('rendering profile');
-                res.render("userProfile.ejs", {profile: profileData, admindanger: adminDanger, profileowner: profileOwner});
+                res.render("userProfile.ejs", {profile: profileData, admindanger: adminDanger, profileowner: profileOwner, profileisadminoreditor:profileIsAdminOrEditor});
                 
             } else {
                 req.flash('error', "Unable to determine authorization");
