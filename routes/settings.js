@@ -36,6 +36,50 @@ router.get("/dashboard", middleware.isLoggedIn, (req, res) => {
 
 // settings/users
 router.get("/users", middleware.isLoggedIn, (req, res) => {
+    function gatherUserProfiles(){
+        return new Promise((resolve, reject)=>{
+            User.find({}, (err, users)=>{
+               if(err){
+                    req.flash('error', "Unable to retrieve Users data");
+                    res.redirect('back');
+                    return;
+               } else {
+                    resolve(users);
+               }
+            });
+        });
+    }
+    
+    function checkProfilePhotos(profiles){
+        return new Promise((resolve, reject)=>{
+            profiles.forEach((profile)=>{
+                if(!profile.photo) {
+                    // if there is no profile photo use default photo
+                    profile.photo = '/images/default_user_logo.svg';
+                } else {
+                    // if there is a profile photo use that photo
+                    profile.photo = profile.photo;
+                }
+            });
+            resolve(profiles);
+        });
+    }
+
+async function settingsUsersHandler(){
+        try{
+            const allUserData                 = await gatherUserProfiles();
+            const usersWithVerifiedPhotos     = await checkProfilePhotos(allUserData);
+            
+            res.render("settings-users.ejs", {users:usersWithVerifiedPhotos});
+            
+        } catch(err){
+            console.log(err);
+        }
+    }
+    settingsUsersHandler();
+});    
+
+/*router.get("/users", middleware.isLoggedIn, (req, res) => {
     // get users from database
     User.find({},(err, users) => {
         if(err){
@@ -44,7 +88,7 @@ router.get("/users", middleware.isLoggedIn, (req, res) => {
             res.render("settings-users.ejs", {users:users});
         }
     });
-});
+});*/
 
 // settings/general
 router.get("/general", middleware.isLoggedIn, (req, res) => {

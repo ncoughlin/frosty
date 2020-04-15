@@ -54,6 +54,7 @@ router.use((req,res,next) => {
 // user profile page
 router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsBack, (req, res) => {
     
+    // does requested profile exist?
     function checkProfileExists(requestedProfileID){
         return new Promise((resolve,reject)=>{
            console.log("Checking that Profile of User " + requestedProfileID + "still exists");
@@ -63,78 +64,45 @@ router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsB
                } else if(!foundProfile) {
                    req.flash('error', 'Profile does not exist.');
                    res.redirect('back');
-                   // redirect does not end statement like res.render
-                   // so we must return to end process
                    return;
                } else {
-                   console.log(foundProfile);
                    resolve(true);
                }
            });
         });
     }
     
-    function getUserData(IDNumber){
+    // does requested profile exist?
+    function retrieveProfileData(requestedProfileID){
         return new Promise((resolve,reject)=>{
-            console.log("Requesting user data of: "+ IDNumber);
-            resolve(User.findById(IDNumber));
-        });
-    }
-
-    // is user an administrator?
-    function getAdminStatus(userData){
-        return new Promise((resolve,reject)=>{
-           console.log("Retreiving user role of: " + userData.username);
-           
-           if(userData.role === "Administrator"){
-                resolve(true);
-           } else if(userData.role != "Administrator") {
-                resolve(false);
-           } else {   
-               console.log("Error retreiving status of user role.");
-               reject("Error retreiving status of user role.");
-           }
-        });
-    }
-
-    function getAdminCount(role){
-        return new Promise((resolve,reject)=>{
-            User.countDocuments({ role: role },(err, count) => {
-                                if(err){
-                                    console.log(err);
-                                } else {
-                                    resolve(count);
-                                }
-                            });
-        });
-    }
-    
-    // check if user already has a profile photo and if not use default photo
-    function checkProfilePhoto(requestedProfileID){
-        return new Promise((resolve,reject)=>{
+            console.log("Gathering profile data of: " + requestedProfileID);
             User.findById(requestedProfileID, (err, foundProfile) =>{
-               if(err){
+                if(err){
+                   req.flash('error', 'Could not retrieve profile data.');
+                   res.redirect('back');
                    console.log(err);
-                   req.flash('error', "There was a problem retreiving user profile.");
-                    res.redirect('back');
-                return;
-               } else if(!foundProfile.photo) {
-                   // if there is no profile photo use default photo
-                   console.log('User has no profile photo.');
-                   resolve('/images/default_user_logo.svg');
-               } else {
-                   // if there is a profile photo use that photo
-                   console.log('User has a profile photo.');
-                   resolve(foundProfile.photo);
-               }
-           });
+                } else {
+                   resolve(foundProfile);
+                }
+            });
         });
     }
     
     // is user reader or writer?
-    function readerOrWriter(){
+    function readerOrWriter(user){
         return new Promise((resolve, reject)=>{
-            if(res.locals.currentUser.role === 'Reader' || res.locals.currentUser.role === 'Writer'){
+            if(user.role === 'Reader' || user.role === 'Writer'){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    }
+    
+    // is user editor or admin?
+    function adminOrEditor(user){
+        return new Promise((resolve, reject)=>{
+            if(user.role === 'Editor' || user.role === 'Administrator'){
                 resolve(true);
             } else {
                 resolve(false);
@@ -153,6 +121,81 @@ router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsB
         });
     }
     
+    function getUserData(IDNumber){
+        return new Promise((resolve,reject)=>{
+            console.log("Requesting user data of: "+ IDNumber);
+            resolve(User.findById(IDNumber));
+        });
+    }
+
+    // is user an administrator?
+    function getUserAdminStatus(userData){
+        return new Promise((resolve,reject)=>{
+           console.log("Retreiving user role of: " + userData.username);
+           
+           if(userData.role === "Administrator"){
+                resolve(true);
+           } else if(userData.role != "Administrator") {
+                resolve(false);
+           } else {   
+               console.log("Error retreiving status of user role.");
+               reject("Error retreiving status of user role.");
+           }
+        });
+    }
+    
+    // is profile administrator?
+    function getProfileAdminStatus(profile){
+        return new Promise((resolve,reject)=>{
+            if(profile.role === 'Administrator'){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    }
+
+    // count total administrators
+    function getAdminCount(role){
+        return new Promise((resolve,reject)=>{
+            User.countDocuments({ role: role },(err, count) => {
+                if(err){
+                    console.log(err);
+                } else {
+                    resolve(count);
+                }
+            });
+        });
+    }
+    
+    // check if user already has a profile photo and if not use default photo
+    function checkProfilePhoto(profile){
+        return new Promise((resolve,reject)=>{
+            if(!profile.photo) {
+                // if there is no profile photo use default photo
+                console.log('User has no profile photo.');
+                resolve('/images/default_user_logo.svg');
+            } else {
+                // if there is a profile photo use that photo
+                console.log('User has a profile photo.');
+                resolve(profile.photo);
+            }
+        });
+    }
+    
+    
+    // is there a danger of removing the last administrator?
+    function checkAdminDanger(userAdmin,number,profileAdmin){
+        return new Promise((resolve,reject)=>{
+            if(userAdmin === true && number <= 1 && profileAdmin === true){
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    }
+    
+    
     // first check that user profile still exists (user was not deleted)
     // if user is the last administrator and is editing the profile
     // of the last administrator, prevent them from changing roles
@@ -161,17 +204,22 @@ router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsB
         try{
             // login check handled by middleware
             
-            const profileExists = await checkProfileExists(req.params.id);
-            const isReaderOrWriter = await readerOrWriter();
-            const profileOwner = await matchingProfile();
-            const currentUserData = await getUserData(res.locals.currentUser.id);
-            console.log("Current User: " + currentUserData.username);
-            const isAdmin = await getAdminStatus(currentUserData);
-            console.log("User is Administrator: " + isAdmin);
-            const numberOfAdmins = await getAdminCount('Administrator');
-            console.log("Current Number of Administrators: " + numberOfAdmins);
-            const userPhoto = await checkProfilePhoto(req.params.id);
+            const profileExists        = await checkProfileExists(req.params.id);
+            const profileData          = await retrieveProfileData(req.params.id);
+            const currentUserData      = await getUserData(res.locals.currentUser.id);
+            const userIsReaderOrWriter = await readerOrWriter(currentUserData);
+            const userIsAdminOrEditor  = await adminOrEditor(currentUserData);
+            const profileOwner         = await matchingProfile();
+            const userIsAdmin          = await getUserAdminStatus(currentUserData);
+            const profileIsAdmin       = await getProfileAdminStatus(profileData);
+            const numberOfAdmins       = await getAdminCount('Administrator');
+            const profilePhoto         = await checkProfilePhoto(profileData);
+            const adminDanger          = await checkAdminDanger(userIsAdmin,numberOfAdmins,profileIsAdmin);
             
+            // photo is determined by checkProfilePhoto()    
+            profileData.photo = profilePhoto;   
+            
+            console.log('...........................');
             
             // if no profile go back
             if(profileExists === false){
@@ -179,41 +227,23 @@ router.get("/:id/profile",middleware.isLoggedIn, middleware.profilePhoto3LevelsB
                 res.redirect('back');
                 return;
             // if not profile owner, admin or editor go back    
-            } else if(isReaderOrWriter === true && profileOwner === false) {
+            } else if(userIsReaderOrWriter === true && profileOwner === false) {
                 req.flash('error', "You do not have permission to view that profile");
                 res.redirect('back');
                 return;
             // if authorized to view the profile
             // look up the profile
+            } else if(userIsAdminOrEditor === true || profileOwner === true){
+            
+                console.log('rendering profile');
+                res.render("userProfile.ejs", {profile: profileData, admindanger: adminDanger, profileowner: profileOwner});
+                
             } else {
-                User.findById(req.params.id, (err, foundUser) => {
-                
-                // photo is determined by checkProfilePhoto()    
-                foundUser.photo = userPhoto;    
-                
-                // set role of user to variable to modify profile template
-                let profileRole = foundUser.role;
-                console.log('Current user is: ' + profileRole);
-                
-                if(err){
-                    console.log(err);
-                    req.flash('error', "Could not find User Profile");
-                    res.redirect('back');
-                    return;
-                
-                // check for adminDanger and then render template    
-                } else if(isAdmin === true && numberOfAdmins <= 1 && profileRole === "Administrator"){
-                        let adminDanger = true;
-                        console.log('ADMIN DANGER: There is only 1 administrator');
-                        res.render("userProfile.ejs", {user: foundUser, admindanger: adminDanger});
-                } else {
-                    let adminDanger = false;
-                    console.log('No Admin Danger');
-                    res.render("userProfile.ejs", {user: foundUser, admindanger: adminDanger});
-                }   
-                    
-                });
+                req.flash('error', "Unable to determine authorization");
+                res.redirect('back');
+                return;
             }
+            
         } catch(err) {
             console.log(err);
         }

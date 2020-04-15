@@ -10,7 +10,7 @@ middlewareObj.isLoggedIn = (req, res, next)=>{
     res.redirect("/login");
 };
 
-// if user is logged in but has no profile photo supply default photo
+// if user is logged in but has no profile photo supply default photo for navbar
 middlewareObj.profilePhoto = (req, res, next)=>{
     // logged in
     if(req.user && req.user.photo === undefined){
@@ -26,7 +26,7 @@ middlewareObj.profilePhoto = (req, res, next)=>{
     }
 };
 
-// if user is logged in but has no profile photo supply default photo
+// if user is logged in but has no profile photo supply default photo for navbar
 middlewareObj.profilePhoto2LevelsBack = (req, res, next)=>{
     // logged in
     if(req.user && req.user.photo === undefined){
@@ -42,7 +42,7 @@ middlewareObj.profilePhoto2LevelsBack = (req, res, next)=>{
     }
 };
 
-// if user is logged in but has no profile photo supply default photo
+// if user is logged in but has no profile photo supply default photo for navbar
 middlewareObj.profilePhoto3LevelsBack = (req, res, next)=>{
     // logged in
     if(req.user && req.user.photo === undefined){

@@ -9,21 +9,32 @@
 
 
 <!-- begin content -->
-    <!-- fixed width container for content -->
-    <div class="container-lg mt-5">
-    <h1 class="settings-title">User Profile: <%= user.username %></h1>
-    <h4> Role: <strong><%= user.role %></strong></h4>
-    <% if(user.role != 'Administrator'){%>
+<!-- fixed width container for content -->
+<div class="container-lg mt-5">
+    <h1 class="settings-title">User Profile: <%= profile.username %></h1>
+    <h4> Role: <strong><%= profile.role %></strong></h4>
+    
+    <!-- SECTION 1 -->
+    <!-- User is Owner || User is Admin -->
+    
+    
+    <% if(profile.role != 'Administrator'){%>
+    
         <div class="alert alert-primary" role="alert">
         If you would like additional permissions  you must contact an Administrator.
         </div>
+        
     <% }%>
-    <p class="text-muted"> ID: <%= user._id %></p>
+    
+    <p class="text-muted"> ID: <%= profile._id %></p>
+    
         <!--input for title, image, content -->
-        <form action="/users/<%= user._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+        <form action="/users/<%= profile._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
             <!--profile photo -->
-            <img src="<%= user.photo %>" class="profile-photo" >
-            <% if(user.role === 'Administrator' || user.role === 'Editor' || user.role === 'Writer'){%>
+            <img src="<%= profile.photo %>" class="profile-photo" >
+            
+            <% if(profile.role === 'Administrator' || profile.role === 'Editor' || profile.role === 'Writer'){%>
+            
                 <div class="form-group">
                     <label for="profilePhoto">
                         <h4>Profile Image</h4>
@@ -31,46 +42,52 @@
                     <input type="file" id="profilePhoto" name="user[photo]" accept="image/*" aria-describedby="photoUploadHelp"required>
                     <small id='photoUploadHelp' class="form-text text-muted">Photo should be square. Preferably 200x200 px.</small>
                 </div>
-            <% } %>    
+                
+            <% } %>   
+            
             <!--username -->
             <div class="form-group">
                 <label for="username">
                     <h4>Username</h4>
                 </label>
-                <input type="text" class="form-control" id="username" name="user[username]" value="<%= user.username %>">
+                <input type="text" class="form-control" id="username" name="user[username]" value="<%= profile.username %>">
             </div>
             
             <!--user role -->
             <!-- selection disabled for Readers & Writers -->
             <% if(currentUser.role === "Administrator" || currentUser.role === "Editor"){ %>
-            <div class="form-group">
-                <label for="role-select">
-                    <h4>Role</h4>
-                </label>
-                    <!-- cannot change user role if user is the last administrator -->
-                    <% if(admindanger === true){ %>
-                        <div class="alert alert-info" role="alert">
-                            You cannot remove the last Administrator.
-                        </div>
-                        <select class="form-control" name="user[role]" id="role-select" value="<%= user.role %>" disabled>
-                    <% } else { %>    
-                        <select class="form-control" name="user[role]" id="role-select" value="<%= user.role %>">
-                    <% } %>
-                    
-                            <option value="<%= user.role %>"><%= user.role %></options>
-                            <option value="Reader">Reader</option>
-                            <option value="Writer">Writer</option>
-                            <option value="Editor">Editor</option>
-                            
-                            <!--only admin can make other admin -->
-                            <% if(currentUser.role != "Administrator"){ %>
-                                <option value="Administrator" disabled>Administrator</option> 
-                            <% } else { %>
-                                <option value="Administrator">Administrator</option>
-                            <% } %>
-                            
-                        </select>    
-            </div>
+            
+                <div class="form-group">
+                    <label for="role-select">
+                        <h4>Role</h4>
+                    </label>
+                        <!-- cannot change user role if user is the last administrator -->
+                        
+                        <% if(admindanger === true){ %>
+                        
+                            <div class="alert alert-info" role="alert">
+                                You cannot remove the last Administrator.
+                            </div>
+                            <select class="form-control" name="user[role]" id="role-select" value="<%= profile.role %>" disabled>
+                        <% } else { %>    
+                            <select class="form-control" name="user[role]" id="role-select" value="<%= profile.role %>">
+                        <% } %>
+                        
+                                <option value="<%= profile.role %>"><%= profile.role %></options>
+                                <option value="Reader">Reader</option>
+                                <option value="Writer">Writer</option>
+                                <option value="Editor">Editor</option>
+                                
+                                <!--only admin can make other admin -->
+                                <% if(currentUser.role != "Administrator"){ %>
+                                    <option value="Administrator" disabled>Administrator</option> 
+                                <% } else { %>
+                                    <option value="Administrator">Administrator</option>
+                                <% } %>
+                                
+                            </select>    
+                </div>
+            
             <% } %>
             
             
@@ -79,7 +96,7 @@
                 <label for="firstName">
                     <h4>First Name</h4>
                 </label>
-                <input type="text" class="form-control" id="firstName" name="user[firstname]" value="<%= user.firstname %>">
+                <input type="text" class="form-control" id="firstName" name="user[firstname]" value="<%= profile.firstname %>">
             </div>
             
             <!--last name -->
@@ -87,7 +104,7 @@
                 <label for="lastName">
                     <h4>Last Name</h4>
                 </label>
-                <input type="text" class="form-control" id="lastName" name="user[lastname]" value="<%= user.lastname %>">
+                <input type="text" class="form-control" id="lastName" name="user[lastname]" value="<%= profile.lastname %>">
             </div>
             
             <!--email -->
@@ -95,15 +112,23 @@
                 <label for="email">
                     <h4>Email</h4>
                 </label>
-                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="user[email]" value="<%= user.email %>" >
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="user[email]" value="<%= profile.email %>" >
             </div>
             
             <!--submit -->
             <button type="submit" class="btn btn-primary">Submit</button>
 
         </form>
-    </div>
-
+    
+    <!-- END SECTION 1 -->
+    
+    <!-- SECTION 2 -->
+    <!-- Else -->
+    
+        
+</div>
+    
+    
 
 <!-- css grid container for settings content end -->
 <% if(currentUser.role != "Reader"){ %>
