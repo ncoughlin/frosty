@@ -11,7 +11,14 @@
     <img src="<%= blog.image %>" class="img-fluid" >
     <!--Title & Author -->
     <h1 class="mt-4"><%= blog.title %></h1>
-    <h6><strong><%= blog.author.firstname + " " + blog.author.lastname %></strong></h6>
+    <div class="d-flex flex-row ">
+        <div class="p-2">
+          <a href="/users/<%=blog.author.id%>/profile"><img src="<%= blog.author.photo %>" class='navbar-profile-photo' /></a>
+        </div>
+        <div class="p-2 align-middle">
+          <em><h6 class="card-title index-author"><%= blog.author.firstname + " " + blog.author.lastname %></h6></em>
+        </div>
+    </div>
     <h6><em class="text-muted"><%= moment(blog.date).fromNow() %></em></h6>
 
     <!--Content - EJS set to run as code to render HTML -->
