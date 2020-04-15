@@ -30,15 +30,67 @@ router.use((req,res,next) => {
 
 // landing page
 router.get("/", middleware.profilePhoto, (req, res) => {
-    // get blogs from database 
-    Blog.find({},(err, blogs) => {
-        if(err){
-            console.log("Error: Unable to retreive blog data.");
-        } else {
-            res.render("index.ejs", {blogs:blogs});
+    
+    function retrieveBlogs(){
+        return new Promise((resolve,reject)=>{
+            Blog.find({},(err, blogs)=>{
+               if(err){
+                    req.flash('error', "Unable to retrieve Blogs");
+                    res.redirect('back');
+                    return;
+               } else {
+                   resolve(blogs);
+               }
+            });
+        });
+    }
+    
+    
+    function updateAuthorInfo(blogs){
+        return new Promise((resolve,reject)=>{
+           blogs.forEach((blog)=>{
+                User.findById(blog.author.id, (err, user)=>{
+                    if(err){
+                        req.flash('error', "unable to retrieve blog author");
+                        res.redirect('back');
+                        return;    
+                    } else {
+                        if (typeof user.photo === 'undefined' || typeof user.photo === undefined){
+                            blog.author.photo = 'images/default_user_logo.svg';
+                            blog.author.username  = user.username;
+                            blog.author.firstname = user.firstname;
+                            blog.author.lastname  = user.lastname;
+                            blog.save();
+                        } else {
+                            blog.author.photo  = user.photo;
+                            blog.author.username  = user.username;
+                            blog.author.firstname = user.firstname;
+                            blog.author.lastname  = user.lastname;
+                            blog.save();
+                        }
+                    }
+                });
+            });
+            resolve(blogs); 
+        });
+    }
+
+    async function renderHomepage(){
+        try{
+            const allBlogs                  = await retrieveBlogs();
+            const updatedAuthorInfoOnBlogs  = await updateAuthorInfo(allBlogs);
+        
+            
+            
+            res.render("index.ejs", {blogs:updatedAuthorInfoOnBlogs});
+            
+        } catch(err) {
+            console.log(err);
         }
-    });
+    }
+    renderHomepage();
 });
+
 
 // login page
 router.get("/login",(req, res) => {

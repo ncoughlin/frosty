@@ -23,6 +23,14 @@ html,body {
     height: 36px;
 }
 
+/* Vertically Center Index Author Text*/
+.index-author{
+  display: inline;
+  vertical-align: middle;
+}
+
+
+
 
 /* Alert Wrapper to center alert*/
 .alert-wrapper {
