@@ -1,59 +1,10 @@
+/************************************************/
+/* BASIC FORMATTING  */
+/************************************************/
+
 /* body must be set to 100% height so that settings column can fill the height of the parent */
 html,body {
   height: 100%;
-}
-
-/* Primary Navbar*/
-#primary-nav{
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
-    z-index: 2;
-}
-
-/* Navbar Collapse Content*/
-.navbar-collapse {
-    margin: 1em;
-}
-
-/* Navbar Logos*/
-.navbar-logo {
-    height: 50px;
-}
-
-.default-user-logo {
-    height: 36px;
-}
-
-/* Vertically Center Index Author Text*/
-.index-author{
-  display: inline;
-  vertical-align: middle;
-}
-
-
-
-
-/* Alert Wrapper to center alert*/
-.alert-wrapper {
-  position: absolute;
-  top: 0px; 
-  left: 50%;
-  z-index:9999;
-}
-
-/* Alert Box*/
-.alert-fixed {
-    position: relative; 
-    left: -50%;
-    border-radius:0px
-}
-
-/* Login Logo*/
-.login-logo {
-    height: 100px;
-}
-
-.bg-darker {
-    background-color: #26272b;
 }
 
 /* Settings Grid*/
@@ -77,6 +28,29 @@ html,body {
     grid-area: 1/2/2/3;
 }
 
+/************************************************/
+/* NAVBAR  */
+/************************************************/
+
+/* Primary Navbar*/
+#primary-nav{
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
+    z-index: 2;
+}
+
+/* Navbar Collapse Content*/
+.navbar-collapse {
+    margin: 1em;
+}
+
+.bg-darker {
+    background-color: #26272b;
+}
+
+/************************************************/
+/* SETTINGS NAVBAR  */
+/************************************************/
+
 /* Settings Navbar*/
 #settings-nav {
     width:inherit;
@@ -86,6 +60,10 @@ html,body {
     padding-right: 0px;
     position: relative;
 }
+
+/************************************************/
+/* SETTINGS CONTENT  */
+/************************************************/
 
 /* Settings Content*/
 .settings-title{
@@ -100,6 +78,80 @@ html,body {
 .settings-table-id{
     color: gray;
 }
+
+/************************************************/
+/* LOGOS  */
+/************************************************/
+
+/* Navbar Logos*/
+.navbar-logo {
+    height: 50px;
+}
+
+/* Login Logo*/
+.login-logo {
+    height: 100px;
+}
+
+/************************************************/
+/* PROFILE PICTURES  */
+/************************************************/
+
+.default-user-logo {
+    height: 36px;
+}
+
+/* User Profile Photo */
+.profile-photo {
+  background-color: #26272b;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin-bottom: .25em;
+}
+
+.navbar-profile-photo {
+  background-color: #26272b;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+
+/************************************************/
+/* TEXT  */
+/************************************************/
+
+/* Vertically Center Index Author Text*/
+.index-author{
+  display: inline;
+  vertical-align: middle;
+}
+
+
+/************************************************/
+/* ALERTS  */
+/************************************************/
+
+/* Alert Wrapper to center alert*/
+.alert-wrapper {
+  position: absolute;
+  top: 0px; 
+  left: 50%;
+  z-index:9999;
+}
+
+/* Alert Box*/
+.alert-fixed {
+    position: relative; 
+    left: -50%;
+    border-radius:0px
+}
+
+
+/************************************************/
+/* ICONS  */
+/************************************************/
 
 /* Icons*/
 i{
@@ -124,24 +176,11 @@ i{
     }
 .material-icons.md-48 { font-size: 48px; }
 
-/* User Profile Photo */
-.profile-photo {
-  background-color: #26272b;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  margin-bottom: .25em;
-}
 
-.navbar-profile-photo {
-  background-color: #26272b;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-}
+/************************************************/
+/* FOOTER  */
+/************************************************/
 
-
-/* FOOTER */
 .footer-spacer {
     height:1px;
 }
@@ -159,7 +198,7 @@ i{
   opacity:0.5
 }
 
-.site-footer h6
+h6.site-footer 
 {
   color:#fff;
   font-size:16px;
@@ -227,6 +266,9 @@ i{
 .footer-social-icon {
     width: 24px;
 }
+
+
+
 
 /* TESTING */
 /*
