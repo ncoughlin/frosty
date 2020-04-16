@@ -8,7 +8,7 @@
 <!-- begin content -->
 
     
-    <!-- bootstrap fixed width container for content -->
+    <!-- BLOGS WIDGET -->
     <div class="container-flex card m-5">    
         <div class="row justify-content-start">
             <div class="col-auto settings-widget-left">
@@ -20,13 +20,13 @@
             <div class="col settings-widget-right">
                 <div class="m-4">
                     <h3>Recent</h3>
-                    <table>
+                    <table class="table">
                         <!--start loop-->
                         
                         <% for(let i = blogs.length-1; i>blogs.length-4; i--) { %>
                             <tr>
-                                <td><a href="/blogs/<%= blogs[i].id %>"><img src="<%= blogs[i].image %>" class="dashboard-blog-image"></a></tr>
-                                <td><%= blogs[i].title %></tr>
+                                <td><a href="/blogs/<%= blogs[i].id %>"><img src="<%= blogs[i].image %>" class="dashboard-blog-image"></a></td>
+                                <td><%= blogs[i].title %></td>
                             </tr>  
                         <% } %>
                         
@@ -37,15 +37,67 @@
         </div>
     </div>
     
-    <div class="container-flex m-5">    
-        <div class="card">
-            Users
+    <!-- USERS WIDGET -->
+    <div class="container-flex card m-5">    
+        <div class="row justify-content-start">
+            <div class="col-auto settings-widget-left">
+                <div class="m-4 text-center">
+                    <h3>Users</h3>
+                    <h1 class="dashboard-widget-number"><%= usercount %></h1>
+                </div>
+            </div>
+            <div class="col settings-widget-right">
+                <div class="m-4">
+                    <h3>Roles</h3>
+                    <table class="table">
+                        <tr>
+                            <td><h3><%= admincount %></h3></td>
+                            <td>Administrators</td>
+                        </tr>
+                        <tr>
+                            <td><h3><%= editorcount %></h3></td>
+                            <td>Editors</td>
+                        </tr>
+                        <tr>
+                            <td><h3><%= writercount %></h3></td>
+                            <td>Writers</td>
+                        </tr>
+                        <tr>
+                            <td><h3><%= readercount %></h3></td>
+                            <td>Readers</td>
+                        </tr>
+                    </table>    
+                </div>    
+            </div>
         </div>
     </div>
     
-    <div class="container-flex m-5">    
-        <div class="card">
-            comments
+    <!-- BLOGS WIDGET -->
+    <div class="container-flex card m-5">    
+        <div class="row justify-content-start">
+            <div class="col-auto settings-widget-left">
+                <div class="m-4 text-center">
+                    <h3>Comments</h3>
+                    <h1 class="dashboard-widget-number"><%= commentcount %></h1>
+                </div>
+            </div>
+            <div class="col settings-widget-right">
+                <div class="m-4">
+                    <h3>Recent</h3>
+                    <table class="table">
+                        <!--start loop-->
+                        
+                        <% for(let i = comments.length-1; i>comments.length-4; i--) { %>
+                            <tr>
+                                <td><%= comments[i].author.username %></td>
+                                <td><%= comments[i].content %></td>
+                            </tr>  
+                        <% } %>
+                        
+                        <!--end loop-->
+                    </table>    
+                </div>    
+            </div>
         </div>
     </div>
 
