@@ -51,26 +51,23 @@
       
       <% } %>
         
-        <!-- username/profile link -->
+        <!-- profile picture dropdown menu-->
         <li class="nav-item">
-            <a class="nav-link mr-2" href="/users/<%= currentUser.id %>/profile">
-                <u><%= currentUser.username %></u>
-                <span class="sr-only"><%= currentUser.username %></span>
+          <div class="dropdown">
+            
+            <a class="dropdown-toggle nav-link mr-2" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="<%= currentUser.photo %>" class='navbar-profile-photo' />
             </a>
-        </li>
-        
-        <!-- logout -->
-        <li class="nav-item">
-            <a class="nav-link mr-2" href="/logout">
-                Logout
-                <span class="sr-only">Logout</span></a>
-        </li>
-        
-        <!-- profile picture -->
-        <li class="nav-item">
-            <a class="nav-link mr-2" href="/users/<%= currentUser.id %>/profile">
-                <img src="<%= currentUser.photo %>" class='navbar-profile-photo'/>
-            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="/users/<%= currentUser.id %>/profile">My Profile</a>
+              <% if(currentUser.role != "Reader") {%>
+                <a class="dropdown-item" href="/settings/dashboard">Dashboard</a>
+              <% } %>  
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">Logout</a>
+            </div>
+            
+          </div>
         </li>
         
         <!-- settings icon: not visible if you are a reader -->
