@@ -15,13 +15,13 @@ middlewareObj.profilePhoto = (req, res, next)=>{
     // logged in
     if(req.user && req.user.photo === undefined){
 
-        console.log("current user does not have a profile picture");
+        //console.log("current user does not have a profile picture");
         req.user.photo = 'images/default_user_logo.svg';
         return next();    
         
     // not logged in    
     } else {
-        console.log("no current user");
+        //console.log("no current user");
         return next();
     }
 };
@@ -31,13 +31,13 @@ middlewareObj.profilePhoto2LevelsBack = (req, res, next)=>{
     // logged in
     if(req.user && req.user.photo === undefined){
 
-        console.log("current user does not have a profile picture");
+        //console.log("current user does not have a profile picture");
         req.user.photo = '../../images/default_user_logo.svg';
         return next();    
         
     // not logged in    
     } else {
-        console.log("no current user");
+        //console.log("no current user");
         return next();
     }
 };
@@ -47,13 +47,13 @@ middlewareObj.profilePhoto3LevelsBack = (req, res, next)=>{
     // logged in
     if(req.user && req.user.photo === undefined){
 
-        console.log("current user does not have a profile picture");
+        //console.log("current user does not have a profile picture");
         req.user.photo = '../../../images/default_user_logo.svg';
         return next();    
         
     // not logged in    
     } else {
-        console.log("no current user");
+        //console.log("no current user");
         return next();
     }
 };

@@ -37,7 +37,7 @@
         <li class="nav-item">
             <a class="nav-link" href="/login">
                 Login
-                <span class="sr-only">Login</span></a>
+            <span class="sr-only">Login</span></a>
         </li>
       
       <% } else { %>
@@ -45,7 +45,7 @@
       <!-- new post button: not visible if you are a reader -->
       <% if(currentUser.role != "Reader"){ %>
       
-        <li class="nav-item">
+        <li class="nav-link">
           <a class="btn btn-outline-success nav-item mr-2" href="/blogs/new" role="button"> +New Post</a>
         </li>
       
@@ -59,25 +59,17 @@
               <img src="<%= currentUser.photo %>" class='navbar-profile-photo' />
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="/users/<%= currentUser.id %>/profile">My Profile</a>
               <% if(currentUser.role != "Reader") {%>
                 <a class="dropdown-item" href="/settings/dashboard">Dashboard</a>
               <% } %>  
+              <a class="dropdown-item" href="/users/<%= currentUser.id %>/profile">My Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/logout">Logout</a>
             </div>
             
           </div>
         </li>
-        
-        <!-- settings icon: not visible if you are a reader -->
-        <% if(currentUser.role != "Reader"){ %>
-        
-          <li class="nav-item">
-            <a href="/settings/dashboard"><i class="material-icons md-36">settings</i></a>   
-          </li> 
-          
-        <% } %>  
+      
       
       <% } %>
     </ul>
