@@ -65,6 +65,10 @@ html,body {
 /* SETTINGS CONTENT  */
 /************************************************/
 
+.settings-container{
+  
+}
+
 /* Settings Content*/
 .settings-title{
     padding-bottom: 30px;
@@ -127,6 +131,7 @@ html,body {
   display: inline;
   vertical-align: middle;
 }
+
 
 
 /************************************************/
