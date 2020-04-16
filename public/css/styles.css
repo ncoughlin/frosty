@@ -1,17 +1,10 @@
-#test1{
-  background-color: red;
-}
-
-#test2{
-  background-color: blue;
-}
 
 .settings-widget-left{
   margin-right: -15px;
+  /*border-right: 1px solid rgba(0,0,0,.125);*/
 }
 
 .settings-widget-right{
-  border-left: 1px solid rgba(0,0,0,.125);
   padding-left: 0px;
 }
 

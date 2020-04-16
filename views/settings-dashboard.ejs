@@ -11,21 +11,21 @@
     <!-- BLOGS WIDGET -->
     <div class="container-flex card m-5">    
         <div class="row justify-content-start">
-            <div class="col-auto settings-widget-left">
+            <div class="col-md-4 settings-widget-left">
                 <div class="m-4 text-center">
                     <h3>Blogs</h3>
                     <h1 class="dashboard-widget-number"><%= blogcount %></h1>
                 </div>
             </div>
-            <div class="col settings-widget-right">
+            <div class="col-md-8 settings-widget-right">
                 <div class="m-4">
                     <h3>Recent</h3>
-                    <table class="table">
+                    <table>
                         <!--start loop-->
                         
                         <% for(let i = blogs.length-1; i>blogs.length-4; i--) { %>
                             <tr>
-                                <td><a href="/blogs/<%= blogs[i].id %>"><img src="<%= blogs[i].image %>" class="dashboard-blog-image"></a></td>
+                                <td><a href="/blogs/<%= blogs[i].id %>"><img src="<%= blogs[i].image %>" class="dashboard-blog-image mr-3"></a></td>
                                 <td><%= blogs[i].title %></td>
                             </tr>  
                         <% } %>
@@ -40,30 +40,30 @@
     <!-- USERS WIDGET -->
     <div class="container-flex card m-5">    
         <div class="row justify-content-start">
-            <div class="col-auto settings-widget-left">
+            <div class="col-md-4 settings-widget-left">
                 <div class="m-4 text-center">
                     <h3>Users</h3>
                     <h1 class="dashboard-widget-number"><%= usercount %></h1>
                 </div>
             </div>
-            <div class="col settings-widget-right">
+            <div class="col-md-8 settings-widget-right">
                 <div class="m-4">
                     <h3>Roles</h3>
-                    <table class="table">
+                    <table>
                         <tr>
-                            <td><h3><%= admincount %></h3></td>
+                            <td><h3 class="mr-3"><%= admincount %></h3></td>
                             <td>Administrators</td>
                         </tr>
                         <tr>
-                            <td><h3><%= editorcount %></h3></td>
+                            <td><h3 class="mr-3"><%= editorcount %></h3></td>
                             <td>Editors</td>
                         </tr>
                         <tr>
-                            <td><h3><%= writercount %></h3></td>
+                            <td><h3 class="mr-3"><%= writercount %></h3></td>
                             <td>Writers</td>
                         </tr>
                         <tr>
-                            <td><h3><%= readercount %></h3></td>
+                            <td><h3 class="mr-3"><%= readercount %></h3></td>
                             <td>Readers</td>
                         </tr>
                     </table>    
@@ -75,13 +75,13 @@
     <!-- BLOGS WIDGET -->
     <div class="container-flex card m-5">    
         <div class="row justify-content-start">
-            <div class="col-auto settings-widget-left">
+            <div class="col-md-4 settings-widget-left">
                 <div class="m-4 text-center">
                     <h3>Comments</h3>
                     <h1 class="dashboard-widget-number"><%= commentcount %></h1>
                 </div>
             </div>
-            <div class="col settings-widget-right">
+            <div class="col-md-8 settings-widget-right">
                 <div class="m-4">
                     <h3>Recent</h3>
                     <table class="table">
@@ -89,8 +89,8 @@
                         
                         <% for(let i = comments.length-1; i>comments.length-4; i--) { %>
                             <tr>
-                                <td><%= comments[i].author.username %></td>
-                                <td><%= comments[i].content %></td>
+                                <td><%= comments[i].content %> 
+                                <strong> -<a href="/users/<%= comments[i].author.id %>/profile"><%= comments[i].author.username %></strong></a></td>
                             </tr>  
                         <% } %>
                         
