@@ -1,3 +1,26 @@
+#test1{
+  background-color: red;
+}
+
+#test2{
+  background-color: blue;
+}
+
+.settings-widget-left{
+  margin-right: -15px;
+}
+
+.settings-widget-right{
+  border-left: 1px solid rgba(0,0,0,.125);
+  padding-left: 0px;
+}
+
+/* the big number in the widgets */
+.dashboard-widget-number{
+  font-size: 6em;
+  font-weight: 600;
+}
+
 /************************************************/
 /* BASIC FORMATTING  */
 /************************************************/
@@ -119,6 +142,10 @@ html,body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
+}
+
+.dashboard-blog-image{
+  height: 36px;
 }
 
 

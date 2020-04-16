@@ -9,9 +9,43 @@
 
     
     <!-- bootstrap fixed width container for content -->
+    <div class="container-flex card m-5">    
+        <div class="row justify-content-start">
+            <div class="col-auto settings-widget-left">
+                <div class="m-4 text-center">
+                    <h3>Blogs</h3>
+                    <h1 class="dashboard-widget-number"><%= blogcount %></h1>
+                </div>
+            </div>
+            <div class="col settings-widget-right">
+                <div class="m-4">
+                    <h3>Recent</h3>
+                    <table>
+                        <!--start loop-->
+                        
+                        <% for(let i = blogs.length-1; i>blogs.length-4; i--) { %>
+                            <tr>
+                                <td><a href="/blogs/<%= blogs[i].id %>"><img src="<%= blogs[i].image %>" class="dashboard-blog-image"></a></tr>
+                                <td><%= blogs[i].title %></tr>
+                            </tr>  
+                        <% } %>
+                        
+                        <!--end loop-->
+                    </table>    
+                </div>    
+            </div>
+        </div>
+    </div>
+    
     <div class="container-flex m-5">    
-        <div class="col-6 settings-content">
-            <h1>Dashboard will go here.</h1>
+        <div class="card">
+            Users
+        </div>
+    </div>
+    
+    <div class="container-flex m-5">    
+        <div class="card">
+            comments
         </div>
     </div>
 

@@ -31,7 +31,182 @@ router.use((req,res,next) => {
 
 // settings/dashboard
 router.get("/dashboard", middleware.isLoggedIn, middleware.profilePhoto2LevelsBack, (req, res) => {
-    res.render("settings-dashboard.ejs");
+    
+    // find all blogs
+    function gatherBlogs(){
+        return new Promise((resolve, reject)=>{
+            Blog.find({}, (err, blogs)=>{
+               if(err){
+                    req.flash('error', "Unable to retrieve Blogs");
+                    res.redirect('back');
+                    return;
+               } else {
+                    resolve(blogs);
+               }
+            });
+        });
+    }
+    
+    // find all comments
+    function gatherComments(){
+        return new Promise((resolve, reject)=>{
+            Comment.find({}, (err, comments)=>{
+               if(err){
+                    req.flash('error', "Unable to retrieve Blogs");
+                    res.redirect('back');
+                    return;
+               } else {
+                    resolve(comments);
+               }
+            });
+        });
+    }
+    
+    // find all users
+    function gatherUsers(){
+        return new Promise((resolve, reject)=>{
+            User.find({}, (err, users)=>{
+               if(err){
+                    req.flash('error', "Unable to retrieve Blogs");
+                    res.redirect('back');
+                    return;
+               } else {
+                    resolve(users);
+               }
+            });
+        });
+    }
+    
+    // count blogs
+    function gatherBlogCount(blogs){
+        return new Promise((resolve, reject)=>{
+            Blog.count({ },(err, count) => {
+                if(err){
+                    console.log(err);
+                } else {
+                    console.log('blog count: ' + count);
+                    resolve(count);
+                }
+            });
+        });
+    }
+    
+    // count users
+    function gatherUserCount(users){
+        return new Promise((resolve, reject)=>{
+            User.countDocuments({ },(err, count) => {
+                if(err){
+                    console.log(err);
+                } else {
+                    console.log('user count: ' + count);
+                    resolve(count);
+                }
+            });
+        });
+    }
+    
+    // count comments
+    function gatherCommentCount(comments){
+        return new Promise((resolve, reject)=>{
+            Comment.countDocuments({ },(err, count) => {
+                if(err){
+                    console.log(err);
+                } else {
+                    console.log('comments count: ' + count);
+                    resolve(count);
+                }
+            });
+        });
+    }
+    
+    // count admins
+    function gatherAdminCount(role){
+        return new Promise((resolve,reject)=>{
+            User.countDocuments({ role: role },(err, count) => {
+                if(err){
+                    console.log(err);
+                } else {
+                    console.log('admin count: ' + count);
+                    resolve(count);
+                }
+            });
+        });
+    }
+    
+    // count editors
+    function gatherEditorCount(role){
+        return new Promise((resolve,reject)=>{
+            User.countDocuments({ role: role },(err, count) => {
+                if(err){
+                    console.log(err);
+                } else {
+                    console.log('editor count: ' + count);
+                    resolve(count);
+                }
+            });
+        });
+    }
+    
+    // count writers
+    function gatherWriterCount(role){
+        return new Promise((resolve,reject)=>{
+            User.countDocuments({ role: role },(err, count) => {
+                if(err){
+                    console.log(err);
+                } else {
+                    console.log('writer count: ' + count);
+                    resolve(count);
+                }
+            });
+        });
+    }
+    
+    // count reader
+    function gatherReaderCount(role){
+        return new Promise((resolve,reject)=>{
+            User.countDocuments({ role: role },(err, count) => {
+                if(err){
+                    console.log(err);
+                } else {
+                    console.log('reader count: ' + count);
+                    resolve(count);
+                }
+            });
+        });
+    }
+    
+
+    async function settingsDashboardHandler(){
+        try{
+            const allBlogs          = await gatherBlogs();
+            const allComments       = await gatherComments();
+            const allUsers          = await gatherUsers();
+            const blogCount         = await gatherBlogCount(allBlogs);
+            const userCount         = await gatherUserCount(allUsers);
+            const adminCount        = await gatherAdminCount('Administrator');
+            const editorCount       = await gatherEditorCount('Editor');
+            const writerCount       = await gatherWriterCount('Writer');
+            const readerCount       = await gatherReaderCount('Reader');
+            const commentCount      = await gatherCommentCount(allComments);
+            
+            res.render("settings-dashboard.ejs", {blogs: allBlogs, 
+                                                  comments: allComments,
+                                                  users: allUsers,
+                                                  blogcount: blogCount,
+                                                  usercount: userCount,
+                                                  admincount: adminCount,
+                                                  editorcount: editorCount,
+                                                  writercount: writerCount,
+                                                  readercount: readerCount,
+                                                  commentcount: commentCount
+                                                });
+            
+        } catch(err){
+            console.log(err);
+        }
+    }
+    settingsDashboardHandler();
+  
 });
 
 // settings/users
