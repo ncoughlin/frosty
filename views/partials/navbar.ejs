@@ -1,5 +1,5 @@
 <!-- begin navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-darker" id="primary-nav">
+<nav class="navbar navbar-expand-md navbar-dark bg-darker" id="primary-nav">
 <!-- logo -->   
   <a class="navbar-brand" href="/">
     <img
@@ -47,12 +47,13 @@
       
         <li class="nav-link">
           <a class="btn btn-outline-success nav-item mr-2" href="/blogs/new" role="button"> +New Post</a>
+          <span class="sr-only">+New Pos</span></a>
         </li>
       
       <% } %>
         
-        <!-- profile picture dropdown menu-->
-        <li class="nav-item">
+        <!-- profile picture dropdown menu for desktop-->
+        <li class="nav-item d-none d-md-block">
           <div class="dropdown">
             
             <a class="dropdown-toggle nav-link mr-2" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -69,6 +70,19 @@
             
           </div>
         </li>
+        
+        <!-- mobile only links -->
+        <% if(currentUser.role != "Reader") {%>
+          <li class="nav-item d-md-none">
+            <a href="/settings/dashboard" class="nav-link">Dashboard</a>
+          </li> 
+        <% } %>
+        <li class="nav-item d-md-none">
+          <a href="/users/<%= currentUser.id %>/profile" class="nav-link">MyProfile</a>
+        </li> 
+        <li class="nav-item d-md-none">
+          <a href="/logout" class="nav-link">Logout</a>
+        </li> 
       
       
       <% } %>
