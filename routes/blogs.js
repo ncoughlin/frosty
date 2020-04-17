@@ -117,6 +117,8 @@ router.get("/:id", middleware.profilePhoto2LevelsBack, (req, res) => {
     async function loadSingleBlogWithPermissionCheck(){
         try {
             const editPermission = await editorCheck();
+            
+            
             console.log("User is Admin or Editor: " + editPermission);
             // Find Blog by ID and populate comments
             Blog.findById(req.params.id).

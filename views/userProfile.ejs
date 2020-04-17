@@ -184,4 +184,20 @@
     <!-- settings grid container end must go at end of settings content templates! -->  
     <%- include("partials/settings-grid-container-end.ejs") %>
 <% } %>
+
+<% if(currentUser.role != "Reader"){ %>
+    <!-- footer grid start -->
+    <%- include("partials/settings-footer-grid-start.ejs") %>
+<% } %>
+
 <%- include("partials/footer.ejs") %>
+
+<% if(currentUser.role != "Reader"){ %>
+    <!-- footer grid end -->
+    <%- include("partials/settings-footer-grid-end.ejs") %>
+<% } %>
+
+<%- include("partials/bootstrap.ejs") %>
+
+
+
