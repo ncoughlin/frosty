@@ -1,5 +1,7 @@
 <%- include("partials/header.ejs") %>
 <%- include("partials/navbar.ejs") %>
+<%- include("partials/main-content-grid-start.ejs") %>
+
 
 
     <div class="container-xl mt-5 mb-5">
@@ -8,7 +10,7 @@
         <!-- The Loop Starts Here -->
         <% blogs.forEach((blog) => { %>
         
-        <div class="col-sm-12 col-md-6 col-lg-4">
+        <div class="col-sm-12 col-lg-6 col-xl-4">
           <div class="card shadow bg-dark mt-4" >
             <img
               src="<%= blog.image %>"
@@ -42,8 +44,10 @@
     <div class="spacer-60px">
     </div>  
 
-
+<%- include("partials/main-content-grid-end.ejs") %>
+<%- include("partials/main-footer-grid-start.ejs") %>
 <%- include("partials/footer.ejs") %>
+<%- include("partials/main-footer-grid-end.ejs") %>
 <%- include("partials/bootstrap.ejs") %>
 
 
