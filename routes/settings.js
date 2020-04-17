@@ -6,7 +6,22 @@ const express          = require('express'),
       middleware       = require('../middleware'),
       Blog             = require('../models/blogs'),
       Comment          = require('../models/comments'),
-      User             = require('../models/users');
+      User             = require('../models/users'),
+      multer           = require('multer'),
+      storage          = multer.diskStorage({
+          filename: (req, file, callback)=>{
+              callback(null, Date.now() + file.originalname);
+          }
+      }),
+      imageFilter      = (req, file, cb)=>{
+        // accept image files only
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+            return cb(new Error('Only image files are allowed!'), false);
+        }
+        cb(null, true);
+        },
+      upload           = multer({storage: storage, fileFilter: imageFilter}),    
+      cloudinary       = require('cloudinary');
       
     
 // ***************************
@@ -254,10 +269,6 @@ async function settingsUsersHandler(){
     settingsUsersHandler();
 });    
 
-// settings/general
-router.get("/general", middleware.isLoggedIn, middleware.profilePhoto2LevelsBack, (req, res) => {
-    res.render("settings-general.ejs");
-});
 
 // settings/blogs
 
@@ -368,6 +379,7 @@ async function settingsCommentsHandler(){
 //----------------------------
 // .POST routes
 //----------------------------
+
 
 //----------------------------
 // .PUT routes

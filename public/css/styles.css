@@ -203,8 +203,12 @@ h6{
 }
 
 .footer-text{
-  color: #515151;
+  color: #665f5f;
   margin-bottom: 0;
+}
+
+.footer-text a {
+  color:#84836e;
 }
 
 /************************************************/

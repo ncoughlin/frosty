@@ -96,7 +96,7 @@ router.get("/:id/edit",middleware.isLoggedIn, (req, res) => {
 // placed after static links in the application!
 router.get("/:id", middleware.profilePhoto2LevelsBack, (req, res) => {
     
-    // evaluate if the user should be able to edit
+    // evaluate if the user should be able to edit (for comments)
     function editorCheck(){
         return new Promise((resolve, reject)=>{
             // First check if user is logged in
@@ -113,13 +113,13 @@ router.get("/:id", middleware.profilePhoto2LevelsBack, (req, res) => {
         });
     }    
     
+    
     // check if user has blanket permission to edit a comment before loading page.
-    async function loadSingleBlogWithPermissionCheck(){
+    // populate comments
+    async function singleBlogRouter(){
         try {
-            const editPermission = await editorCheck();
-            
-            
-            console.log("User is Admin or Editor: " + editPermission);
+            const editPermission   = await editorCheck();
+        
             // Find Blog by ID and populate comments
             Blog.findById(req.params.id).
             // populate comments
@@ -140,7 +140,7 @@ router.get("/:id", middleware.profilePhoto2LevelsBack, (req, res) => {
             console.log(err);
         }
     }
-    loadSingleBlogWithPermissionCheck();
+    singleBlogRouter();
 });
 
 //----------------------------
