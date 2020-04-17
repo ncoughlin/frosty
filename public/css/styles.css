@@ -8,6 +8,7 @@
 /* body must be set to 100% height so that settings column can fill the height of the parent */
 html,body {
   height: 100%;
+  background-color:#292e33;
 }
 
 /* Settings Grid*/
@@ -47,7 +48,7 @@ html,body {
   margin-left:auto;
 }
 
-.single-blog-container{
+.height100{
   height: 100%;
 }
 
@@ -178,28 +179,18 @@ html,body {
   vertical-align: middle;
 }
 
-h1{
+h1,h2,h3{
   font-weight: 600;
+  color:#cecbba;
 }
 
-h2{
-  font-weight: 600;
-}
-
-h3{
-  font-weight: 600;
-}
-
-h4{
+h4,h5,h6{
   font-weight: 400;
+  color:#e4e1d4;
 }
 
-h5{
-  font-weight: 400;
-}
-
-h6{
-  font-weight: 400;
+p{
+ color:#e4e1d4; 
 }
 
 .footer-text{
