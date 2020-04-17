@@ -13,7 +13,7 @@
     <h1 class="mt-4"><%= blog.title %></h1>
     <div class="d-flex flex-row ">
         <div class="p-2">
-          <a href="/users/<%=blog.author.id%>/profile"><img src="../<%= blog.author.photo %>" class='navbar-profile-photo' /></a>
+          <a href="/users/<%=blog.author.id%>/profile"><img src="<%= profileimage %>" class='navbar-profile-photo' /></a>
         </div>
         <div class="p-2 align-middle">
           <em><h6 class="card-title index-author"><%= blog.author.firstname + " " + blog.author.lastname %></h6></em>

@@ -113,12 +113,28 @@ router.get("/:id", middleware.profilePhoto2LevelsBack, (req, res) => {
         });
     }    
     
+    function checkProfileImage(id){
+        return new Promise((resolve,reject)=>{
+            Blog.findById(id,(err, blog)=>{
+                if(err){
+                    console.log(err);
+                } else if (blog.author.photo === 'undefined' || typeof blog.author.photo === undefined || blog.author.photo === "images/default_user_logo.svg"){
+                    resolve("../images/default_user_logo.svg");
+                } else {
+                    resolve(blog.author.photo);
+                }
+            });
+        });
+    }
+    
     
     // check if user has blanket permission to edit a comment before loading page.
     // populate comments
     async function singleBlogRouter(){
         try {
             const editPermission   = await editorCheck();
+            const profileImage     = await checkProfileImage(req.params.id);
+            
         
             // Find Blog by ID and populate comments
             Blog.findById(req.params.id).
@@ -132,7 +148,7 @@ router.get("/:id", middleware.profilePhoto2LevelsBack, (req, res) => {
                     return;
                 } else {
                     // render single post template with that post data
-                    res.render("singleBlog.ejs", {blog: dbData, editPermission: editPermission});
+                    res.render("singleBlog.ejs", {blog: dbData, editPermission: editPermission, profileimage: profileImage});
                     console.log("Article: " + dbData.title + " has loaded.");
                 }
             });
