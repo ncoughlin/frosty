@@ -1,34 +1,35 @@
 <%- include("partials/header.ejs") %>
-
-<div class="container-sm h-100">
-   <div class="row h-100 justify-content-center align-items-center"> 
-        <div class="card shadow" style="width: 25rem;">
-            <div class="card-body">
-                <a href="/">
-                <img
-                  src="/images/logo_v2_small.svg"
-                  class="card-img-top mt-4 mb-4 login-logo"
-                  alt="Frosty CMS Logo"
-                /></a>
-                <h2 class="card-title text-center">Login</h2>
-                <% if(error != '') {%>
-                <div class="alert alert-danger" role="alert">
-                  <%= error %>
-                </div>
-                <% } %>
-                <form class="mt-4" action="/login" method="POST">
-                  <div class="form-group">
-                    <input type="text" class="form-control form-control-lg" placeholder="username" name="username">
-                  </div>
-                  <div class="form-group">
-                    <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="password" name="password">
-                  </div>
-                  <button type="submit" class="btn btn-primary btn-lg btn-block mt-4 mb-3">Submit</button>
-                </form>
-                <a href="/register"><p class="text-center">Register</p></a>
+<div class="registration-wrapper">
+  <div class="container-sm h-100">
+    <div class="row h-100 justify-content-center align-items-center"> 
+      <div class="card shadow bg-dark" style="width: 25rem;">
+        <div class="card-body">
+          <a href="/">
+          <img
+            src="/images/logo_v2_small.svg"
+            class="card-img-top mt-4 mb-4 login-logo"
+            alt="Frosty CMS Logo"
+          /></a>
+          <h2 class="card-title text-center frontend-text-large">Login</h2>
+          <% if(error != '') {%>
+          <div class="alert alert-danger" role="alert">
+            <%= error %>
+          </div>
+          <% } %>
+          <form class="mt-4" action="/login" method="POST">
+            <div class="form-group">
+              <input type="text" class="frontend-form-control form-control-lg" placeholder="username" name="username">
             </div>
+            <div class="form-group">
+              <input type="password" class="frontend-form-control form-control-lg" id="exampleInputPassword1" placeholder="password" name="password">
+            </div>
+            <button type="submit" class="btn btn-frontend-primary btn-lg btn-block mt-4 mb-3">Submit</button>
+          </form>
+          <a href="/register"><p class="text-center frontend-text-small">Register</p></a>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <%- include("partials/footer.ejs") %>

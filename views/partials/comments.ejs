@@ -1,18 +1,18 @@
 <!--Comments Section -->
     <!--comments wrapper -->
     <div class="mt-5 mb-5">
-        <hr>
+        <hr class="frontend-hr">
         <!--Comments Section Toggle -->
         <p>
-          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseComments" aria-expanded="false" aria-controls="collapseComments">
-            <strong>View Comments</strong>
+          <button class="btn btn-frontend-primary" type="button" data-toggle="collapse" data-target="#collapseComments" aria-expanded="false" aria-controls="collapseComments">
+            View Comments
           </button>
         </p>
         <div class="collapse" id="collapseComments">
           <div class="card bg-dark card-body">
             <!--New Comment Button -->
             <p>
-              <button class="btn btn-outline-success" role="button" data-toggle="collapse" data-target="#collapseNewComment" aria-expanded="false" aria-controls="collapseNewComment"> 
+              <button class="btn btn-frontend-outline-success" role="button" data-toggle="collapse" data-target="#collapseNewComment" aria-expanded="false" aria-controls="collapseNewComment"> 
               +New Comment
               </button>
             </p>
@@ -20,22 +20,22 @@
             <div class="collapse" id="collapseNewComment">
               <div class="card card-body bg-dark mb-4">
                 <% if(!currentUser){ %>
-                <p>You must be logged in to comment.<p>
-                <a class="btn btn-outline-primary" role="button" href="/login">Login</a>
+                <p class="frontend-text-small">You must be logged in to comment.<p>
+                <a class="btn btn-frontend-outline-primary" role="button" href="/login">Login</a>
                 <% } else { %>
                 <!--New Comment Form -->
                 <form action="/blogs/<%= blog._id %>/comments" method="POST">
                   <div class="form-group">
                     <label for="contentInput">
-                      <p><strong>Your Thoughts...</strong></p>
+                      <p class="frontend-text-small"><strong>Your Thoughts...</strong></p>
                     </label>
-                    <textarea class="form-control" id="contentInput" rows="3" placeholder="Comment goes here..." name="comment[content]"></textarea>
+                    <textarea class="frontend-form-control" id="contentInput" rows="3" placeholder="Comment goes here..." name="comment[content]"></textarea>
                   </div>
                   <span>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-frontend-primary">
                     Submit
                     </button>
-                    <button type="button" class="btn btn-outline-danger role="button" data-toggle="collapse" data-target="#collapseNewComment" aria-controls="collapseNewComment"">
+                    <button type="button" class="btn btn-frontend-outline-danger role="button" data-toggle="collapse" data-target="#collapseNewComment" aria-controls="collapseNewComment"">
                     Cancel
                     </button>
                   </span>
@@ -48,8 +48,8 @@
             
             <% blog.comments.forEach((comment) => { %>
               
-                <p class="mt-4"><strong><%= comment.author.username %></strong><em class="text-muted"> - <%= moment(comment.date).fromNow() %></em></p>
-                <p><%= comment.content %></p>
+                <p class="mt-4 frontend-text-small"><strong><%= comment.author.username %></strong><em class="text-muted"> - <%= moment(comment.date).fromNow() %></em></p>
+                <p class="frontend-text-small"><%= comment.content %></p>
                 
                 <!--Edit and Delete Buttons -->  
                 <!-- Only author, admin or editor can modify content -->
@@ -57,13 +57,13 @@
                 
                 <div class="d-inline-flex">
                   <span class="mr-2">
-                      <a class="btn btn-outline-warning btn-sm" href="/blogs/<%= blog._id %>/comments/<%= comment._id %>/edit">
+                      <a class="btn btn-frontend-outline-warning btn-sm" href="/blogs/<%= blog._id %>/comments/<%= comment._id %>/edit">
                         Edit
                       </a>
                   </span>
                   <span>
                       <form action="/blogs/<%= blog._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
-                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                        <button type="submit" class="btn btn-frontend-outline-danger btn-sm">Delete</button>
                       </form>
                   </span>
                 </div>

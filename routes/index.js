@@ -182,7 +182,7 @@ router.post("/register", (req, res) => {
 // login user: authenticate user
 // app.post("/login", middleware, callback)
 router.post("/login",passport.authenticate("local", {
-                                                    successRedirect: "..",
+                                                    successRedirect: "/",
                                                     failureRedirect: "/login",
                                                     failureFlash: true
                                                 }), (req, res) => {}

@@ -18,19 +18,19 @@
               alt="..."
             />
             <div class="card-body">
-              <h3 class="card-title"><%= blog.title %></h3>
+              <h3 class="card-title frontend-text-large"><%= blog.title %></h3>
               
               <div class="d-flex flex-row ">
                 <div class="p-2">
                   <a href="/users/<%=blog.author.id%>/profile"><img src="<%= blog.author.photo %>" class='navbar-profile-photo' /></a>
                 </div>
                 <div class="p-2 align-middle">
-                  <em><h6 class="card-title index-author"><%= blog.author.firstname + " " + blog.author.lastname %></h6></em>
+                  <em><h6 class="card-title index-author frontend-text-medium"><%= blog.author.firstname + " " + blog.author.lastname %></h6></em>
                 </div>
               </div>
               
-              <p class="card-text"><%= blog.short %></p>
-              <a href="/blogs/<%=blog._id%>" class="btn btn-primary">Read More</a>
+              <p class="card-text frontend-text-small"><%= blog.short %></p>
+              <a href="/blogs/<%=blog._id%>" class="btn btn-frontend-primary">Read More</a>
             </div>
           </div>
         </div>
