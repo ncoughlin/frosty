@@ -8,34 +8,35 @@
       <div class="row justify-content-start">
          
         <!-- The Loop Starts Here -->
-        <% blogs.forEach((blog) => { %>
+        <% for(i=blogs.length-1; i>=0 ;i--)  { %>
+        
         
         <div class="col-sm-12 col-lg-6 col-xl-4">
           <div class="card shadow bg-dark mt-4" >
             <img
-              src="<%= blog.image %>"
+              src="<%= blogs[i].image %>"
               class="card-img-top"
               alt="..."
             />
             <div class="card-body">
-              <h3 class="card-title frontend-text-large"><%= blog.title %></h3>
+              <h3 class="card-title frontend-text-large"><%= blogs[i].title %></h3>
               
               <div class="d-flex flex-row ">
                 <div class="p-2">
-                  <a href="/users/<%=blog.author.id%>/profile"><img src="<%= blog.author.photo %>" class='navbar-profile-photo' /></a>
+                  <a href="/users/<%=blogs[i].author.id%>/profile"><img src="<%= blogs[i].author.photo %>" class='navbar-profile-photo' /></a>
                 </div>
                 <div class="p-2 align-middle">
-                  <em><h6 class="card-title index-author frontend-text-medium"><%= blog.author.firstname + " " + blog.author.lastname %></h6></em>
+                  <em><h6 class="card-title index-author frontend-text-medium"><%= blogs[i].author.firstname + " " + blogs[i].author.lastname %></h6></em>
                 </div>
               </div>
               
-              <p class="card-text frontend-text-small"><%= blog.short %></p>
-              <a href="/blogs/<%=blog._id%>" class="btn btn-frontend-primary">Read More</a>
+              <p class="card-text frontend-text-small"><%= blogs[i].short %></p>
+              <a href="/blogs/<%=blogs[i]._id%>" class="btn btn-frontend-primary">Read More</a>
             </div>
           </div>
         </div>
         
-        <% }); %>
+        <% }; %>
         <!-- The Loop Ends Here -->
         
       </div>
