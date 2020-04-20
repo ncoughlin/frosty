@@ -8,7 +8,8 @@ const commentSchema = new mongoose.Schema({
             ref: "User"
         },
         username: String,
-        role: String
+        role: String,
+        image: String
     },
     date: {type: Date, default: Date.now},
     content: String,

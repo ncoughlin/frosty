@@ -61,6 +61,10 @@ router.post("/", middleware.isLoggedIn, (req,res) => {
             // add author references
             comment.author.id = req.user._id;
             comment.author.username = req.user.username;
+            
+            // associate comment author photo with comment
+            comment.author.image = req.user.photo;
+            
             // add blog references
             comment.blogID = blog._id;
             comment.blogTitle = blog.title;

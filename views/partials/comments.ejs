@@ -45,10 +45,32 @@
             </div>
             
             <!--Comments Loop -->
-            
-            <% blog.comments.forEach((comment) => { %>
-              
-                <p class="mt-4 frontend-text-small"><strong><%= comment.author.username %></strong><em class="text-muted"> - <%= moment(comment.date).fromNow() %></em></p>
+            <% comments.forEach((comment) => { %>
+
+                <div class="d-flex flex-row ">
+                  
+                  <!--If Comment Author has no profile photo use default photo  -->
+                  <% if((typeof comment.author.image === 'undefined') || (typeof comment.author.image === undefined) || (typeof comment.author.image === null )|| (comment.author.image === "images/default_user_logo.svg")) { %>
+                  
+                    <div class="p-2">
+                      <img src="/images/default_user_logo.svg" class='navbar-profile-photo' />
+                    </div>
+                    
+                  <% } else { %>  
+
+                    <div class="p-2">
+                      <img src="<%= comment.author.image %>" class='navbar-profile-photo' />
+                    </div>
+                    
+                  <% } %>
+                    <div class="p-2 align-middle">
+                      <em><h6 class="card-title index-author frontend-text-medium"><%= comment.author.username %></h6></em>
+                    </div>
+                    <div class="p-2 align-middle">
+                      <p><em class="text-muted"> - <%= moment(comment.date).fromNow() %></em></p>
+                    </div>
+                </div>
+                
                 <p class="frontend-text-small"><%= comment.content %></p>
                 
                 <!--Edit and Delete Buttons -->  

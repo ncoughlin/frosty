@@ -20,7 +20,9 @@ const express          = require("express"),
         },
       upload           = multer({storage: storage, fileFilter: imageFilter}),    
       cloudinary       = require('cloudinary'),
-      Blog             = require('../models/blogs');
+      Blog             = require('../models/blogs'),
+      User             = require('../models/users'),
+      Comment          = require('../models/comments');
       
 
 // ***************************
@@ -113,6 +115,7 @@ router.get("/:id", middleware.profilePhoto2LevelsBack, (req, res) => {
         });
     }    
     
+    // use default profile photo is author has no profile image
     function checkProfileImage(id){
         return new Promise((resolve,reject)=>{
             Blog.findById(id,(err, blog)=>{
@@ -127,17 +130,122 @@ router.get("/:id", middleware.profilePhoto2LevelsBack, (req, res) => {
         });
     }
     
+    /*// retrieve full comment data by blog ID
+    function retrieveComments(id){
+        return new Promise((resolve,reject)=>{
+            Blog.findById(id,(err, singleBlog)=>{
+               
+               console.log(singleBlog.comments);
+                
+               if(err){
+                   console.log(err);
+               } else {
+                   let fullComments = {};
+                   
+                   for (let i=0; i < singleBlog.comments.length; i++){
+                       Comment.findById(singleBlog.comments[i].id,(err, foundComment)=>{
+                           if(err){
+                               console.log(err);
+                           } else {
+                               console.log(fullComments[i]);
+                               fullComments[i] = foundComment;
+                           }
+                       });
+                   }
+                   console.log(fullComments);
+                   resolve(fullComments);
+               }
+            });
+        });
+    }
+    
+    function saveProfileImagesToComments(comments){
+        return new Promise((resolve,reject)=>{
+            console.log(comments);
+           comments.forEach((comment) => {
+               User.findById(comment.author.id,(err,commentAuthor)=>{
+                   if (err){
+                       console.log(err);
+                   } else {
+                       comment.author.image = commentAuthor.photo;
+                       console.log(comment);
+                       comment.save();
+                   }
+               });
+           }); 
+           console.log(comments);
+           resolve(comments);
+        });
+    }*/
+    
+    
+     // use default profile photo is author has no profile image
+    function retrieveComments(id){
+        return new Promise((resolve,reject)=>{
+            Comment.find({blogID: id},(err, foundComments)=>{
+                if(err){
+                    console.log(err);
+                } else {
+                    resolve(foundComments);
+                }
+            });
+        });
+    }
+    
+   // use default profile photo is comment author has no profile image
+   /* function checkCommentImages(comments){
+        return new Promise((resolve,reject)=>{
+            comments.forEach((comment)=>{
+                if (comment.author.image === 'undefined' || typeof comment.author.image === undefined || comment.author.image === "images/default_user_logo.svg"){
+                    console.log('NO COMMENT IMAGE');
+                    comment.author.image = "/images/default_user_logo.svg";
+                    comment.save();
+                } else {
+                    comment.author.image = comment.author.image;
+                }
+            });
+            console.log('UPDATED COMMENTS');
+            console.log(comments);
+            resolve(comments);
+        });
+    } */
     
     // check if user has blanket permission to edit a comment before loading page.
     // populate comments
+    
     async function singleBlogRouter(){
         try {
-            const editPermission   = await editorCheck();
-            const profileImage     = await checkProfileImage(req.params.id);
-            
+            const editPermission                   = await editorCheck();
+            const profileImage                     = await checkProfileImage(req.params.id);
+            const fullComments                     = await retrieveComments(req.params.id);
+            /*const commentsWithImagesChecked        = await checkCommentImages(fullComments);*/
+            /*const completeComments                 = await retrieveComments(req.params.id);
+            const profileImagesSavedToComments     = await saveProfileImagesToComments(completeComments);
+            */
+        
+        
+            Blog.findById(req.params.id,(err, dbData) => {
+                if(err){
+                    console.log("error finding blog data by ID");
+                    req.flash('error', 'error finding blog data by ID');
+                    res.redirect('/');
+                    return;
+                } else {
+                    // render single post template with that post data
+                    res.render("singleBlog.ejs", {blog: dbData, editPermission: editPermission, profileimage: profileImage, comments: fullComments});
+                    console.log("Article: " + dbData.title + " has loaded.");
+                }
+            });
+        } catch(err) {
+            console.log(err);
+        }
+    }
+    singleBlogRouter();
+});
+        
         
             // Find Blog by ID and populate comments
-            Blog.findById(req.params.id).
+            /*Blog.findById(req.params.id).
             // populate comments
             populate("comments").
             exec((err, dbData) => {
@@ -158,7 +266,7 @@ router.get("/:id", middleware.profilePhoto2LevelsBack, (req, res) => {
     }
     singleBlogRouter();
 });
-
+*/
 //----------------------------
 // .POST routes
 //----------------------------
